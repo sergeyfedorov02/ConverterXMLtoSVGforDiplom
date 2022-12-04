@@ -51,18 +51,18 @@ namespace Diploma_Project // Пространство имен
                         {
                             // создаем объект класса XmlDocument
                             XmlDocument docXML = new XmlDocument();
-                            
+
                             // загрузим в созданный объект наш XML-документ
                             docXML.Load(stream);
-                            
+
                             // Найдем все узлы с именем "DesignerItem"
                             XmlNodeList nodeList = docXML.GetElementsByTagName("DesignerItem");
-                            
+
                             // Создаем холст для рисования
                             var svgDoc = new GcSvgDocument();
                             svgDoc.RootSvg.Width = new SvgLength(2000, SvgLengthUnits.Pixels);
                             svgDoc.RootSvg.Height = new SvgLength(2000, SvgLengthUnits.Pixels);
-                            
+
                             // Пройдемся по всем полученным узлам
                             foreach (XmlNode xmlnode in nodeList)
                             {
@@ -117,7 +117,11 @@ namespace Diploma_Project // Пространство имен
                                         break;
                                 }
                             }
-                            string path = "D:\\Imsat\\svg_images\\" + String.Format("chart_{0}", chr_number) + ".svg";
+
+                            // C:\Users\fsergey\RiderProjects\Diploma_Project\Diploma_Project\src
+                            // D:\\Imsat\\svg_images\\
+                            string path = "C:\\Users\\fsergey\\RiderProjects\\Diploma_Project\\Diploma_Project\\src\\" +
+                                          String.Format("chart_{0}", chr_number) + ".svg";
                             svgDoc.Save(path);
                         }
 
@@ -132,7 +136,8 @@ namespace Diploma_Project // Пространство имен
 
 
         // Функция для формирования SVG картинки для "StandardLibrary.Lamp"
-        static SvgGroupElement svg_image_Lamp(Dictionary<string, string> xmlnode, string? should_draw_label, string? name)
+        static SvgGroupElement svg_image_Lamp(Dictionary<string, string> xmlnode, string? should_draw_label,
+            string? name)
         {
             var result = new SvgGroupElement();
             // Отрисовка элемента прямоугольника с текстом
@@ -211,8 +216,9 @@ namespace Diploma_Project // Пространство имен
                     result.Children.Add(text);
                 }
             }
+
             return result;
-            
+
             // Рисуем элемент Линии
             /*float length = (float)cur_length;
             var line = new SvgLineElement()
