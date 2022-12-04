@@ -11,4 +11,8 @@
       <PackageReference Include="GrapeCity.Documents.Imaging" Version="5.2.0.804" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="src" />
+    </ItemGroup>
+
 </Project>
