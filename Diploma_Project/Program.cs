@@ -7,6 +7,7 @@ using System;
 using System.Drawing;
 using System.IO.Compression;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using GrapeCity.Documents.Common;
 using GrapeCity.Documents.Drawing;
@@ -35,16 +36,23 @@ namespace Diploma_Project // Пространство имен
             //Console.Write("Введите номер интересующего файла: ");
             //int chr_number = Convert.ToInt32(Console.ReadLine());
 
-            int chr_number = 372;
-
             // открытие архива в режиме чтения
             using (ZipArchive zipArchive = ZipFile.OpenRead(archivePath))
             {
                 // проход циклом всех сущностей в архиве
                 foreach (ZipArchiveEntry entry in zipArchive.Entries)
                 {
-                    // Выбираем нужный файл по заданному номеру
-                    if (entry.FullName.Equals(String.Format("chart_{0}.chr", chr_number)))
+                    var pattern = @"^chart_\d{1,}.chr$";
+                    Regex rg = new Regex(pattern);
+
+                    // Если файл с данными, то добавим его в List со всем именами файлов с данными
+                    if (rg.IsMatch(entry.FullName))
+                    {
+                        files_names.Add(entry.FullName);
+                    }
+
+                    // Пройдемся по всем файлам с данными
+                    if (rg.IsMatch(entry.FullName) && entry.FullName.Equals("chart_383.chr"))
                     {
                         // открываем этот файл
                         using (var stream = entry.Open())
@@ -60,7 +68,7 @@ namespace Diploma_Project // Пространство имен
 
                             // Создаем холст для рисования
                             var svgDoc = new GcSvgDocument();
-                            svgDoc.RootSvg.Width = new SvgLength(2000, SvgLengthUnits.Pixels);
+                            svgDoc.RootSvg.Width = new SvgLength(3000, SvgLengthUnits.Pixels);
                             svgDoc.RootSvg.Height = new SvgLength(2000, SvgLengthUnits.Pixels);
 
                             // Пройдемся по всем полученным узлам
@@ -80,17 +88,6 @@ namespace Diploma_Project // Пространство имен
                                         // Получим Dictionary, состоящий из свойств текущего элемента StandardLibrary.Lamp
                                         Dictionary<string, string> parser_result = parser_Lamp(xmlnode);
 
-                                        // Нарисуем элемент "StandardLibrary.Lamp"
-                                        var svg_result = svg_image_Lamp(parser_result,
-                                            xmlnode?.SelectSingleNode("ShouldDrawLabel")?.InnerText,
-                                            xmlnode?.SelectSingleNode("Label")?.InnerText);
-
-                                        // Добавим нарисованные элементы на холст
-                                        svgDoc.RootSvg.Children.Add(svg_result);
-
-                                        // тестирование рисования
-                                        //create_svg();
-
                                         // Печать в консоль результата после парсинга
                                         foreach (var element in parser_result)
                                         {
@@ -99,29 +96,46 @@ namespace Diploma_Project // Пространство имен
 
                                         Console.Write("\n\n");
 
+                                        // Нарисуем элемент "StandardLibrary.Lamp"
+                                        var svg_result = svg_image_Lamp(parser_result,
+                                            xmlnode?.SelectSingleNode("ShouldDrawLabel")?.InnerText,
+                                            xmlnode?.SelectSingleNode("Label")?.InnerText);
+
+                                        // Добавим нарисованные элементы на холст
+                                        svgDoc.RootSvg.Children.Add(svg_result);
+
                                         break;
+
                                     case "StandardLibrary.RailUnitEx":
                                         break;
+
                                     case "StandardLibrary.RailJunctionEx":
                                         break;
+
                                     case "StandardLibrary.IsoJoint":
                                         break;
+
                                     case "StandardLibrary.Semaphore":
                                         break;
+
                                     case "StandardLibrary.Label":
                                         break;
+
                                     case "StandardLibrary.RailCrossing":
                                         break;
+
                                     default:
                                         Console.WriteLine("default");
                                         break;
                                 }
                             }
 
+                            // Сохраним получившийся SVG файл
                             // C:\Users\fsergey\RiderProjects\Diploma_Project\Diploma_Project\src
                             // D:\\Imsat\\svg_images\\
+                            var cur_name = entry.FullName.Split(".")[0];
                             string path = "C:\\Users\\fsergey\\RiderProjects\\Diploma_Project\\Diploma_Project\\src\\" +
-                                          String.Format("chart_{0}", chr_number) + ".svg";
+                                          cur_name + ".svg";
                             svgDoc.Save(path);
                         }
 
@@ -140,13 +154,22 @@ namespace Diploma_Project // Пространство имен
             string? name)
         {
             var result = new SvgGroupElement();
+
+            // Добавление кастомного атрибута data-state = "-1" к создаваемой группе, чтобы потом была подсветка, если придет значение
+            result.CustomAttributes = new List<SvgCustomAttribute> { new SvgCustomAttribute("data-state", "-1") };
+
+            // Вычислим цвет обводки
+            var obj_color = convert_argb(xmlnode["ObjectColor"]);
+
+            //Добавление Стиля
+            //TODO()
+
             // Отрисовка элемента прямоугольника с текстом
             if (xmlnode["Shape"] == "Rectangle")
             {
                 // Рисуем прямоугольник
                 var cur_width = (float)Double.Parse(xmlnode["Right"]) - (float)Double.Parse(xmlnode["Left"]);
                 var cur_height = (float)Double.Parse(xmlnode["Bottom"]) - (float)Double.Parse(xmlnode["Top"]);
-                var obj_color = convert_argb(xmlnode["ObjectColor"]);
                 var rectangle = new SvgRectElement()
                 {
                     Width = new SvgLength(cur_width),
@@ -173,49 +196,130 @@ namespace Diploma_Project // Пространство имен
                 // Если надо отображать текст, то добавим его
                 if (should_draw_label != null && should_draw_label.Equals("true"))
                 {
-                    var cur_text = "";
-                    // Проверим, есть ли заданное имя или же будем брать значение Default
-                    if (name != null)
-                    {
-                        cur_text = name;
-                    }
-                    else
-                    {
-                        cur_text = xmlnode["LabelDefaultText"];
-                    }
-
-                    // Получим значения позиции
-                    var position = xmlnode["LabelPosition"];
-                    var cur_x = xmlnode["LabelPosition"].Split(",")[0].Replace(".", ",");
-                    var cur_y = xmlnode["LabelPosition"].Split(",")[1].Replace(".", ",");
-
-                    var text = new SvgTextElement
-                    {
-                        // Создаем сам текст
-                        Children =
-                        {
-                            new SvgContentElement
-                            {
-                                Content = cur_text,
-                            },
-                        },
-
-                        // Задаем расположение надписи
-                        X = new List<SvgLength> { new SvgLength((float)Double.Parse(cur_x)) },
-                        Y = new List<SvgLength> { new SvgLength((float)Double.Parse(cur_y)) },
-
-                        // Задаем размер текста
-                        FontSize = new SvgLength((float)Double.Parse(xmlnode["LabelFontSize"])),
-
-                        // Задаем цвет надписи (черный НЕ прозрачный цвет)
-                        Fill = new SvgPaint(Color.FromArgb(255, 0, 0, 0))
-                    };
-
+                    // Создадим текст
+                    var svg_text_element = add_svg_text_element(xmlnode, name);
 
                     // Добавляем созданный текст
-                    result.Children.Add(text);
+                    result.Children.Add(svg_text_element);
                 }
             }
+
+            // Отрисовка элемента стрелки влево с текстом
+            if (xmlnode["Shape"] == "ArrowLeft")
+            {
+                // Вычислим необходимые точки
+                // Первая точка - остриё стрелки
+                var x1 = Double.Parse(xmlnode["Left"]);
+                var y1 = Double.Parse(xmlnode["Top"]) + (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 2;
+
+                // Вторая точка - верхний угол наконечника стрелки
+                var x2 = Double.Parse(xmlnode["Left"]) + (Double.Parse(xmlnode["Right"]) - Double.Parse(xmlnode["Left"])) / 3;
+                var y2 = Double.Parse(xmlnode["Top"]);
+
+                // Третья точка - левый верхний угол прямоугольника стрелки
+                var x3 = x2;
+                var y3 = Double.Parse(xmlnode["Top"]) + (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 3;
+
+                // Четвертая точка - правый верхний угол прямоугольника стрелки
+                var x4 = Double.Parse(xmlnode["Right"]);
+                var y4 = y3;
+
+                // Пятая точка - правый нижний угол прямоугольника стрелки
+                var x5 = x4;
+                var y5 = Double.Parse(xmlnode["Bottom"]) - (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 3;
+
+                // Шестая точка - левый нижний угол прямоугольника стрелки
+                var x6 = x2;
+                var y6 = y5;
+
+                // Седьмая точка - нижний угол наконечника стрелки
+                var x7 = x2;
+                var y7 = Double.Parse(xmlnode["Bottom"]);
+
+                // Рисуем стрелку влево
+                var arrow_left = new SvgPolygonElement
+                {
+                    // Создадим полигон из точек
+                    Points = new List<SvgPoint>
+                    {
+                        new SvgPoint(new SvgLength((float)x1), new SvgLength((float)y1)),
+                        new SvgPoint(new SvgLength((float)x2), new SvgLength((float)y2)),
+                        new SvgPoint(new SvgLength((float)x3), new SvgLength((float)y3)),
+                        new SvgPoint(new SvgLength((float)x4), new SvgLength((float)y4)),
+                        new SvgPoint(new SvgLength((float)x5), new SvgLength((float)y5)),
+                        new SvgPoint(new SvgLength((float)x6), new SvgLength((float)y6)),
+                        new SvgPoint(new SvgLength((float)x7), new SvgLength((float)y7))
+                    },
+
+                    // Задаем ширину обводки
+                    StrokeWidth = new SvgLength((float)Double.Parse(xmlnode["LineWidth"])),
+
+                    // Задаем цвет внутри стрелки влево полностью прозрачным
+                    //(alfa = 0, если alfa = 255 - НЕ прозрачный)
+                    Fill = new SvgPaint(Color.FromArgb(0, 0, 0, 0)),
+
+                    // Задаем цвет обводки, который берется с ObjectColor
+                    Stroke = new SvgPaint(Color.FromArgb(obj_color[0], obj_color[1], obj_color[2], obj_color[3]))
+                };
+
+                // Добавляем нарисованный элемент прямоугольника на холст
+                result.Children.Add(arrow_left);
+
+                // Если надо отображать текст, то добавим его
+                if (should_draw_label != null && should_draw_label.Equals("true"))
+                {
+                    // Создадим текст
+                    var svg_text_element = add_svg_text_element(xmlnode, name);
+
+                    // Добавляем созданный текст
+                    result.Children.Add(svg_text_element);
+                }
+            }
+
+            // Отрисовка элемента стрелки вправо с текстом
+            if (xmlnode["Shape"] == "ArrowRight")
+            {
+                // Рисуем стрелку влево
+                //TODO()
+                var arrow_right = new SvgContentElement();
+
+                // Добавляем нарисованный элемент прямоугольника на холст
+                result.Children.Add(arrow_right);
+
+                // Если надо отображать текст, то добавим его
+                if (should_draw_label != null && should_draw_label.Equals("true"))
+                {
+                    // Создадим текст
+                    var svg_text_element = add_svg_text_element(xmlnode, name);
+
+                    // Добавляем созданный текст
+                    result.Children.Add(svg_text_element);
+                }
+            }
+
+            // Отрисовка элемента скругленный прямоугольник с текстом
+            if (xmlnode["Shape"] == "RoundRectangle")
+            {
+                // Рисуем скругленный прямоугольник
+                //TODO()
+                var round_rectangle = new SvgContentElement();
+
+                // Добавляем нарисованный элемент прямоугольника на холст
+                result.Children.Add(round_rectangle);
+
+                // Если надо отображать текст, то добавим его
+                if (should_draw_label != null && should_draw_label.Equals("true"))
+                {
+                    // Создадим текст
+                    var svg_text_element = add_svg_text_element(xmlnode, name);
+
+                    // Добавляем созданный текст
+                    result.Children.Add(svg_text_element);
+                }
+            }
+
+            // Круг, треугольник и ...
+            //TODO()
 
             return result;
 
@@ -235,6 +339,50 @@ namespace Diploma_Project // Пространство имен
 
             };*/
         }
+
+        //Функция для добавления элемента SvgTextElement
+        static SvgTextElement add_svg_text_element(Dictionary<string, string> xmlnode, string? name)
+        {
+            var cur_text = "";
+            // Проверим, есть ли заданное имя или же будем брать значение Default
+            if (name != null)
+            {
+                cur_text = name;
+            }
+            else
+            {
+                cur_text = xmlnode["LabelDefaultText"];
+            }
+
+            // Получим значения позиции
+            var position = xmlnode["LabelPosition"];
+            var cur_x = xmlnode["LabelPosition"].Split(",")[0].Replace(".", ",");
+            var cur_y = xmlnode["LabelPosition"].Split(",")[1].Replace(".", ",");
+
+            var text = new SvgTextElement
+            {
+                // Создаем сам текст
+                Children =
+                {
+                    new SvgContentElement
+                    {
+                        Content = cur_text,
+                    },
+                },
+
+                // Задаем расположение надписи
+                X = new List<SvgLength> { new SvgLength((float)Double.Parse(cur_x)) },
+                Y = new List<SvgLength> { new SvgLength((float)Double.Parse(cur_y)) },
+
+                // Задаем размер текста
+                FontSize = new SvgLength((float)Double.Parse(xmlnode["LabelFontSize"])),
+
+                // Задаем цвет надписи (черный НЕ прозрачный цвет)
+                Fill = new SvgPaint(Color.FromArgb(255, 0, 0, 0))
+            };
+            return text;
+        }
+
 
         //Функция для конвертации строки с цветом в десятичную систему счисления в формате Argb
         static List<int> convert_argb(string str)
