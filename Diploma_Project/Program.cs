@@ -164,8 +164,8 @@ namespace Diploma_Project // Пространство имен
             //Добавление Стиля
             //TODO()
 
-            // Отрисовка элемента прямоугольника с текстом
-            if (xmlnode["Shape"] == "Rectangle")
+            // Отрисовка элемента прямоугольника с текстом или скругленного прямоугольника
+            if (xmlnode["Shape"] == "Rectangle" || xmlnode["Shape"] == "RoundRectangle")
             {
                 // Рисуем прямоугольник
                 var cur_width = (float)Double.Parse(xmlnode["Right"]) - (float)Double.Parse(xmlnode["Left"]);
@@ -190,6 +190,12 @@ namespace Diploma_Project // Пространство имен
                     Stroke = new SvgPaint(Color.FromArgb(obj_color[0], obj_color[1], obj_color[2], obj_color[3]))
                 };
 
+                // Если задан RoundRectangle, то установим скругление углов
+                if (xmlnode["Shape"] == "RoundRectangle")
+                {
+                    rectangle.RadiusX = new SvgLength(10f);
+                }
+
                 // Добавляем нарисованный элемент прямоугольника на холст
                 result.Children.Add(rectangle);
 
@@ -204,152 +210,17 @@ namespace Diploma_Project // Пространство имен
                 }
             }
 
-            // Отрисовка элемента стрелки влево с текстом
-            if (xmlnode["Shape"] == "ArrowLeft")
+            // Отрисовка элемента стрелка влево/вправо или двухсторонняя стрелка с текстом
+            if (xmlnode["Shape"] == "ArrowLeftRight" || xmlnode["Shape"] == "ArrowLeft" || xmlnode["Shape"] == "ArrowRight")
             {
                 // Создадим List для точек и вычислим их
-                var list_points = new List<Double>();
-                // Первая точка - остриё стрелки
-                var x1 = Double.Parse(xmlnode["Left"]);
-                var y1 = Double.Parse(xmlnode["Top"]) +
-                         (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 2;
-                list_points.Add(x1);
-                list_points.Add(y1);
+                var list_points = get_points_list(xmlnode);
 
-                // Вторая точка - верхний угол наконечника стрелки
-                var x2 = Double.Parse(xmlnode["Left"]) +
-                         (Double.Parse(xmlnode["Right"]) - Double.Parse(xmlnode["Left"])) / 3;
-                var y2 = Double.Parse(xmlnode["Top"]);
-                list_points.Add(x2);
-                list_points.Add(y2);
-
-                // Третья точка - левый верхний угол прямоугольника стрелки
-                var x3 = x2;
-                var y3 = Double.Parse(xmlnode["Top"]) +
-                         (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 3;
-                list_points.Add(x3);
-                list_points.Add(y3);
-
-                // Четвертая точка - правый верхний угол прямоугольника стрелки
-                var x4 = Double.Parse(xmlnode["Right"]);
-                var y4 = y3;
-                list_points.Add(x4);
-                list_points.Add(y4);
-
-                // Пятая точка - правый нижний угол прямоугольника стрелки
-                var x5 = x4;
-                var y5 = Double.Parse(xmlnode["Bottom"]) -
-                         (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 3;
-                list_points.Add(x5);
-                list_points.Add(y5);
-
-                // Шестая точка - левый нижний угол прямоугольника стрелки
-                var x6 = x2;
-                var y6 = y5;
-                list_points.Add(x6);
-                list_points.Add(y6);
-
-                // Седьмая точка - нижний угол наконечника стрелки
-                var x7 = x2;
-                var y7 = Double.Parse(xmlnode["Bottom"]);
-                list_points.Add(x7);
-                list_points.Add(y7);
-
-                // Рисуем стрелку влево
-                var arrow_left = add_svg_left_or_right_arrow(list_points, xmlnode["LineWidth"], obj_color);
+                // Рисуем двухстороннюю стрелку
+                var arrow = add_svg_left_right_arrow(list_points, xmlnode["LineWidth"], obj_color);
 
                 // Добавляем нарисованный элемент прямоугольника на холст
-                result.Children.Add(arrow_left);
-
-                // Если надо отображать текст, то добавим его
-                if (should_draw_label != null && should_draw_label.Equals("true"))
-                {
-                    // Создадим текст
-                    var svg_text_element = add_svg_text_element(xmlnode, name);
-
-                    // Добавляем созданный текст
-                    result.Children.Add(svg_text_element);
-                }
-            }
-
-            // Отрисовка элемента стрелки вправо с текстом
-            if (xmlnode["Shape"] == "ArrowRight")
-            {
-                // Рисуем стрелку вправо
-                // Создадим List для точек и вычислим их
-                var list_points = new List<Double>();
-                // Первая точка - остриё стрелки
-                var x1 = Double.Parse(xmlnode["Right"]);
-                var y1 = Double.Parse(xmlnode["Top"]) +
-                         (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 2;
-                list_points.Add(x1);
-                list_points.Add(y1);
-
-                // Вторая точка - верхний угол наконечника стрелки
-                var x2 = Double.Parse(xmlnode["Right"]) -
-                         (Double.Parse(xmlnode["Right"]) - Double.Parse(xmlnode["Left"])) / 3;
-                var y2 = Double.Parse(xmlnode["Top"]);
-                list_points.Add(x2);
-                list_points.Add(y2);
-
-                // Третья точка - левый верхний угол прямоугольника стрелки
-                var x3 = x2;
-                var y3 = Double.Parse(xmlnode["Top"]) +
-                         (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 3;
-                list_points.Add(x3);
-                list_points.Add(y3);
-
-                // Четвертая точка - правый верхний угол прямоугольника стрелки
-                var x4 = Double.Parse(xmlnode["Left"]);
-                var y4 = y3;
-                list_points.Add(x4);
-                list_points.Add(y4);
-
-                // Пятая точка - правый нижний угол прямоугольника стрелки
-                var x5 = x4;
-                var y5 = Double.Parse(xmlnode["Bottom"]) -
-                         (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 3;
-                list_points.Add(x5);
-                list_points.Add(y5);
-
-                // Шестая точка - левый нижний угол прямоугольника стрелки
-                var x6 = x2;
-                var y6 = y5;
-                list_points.Add(x6);
-                list_points.Add(y6);
-
-                // Седьмая точка - нижний угол наконечника стрелки
-                var x7 = x2;
-                var y7 = Double.Parse(xmlnode["Bottom"]);
-                list_points.Add(x7);
-                list_points.Add(y7);
-
-                // Рисуем стрелку влево
-                var arrow_right = add_svg_left_or_right_arrow(list_points, xmlnode["LineWidth"], obj_color);
-
-                // Добавляем нарисованный элемент прямоугольника на холст
-                result.Children.Add(arrow_right);
-
-                // Если надо отображать текст, то добавим его
-                if (should_draw_label != null && should_draw_label.Equals("true"))
-                {
-                    // Создадим текст
-                    var svg_text_element = add_svg_text_element(xmlnode, name);
-
-                    // Добавляем созданный текст
-                    result.Children.Add(svg_text_element);
-                }
-            }
-
-            // Отрисовка элемента скругленный прямоугольник с текстом
-            if (xmlnode["Shape"] == "RoundRectangle")
-            {
-                // Рисуем скругленный прямоугольник
-                //TODO()
-                var round_rectangle = new SvgContentElement();
-
-                // Добавляем нарисованный элемент прямоугольника на холст
-                result.Children.Add(round_rectangle);
+                result.Children.Add(arrow);
 
                 // Если надо отображать текст, то добавим его
                 if (should_draw_label != null && should_draw_label.Equals("true"))
@@ -384,23 +255,156 @@ namespace Diploma_Project // Пространство имен
             };*/
         }
 
-        //Функция для добалвения стрелки влево или вправо
-        static SvgPolygonElement add_svg_left_or_right_arrow(List<Double> points, string width, List<int> obj_color)
+        // Дополнительная функция для создания списка точек для той или иной стрелки
+        static List<Double> get_points_list(Dictionary<string, string> xmlnode)
         {
+            var result = new List<double>();
+
+            // Зададим всевозможные координаты для двухсторонней стрелки
+            // Остриё стрелки справа
+            var right_arrowhead_x = Double.Parse(xmlnode["Right"]);
+            var right_arrowhead_y = Double.Parse(xmlnode["Top"]) +
+                                    (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 2;
+
+            // Верхний угол наконечника стрелки справа
+            var right_arrow_top_x = Double.Parse(xmlnode["Right"]) -
+                                    (Double.Parse(xmlnode["Right"]) - Double.Parse(xmlnode["Left"])) / 3;
+            var right_arrow_top_y = Double.Parse(xmlnode["Top"]);
+
+            // Правый верхний угол прямоугольника стрелки
+            var right_arrow_rectangle_top_x = right_arrow_top_x;
+            var right_arrow_rectangle_top_y = Double.Parse(xmlnode["Top"]) +
+                                              (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 3;
+
+            // Левый верхний угол прямоугольника стрелки
+            var left_arrow_rectangle_top_x = Double.Parse(xmlnode["Left"]) +
+                                             (Double.Parse(xmlnode["Right"]) - Double.Parse(xmlnode["Left"])) / 3;
+            var left_arrow_rectangle_top_y = right_arrow_rectangle_top_y;
+
+            // Верхний угол наконечника стрелки справа
+            var left_arrow_top_x = left_arrow_rectangle_top_x;
+            var left_arrow_top_y = right_arrow_top_y;
+
+            // Остриё стрелки слева
+            var left_arrowhead_x = Double.Parse(xmlnode["Left"]);
+            var left_arrowhead_y = right_arrowhead_y;
+
+            // Нижний угол наконечника стрелки слева
+            var left_arrow_bottom_x = left_arrow_rectangle_top_x;
+            var left_arrow_bottom_y = Double.Parse(xmlnode["Bottom"]);
+
+            // Левый нижний угол прямоугольника стрелки
+            var left_arrow_rectangle_bottom_x = left_arrow_rectangle_top_x;
+            var left_arrow_rectangle_bottom_y = Double.Parse(xmlnode["Bottom"]) -
+                                                (Double.Parse(xmlnode["Bottom"]) - Double.Parse(xmlnode["Top"])) / 3;
+
+            // Правый нижний угол прямоугольника стрелки
+            var right_arrow_rectangle_bottom_x = right_arrow_top_x;
+            var right_arrow_rectangle_bottom_y = left_arrow_rectangle_bottom_y;
+
+            // Нижний угол наконечника стрелки справа
+            var right_arrow_bottom_x = right_arrow_top_x;
+            var right_arrow_bottom_y = left_arrow_bottom_y;
+
+            // Правый верхний угол прямоугольника
+            var right_rectangle_top_x = right_arrowhead_x;
+            var right_rectangle_top_y = right_arrow_rectangle_top_y;
+            
+            // Правый нижний угол прямоугольника
+            var right_rectangle_bottom_x = right_arrowhead_x;
+            var right_rectangle_bottom_y = right_arrow_rectangle_bottom_y;
+            
+            // Левый верхний угол прямоугольника
+            var left_rectangle_top_x = left_arrowhead_x;
+            var left_rectangle_top_y = left_arrow_rectangle_top_y;
+            
+            var left_rectangle_bottom_x = left_arrowhead_x;
+            var left_rectangle_bottom_y = left_arrow_rectangle_bottom_y;
+
+            // Если стрелка влево, то добавим нужные координаты 
+            if (xmlnode["Shape"] == "ArrowLeft")
+            {
+                //Добавим нужные координаты
+                result.Add(left_arrowhead_x);
+                result.Add(left_arrowhead_y);
+                result.Add(left_arrow_top_x);
+                result.Add(left_arrow_top_y);
+                result.Add(left_arrow_rectangle_top_x);
+                result.Add(left_arrow_rectangle_top_y);
+                result.Add(right_rectangle_top_x);
+                result.Add(right_rectangle_top_y);
+                result.Add(right_rectangle_bottom_x);
+                result.Add(right_rectangle_bottom_y);
+                result.Add(left_arrow_rectangle_bottom_x);
+                result.Add(left_arrow_rectangle_bottom_y);
+                result.Add(left_arrow_bottom_x);
+                result.Add(left_arrow_bottom_y);
+            }
+
+            // Если стрелка влево, то добавим нужные координаты 
+            if (xmlnode["Shape"] == "ArrowRight")
+            {
+                //Добавим нужные координаты
+                result.Add(right_arrowhead_x);
+                result.Add(right_arrowhead_y);
+                result.Add(right_arrow_top_x);
+                result.Add(right_arrow_top_y);
+                result.Add(right_arrow_rectangle_top_x);
+                result.Add(right_arrow_rectangle_top_y);
+                result.Add(left_rectangle_top_x);
+                result.Add(left_rectangle_top_y);
+                result.Add(left_rectangle_bottom_x);
+                result.Add(left_rectangle_bottom_y);
+                result.Add(right_arrow_rectangle_bottom_x);
+                result.Add(right_arrow_rectangle_bottom_y);
+                result.Add(right_arrow_bottom_x);
+                result.Add(right_arrow_bottom_y);
+            }
+            
+            // Если стрелка влево, то добавим нужные координаты 
+            if (xmlnode["Shape"] == "ArrowLeftRight")
+            {
+                //Добавим нужные координаты
+                result.Add(right_arrowhead_x);
+                result.Add(right_arrowhead_y);
+                result.Add(right_arrow_top_x);
+                result.Add(right_arrow_top_y);
+                result.Add(right_arrow_rectangle_top_x);
+                result.Add(right_arrow_rectangle_top_y);
+                result.Add(left_arrow_rectangle_top_x);
+                result.Add(left_arrow_rectangle_top_y);
+                result.Add(left_arrow_top_x);
+                result.Add(left_arrow_top_y);
+                result.Add(left_arrowhead_x);
+                result.Add(left_arrowhead_y);
+                result.Add(left_arrow_bottom_x);
+                result.Add(left_arrow_bottom_y);
+                result.Add(left_arrow_rectangle_bottom_x);
+                result.Add(left_arrow_rectangle_bottom_y);
+                result.Add(right_arrow_rectangle_bottom_x);
+                result.Add(right_arrow_rectangle_bottom_y);
+                result.Add(right_arrow_bottom_x);
+                result.Add(right_arrow_bottom_y);
+            }
+
+            return result;
+        }
+
+        //Функция для добалвения стрелки влево или вправо
+        static SvgPolygonElement add_svg_left_right_arrow(List<Double> points, string width, List<int> obj_color)
+        {
+            // Создадим полигон из точек
+            var all_points = new List<SvgPoint>();
+            for (int i = 0; i < points.Count; i += 2)
+            {
+                all_points.Add(new SvgPoint(new SvgLength((float)points[i]), new SvgLength((float)points[i + 1])));
+            }
+
             // Рисуем стрелку влево
             var arrow_left_or_right = new SvgPolygonElement
             {
-                // Создадим полигон из точек
-                Points = new List<SvgPoint>
-                {
-                    new SvgPoint(new SvgLength((float)points[0]), new SvgLength((float)points[1])),
-                    new SvgPoint(new SvgLength((float)points[2]), new SvgLength((float)points[3])),
-                    new SvgPoint(new SvgLength((float)points[4]), new SvgLength((float)points[5])),
-                    new SvgPoint(new SvgLength((float)points[6]), new SvgLength((float)points[7])),
-                    new SvgPoint(new SvgLength((float)points[8]), new SvgLength((float)points[9])),
-                    new SvgPoint(new SvgLength((float)points[10]), new SvgLength((float)points[11])),
-                    new SvgPoint(new SvgLength((float)points[12]), new SvgLength((float)points[13]))
-                },
+                // Добавим полигон из точек
+                Points = all_points,
 
                 // Задаем ширину обводки
                 StrokeWidth = new SvgLength((float)Double.Parse(width)),
