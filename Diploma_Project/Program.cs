@@ -31,7 +31,7 @@ namespace Diploma_Project // Пространство имен
             const string archivePath = @"D:\Imsat\project_24_4287.zip";
 
             //Переменная для хранения имен нужных нам файлов
-            List<string> files_names = new List<string>();
+            List<string> filesNames = new List<string>();
 
             // Консольный выбор нужного файла при помощи ввода его номера
             //Console.Write("Введите номер интересующего файла: ");
@@ -49,7 +49,7 @@ namespace Diploma_Project // Пространство имен
                     // Если файл с данными, то добавим его в List со всем именами файлов с данными
                     if (rg.IsMatch(entry.FullName))
                     {
-                        files_names.Add(entry.FullName);
+                        filesNames.Add(entry.FullName);
                     }
 
                     // Пройдемся по всем файлам с данными
@@ -88,10 +88,10 @@ namespace Diploma_Project // Пространство имен
                                             xmlnode.SelectSingleNode("Label")?.InnerText);
 
                                         // Получим Dictionary, состоящий из свойств текущего элемента StandardLibrary.Lamp
-                                        Dictionary<string, string> parser_result = parser_Lamp(xmlnode);
+                                        Dictionary<string, string> parserResult = ParserLamp(xmlnode);
 
                                         // Печать в консоль результата после парсинга
-                                        foreach (var element in parser_result)
+                                        foreach (var element in parserResult)
                                         {
                                             Console.Write("{0} - {1}\n", element.Key, element.Value);
                                         }
@@ -99,12 +99,12 @@ namespace Diploma_Project // Пространство имен
                                         Console.Write("\n\n");
 
                                         // Нарисуем элемент "StandardLibrary.Lamp"
-                                        var svg_result = svg_image_Lamp(parser_result,
+                                        var svgResult = SvgImageLamp(parserResult,
                                             xmlnode?.SelectSingleNode("ShouldDrawLabel")?.InnerText,
                                             xmlnode?.SelectSingleNode("Label")?.InnerText);
 
                                         // Добавим нарисованные элементы на холст
-                                        svgDoc.RootSvg.Children.Add(svg_result);
+                                        svgDoc.RootSvg.Children.Add(svgResult);
 
                                         break;
 
@@ -135,13 +135,13 @@ namespace Diploma_Project // Пространство имен
                             // Сохраним получившийся SVG файл
                             // C:\Users\fsergey\RiderProjects\Diploma_Project\Diploma_Project\src
                             // D:\\Imsat\\svg_images\\
-                            var cur_name = entry.FullName.Split(".")[0];
+                            var curName = entry.FullName.Split(".")[0];
                             string path = "C:\\Users\\fsergey\\RiderProjects\\Diploma_Project\\Diploma_Project\\src\\" +
-                                          cur_name + ".svg";
+                                          curName + ".svg";
                             svgDoc.Save(path);
                         }
 
-                        Dictionary<string, int> my_dictionary = new Dictionary<string, int>();
+                        Dictionary<string, int> myDictionary = new Dictionary<string, int>();
                     }
                 }
             }
@@ -152,14 +152,14 @@ namespace Diploma_Project // Пространство имен
 
 
         // Функция для формирования SVG картинки для "StandardLibrary.Lamp"
-        static SvgGroupElement svg_image_Lamp(Dictionary<string, string> xmlnode, string? should_draw_label,
+        static SvgGroupElement SvgImageLamp(Dictionary<string, string> xmlnode, string? shouldDrawLabel,
             string? name)
         {
             // Приведем координаты к типу float
-            var cur_left = float.Parse(xmlnode["Left"], CultureInfo.InvariantCulture);
-            var cur_right = float.Parse(xmlnode["Right"], CultureInfo.InvariantCulture);
-            var cur_top = float.Parse(xmlnode["Top"], CultureInfo.InvariantCulture);
-            var cur_bottom = float.Parse(xmlnode["Bottom"], CultureInfo.InvariantCulture);
+            var curLeft = float.Parse(xmlnode["Left"], CultureInfo.InvariantCulture);
+            var curRight = float.Parse(xmlnode["Right"], CultureInfo.InvariantCulture);
+            var curTop = float.Parse(xmlnode["Top"], CultureInfo.InvariantCulture);
+            var curBottom = float.Parse(xmlnode["Bottom"], CultureInfo.InvariantCulture);
 
             // Создадим группу для отрисовки текущей "StandardLibrary.Lamp"
             var result = new SvgGroupElement();
@@ -168,7 +168,7 @@ namespace Diploma_Project // Пространство имен
             result.CustomAttributes = new List<SvgCustomAttribute> { new SvgCustomAttribute("data-state", "-1") };
 
             // Вычислим цвет обводки
-            var obj_color = convert_argb(xmlnode["ObjectColor"]);
+            var objColor = ConvertArgb(xmlnode["ObjectColor"]);
 
             // Добавление Стиля
             // TODO() - добавить параметр указания стиля
@@ -177,32 +177,32 @@ namespace Diploma_Project // Пространство имен
             if (xmlnode["Shape"] == "Rectangle" || xmlnode["Shape"] == "RoundRectangle")
             {
                 // Создадим группу для прямоугольника (поворот без этого не осуществить)
-                var rectangle_group = new SvgGroupElement();
+                var rectangleGroup = new SvgGroupElement();
                 
                 // Вычислим координаты для прямоугольника
-                var cur_width = cur_right - cur_left;
-                var cur_height = cur_bottom - cur_top;
-                var cur_x = cur_left;
-                var cur_y = cur_top;
+                var curWidth = curRight - curLeft;
+                var curHeight = curBottom - curTop;
+                var curX = curLeft;
+                var curY = curTop;
 
                 // Были ли перевернуты координаты (рисовали из правого угла)
-                if (cur_right < cur_left)
+                if (curRight < curLeft)
                 {
-                    cur_width = cur_left - cur_right;
-                    cur_height = cur_top - cur_bottom;
-                    cur_x = cur_right;
-                    cur_y = cur_bottom;
+                    curWidth = curLeft - curRight;
+                    curHeight = curTop - curBottom;
+                    curX = curRight;
+                    curY = curBottom;
                 }
 
                 // Создадим стандартный прямоугольник
                 var rectangle = new SvgRectElement()
                 {
-                    Width = new SvgLength(cur_width),
-                    Height = new SvgLength(cur_height),
+                    Width = new SvgLength(curWidth),
+                    Height = new SvgLength(curHeight),
 
                     // Задаем координаты левого верхнего угла
-                    X = new SvgLength(cur_x),
-                    Y = new SvgLength(cur_y),
+                    X = new SvgLength(curX),
+                    Y = new SvgLength(curY),
 
                     // Задаем ширину обводки
                     StrokeWidth = new SvgLength(float.Parse(xmlnode["LineWidth"], CultureInfo.InvariantCulture)),
@@ -212,7 +212,7 @@ namespace Diploma_Project // Пространство имен
 
                     // Задаем цвет обводки, который берется с ObjectColor
                     //(alfa = 0, если alfa = 255 - НЕ прозрачный)
-                    Stroke = new SvgPaint(Color.FromArgb(obj_color[0], obj_color[1], obj_color[2], obj_color[3]))
+                    Stroke = new SvgPaint(Color.FromArgb(objColor[0], objColor[1], objColor[2], objColor[3]))
                 };
 
                 // Если задан RoundRectangle, то установим скругление углов
@@ -229,39 +229,39 @@ namespace Diploma_Project // Пространство имен
                 }
                 
                 // Добавим полученный прямоугольник в группу
-                rectangle_group.Children.Add(rectangle);
+                rectangleGroup.Children.Add(rectangle);
 
                 // Добавим угол поворота, если он есть
                 if (xmlnode.ContainsKey("Angle") && float.Parse(xmlnode["Angle"], CultureInfo.InvariantCulture) != 0.0f)
                 {
                     // Вычислим угол поворота
-                    var angle_of_rotation = float.Parse(xmlnode["Angle"], CultureInfo.InvariantCulture);
-                    var center_x = cur_left + (cur_right - cur_left) / 2;
-                    var center_y = cur_top + (cur_bottom - cur_top) / 2;
+                    var angleOfRotation = float.Parse(xmlnode["Angle"], CultureInfo.InvariantCulture);
+                    var centerX = curLeft + (curRight - curLeft) / 2;
+                    var centerY = curTop + (curBottom - curTop) / 2;
 
                     // Добавим угол поворота
-                    rectangle_group.Transform = new List<SvgTransform>
+                    rectangleGroup.Transform = new List<SvgTransform>
                     {
                         new SvgRotateTransform()
                         {
-                            Angle = new SvgAngle(angle_of_rotation),
-                            CenterX = new SvgLength(center_x),
-                            CenterY = new SvgLength(center_y)
+                            Angle = new SvgAngle(angleOfRotation),
+                            CenterX = new SvgLength(centerX),
+                            CenterY = new SvgLength(centerY)
                         }
                     };
                 }
 
                 // Добавляем группу нашего прямоугольника в группу result
-                result.Children.Add(rectangle_group);
+                result.Children.Add(rectangleGroup);
 
                 // Если надо отображать текст, то добавим его
-                if (should_draw_label != null && should_draw_label.Equals("true"))
+                if (shouldDrawLabel != null && shouldDrawLabel.Equals("true"))
                 {
                     // Создадим текст
-                    var svg_text_element = add_svg_text_element(xmlnode, name);
+                    var svgTextElement = AddSvgTextElement(xmlnode, name);
 
                     // Добавляем созданный текст
-                    result.Children.Add(svg_text_element);
+                    result.Children.Add(svgTextElement);
                 }
             }
 
@@ -270,13 +270,13 @@ namespace Diploma_Project // Пространство имен
                 xmlnode["Shape"] == "ArrowRight")
             {
                 // Создадим группу для стрелки (поворот без этого не осуществить)
-                var arrow_group = new SvgGroupElement();
+                var arrowGroup = new SvgGroupElement();
 
                 // Создадим List для точек и вычислим их
-                var list_points = get_points_list(xmlnode["Shape"], cur_left, cur_right, cur_top, cur_bottom);
+                var listPoints = GetPointsList(xmlnode["Shape"], curLeft, curRight, curTop, curBottom);
 
                 // Рисуем двухстороннюю стрелку
-                var arrow = add_svg_left_right_arrow(list_points, xmlnode["LineWidth"], obj_color);
+                var arrow = AddSvgLeftRightArrow(listPoints, xmlnode["LineWidth"], objColor);
 
                 // Надо ли отображать границу?
                 if (xmlnode.ContainsKey("DrawBorder"))
@@ -289,39 +289,39 @@ namespace Diploma_Project // Пространство имен
                 }
 
                 // Добавим полученную стрелку в группу
-                arrow_group.Children.Add(arrow);
+                arrowGroup.Children.Add(arrow);
 
                 // Добавим угол поворота, если он есть
                 if (xmlnode.ContainsKey("Angle") && float.Parse(xmlnode["Angle"], CultureInfo.InvariantCulture) != 0.0f)
                 {
                     // Вычислим угол поворота
-                    var angle_of_rotation = float.Parse(xmlnode["Angle"], CultureInfo.InvariantCulture);
-                    var center_x = cur_left + (cur_right - cur_left) / 2;
-                    var center_y = cur_top + (cur_bottom - cur_top) / 2;
+                    var angleOfRotation = float.Parse(xmlnode["Angle"], CultureInfo.InvariantCulture);
+                    var centerX = curLeft + (curRight - curLeft) / 2;
+                    var centerY = curTop + (curBottom - curTop) / 2;
 
                     // Добавим угол поворота
-                    arrow_group.Transform = new List<SvgTransform>
+                    arrowGroup.Transform = new List<SvgTransform>
                     {
                         new SvgRotateTransform()
                         {
-                            Angle = new SvgAngle(angle_of_rotation),
-                            CenterX = new SvgLength(center_x),
-                            CenterY = new SvgLength(center_y)
+                            Angle = new SvgAngle(angleOfRotation),
+                            CenterX = new SvgLength(centerX),
+                            CenterY = new SvgLength(centerY)
                         }
                     };
                 }
 
                 // Добавляем группу нашей стрелки в группу result
-                result.Children.Add(arrow_group);
+                result.Children.Add(arrowGroup);
 
                 // Если надо отображать текст, то добавим его
-                if (should_draw_label != null && should_draw_label.Equals("true"))
+                if (shouldDrawLabel != null && shouldDrawLabel.Equals("true"))
                 {
                     // Создадим текст
-                    var svg_text_element = add_svg_text_element(xmlnode, name);
+                    var svgTextElement = AddSvgTextElement(xmlnode, name);
 
                     // Добавляем созданный текст
-                    result.Children.Add(svg_text_element);
+                    result.Children.Add(svgTextElement);
                 }
             }
 
@@ -346,13 +346,13 @@ namespace Diploma_Project // Пространство имен
                 result.Children.Add(circle);
 
                 // Если надо отображать текст, то добавим его
-                if (should_draw_label != null && should_draw_label.Equals("true"))
+                if (shouldDrawLabel != null && shouldDrawLabel.Equals("true"))
                 {
                     // Создадим текст
-                    var svg_text_element = add_svg_text_element(xmlnode, name);
+                    var svgTextElement = AddSvgTextElement(xmlnode, name);
 
                     // Добавляем созданный текст
-                    result.Children.Add(svg_text_element);
+                    result.Children.Add(svgTextElement);
                 }
             }
 
@@ -379,188 +379,183 @@ namespace Diploma_Project // Пространство имен
         }
 
         // Дополнительная функция для создания списка точек для той или иной стрелки
-        static List<float> get_points_list(string cur_shape, float cur_left, float cur_right, float cur_top, float cur_bottom)
+        static List<float> GetPointsList(string curShape, float curLeft, float curRight, float curTop, float curBottom)
         {
             var result = new List<float>();
 
             // Зададим всевозможные координаты для двухсторонней стрелки
             // Остриё стрелки справа
-            var right_arrowhead_x = cur_right;
-            var right_arrowhead_y = cur_top +
-                                    (cur_bottom - cur_top) / 2;
+            var rightArrowheadX = curRight;
+            var rightArrowheadY = curTop + (curBottom - curTop) / 2;
 
             // Верхний угол наконечника стрелки справа
-            var right_arrow_top_x = cur_right -
-                                    (cur_right - cur_left) / 3;
-            var right_arrow_top_y = cur_top;
+            var rightArrowTopX = curRight - (curRight - curLeft) / 3;
+            var rightArrowTopY = curTop;
 
             // Правый верхний угол прямоугольника стрелки
-            var right_arrow_rectangle_top_x = right_arrow_top_x;
-            var right_arrow_rectangle_top_y = cur_top +
-                                              (cur_bottom - cur_top) / 3;
+            var rightArrowRectangleTopX = rightArrowTopX;
+            var rightArrowRectangleTopY = curTop + (curBottom - curTop) / 3;
 
             // Левый верхний угол прямоугольника стрелки
-            var left_arrow_rectangle_top_x = cur_left +
-                                             (cur_right - cur_left) / 3;
-            var left_arrow_rectangle_top_y = right_arrow_rectangle_top_y;
+            var leftArrowRectangleTopX = curLeft + (curRight - curLeft) / 3;
+            var leftArrowRectangleTopY = rightArrowRectangleTopY;
 
             // Верхний угол наконечника стрелки справа
-            var left_arrow_top_x = left_arrow_rectangle_top_x;
-            var left_arrow_top_y = right_arrow_top_y;
+            var leftArrowTopX = leftArrowRectangleTopX;
+            var leftArrowTopY = rightArrowTopY;
 
             // Остриё стрелки слева
-            var left_arrowhead_x = cur_left;
-            var left_arrowhead_y = right_arrowhead_y;
+            var leftArrowheadX = curLeft;
+            var leftArrowheadY = rightArrowheadY;
 
             // Нижний угол наконечника стрелки слева
-            var left_arrow_bottom_x = left_arrow_rectangle_top_x;
-            var left_arrow_bottom_y = cur_bottom;
+            var leftArrowBottomX = leftArrowRectangleTopX;
+            var leftArrowBottomY = curBottom;
 
             // Левый нижний угол прямоугольника стрелки
-            var left_arrow_rectangle_bottom_x = left_arrow_rectangle_top_x;
-            var left_arrow_rectangle_bottom_y = cur_bottom -
-                                                (cur_bottom - cur_top) / 3;
+            var leftArrowRectangleBottomX = leftArrowRectangleTopX;
+            var leftArrowRectangleBottomY = curBottom - (curBottom - curTop) / 3;
 
             // Правый нижний угол прямоугольника стрелки
-            var right_arrow_rectangle_bottom_x = right_arrow_top_x;
-            var right_arrow_rectangle_bottom_y = left_arrow_rectangle_bottom_y;
+            var rightArrowRectangleBottomX = rightArrowTopX;
+            var rightArrowRectangleBottomY = leftArrowRectangleBottomY;
 
             // Нижний угол наконечника стрелки справа
-            var right_arrow_bottom_x = right_arrow_top_x;
-            var right_arrow_bottom_y = left_arrow_bottom_y;
+            var rightArrowBottomX = rightArrowTopX;
+            var rightArrowBottomY = leftArrowBottomY;
 
             // Правый верхний угол прямоугольника
-            var right_rectangle_top_x = right_arrowhead_x;
-            var right_rectangle_top_y = right_arrow_rectangle_top_y;
+            var rightRectangleTopX = rightArrowheadX;
+            var rightRectangleTopY = rightArrowRectangleTopY;
 
             // Правый нижний угол прямоугольника
-            var right_rectangle_bottom_x = right_arrowhead_x;
-            var right_rectangle_bottom_y = right_arrow_rectangle_bottom_y;
+            var rightRectangleBottomX = rightArrowheadX;
+            var rightRectangleBottomY = rightArrowRectangleBottomY;
 
             // Левый верхний угол прямоугольника
-            var left_rectangle_top_x = left_arrowhead_x;
-            var left_rectangle_top_y = left_arrow_rectangle_top_y;
+            var leftRectangleTopX = leftArrowheadX;
+            var leftRectangleTopY = leftArrowRectangleTopY;
 
-            var left_rectangle_bottom_x = left_arrowhead_x;
-            var left_rectangle_bottom_y = left_arrow_rectangle_bottom_y;
+            var leftRectangleBottomX = leftArrowheadX;
+            var leftRectangleBottomY = leftArrowRectangleBottomY;
 
             // Если стрелка влево, то добавим нужные координаты 
-            if (cur_shape == "ArrowLeft")
+            if (curShape == "ArrowLeft")
             {
                 //Добавим нужные координаты
-                result.Add(left_arrowhead_x);
-                result.Add(left_arrowhead_y);
-                result.Add(left_arrow_top_x);
-                result.Add(left_arrow_top_y);
-                result.Add(left_arrow_rectangle_top_x);
-                result.Add(left_arrow_rectangle_top_y);
-                result.Add(right_rectangle_top_x);
-                result.Add(right_rectangle_top_y);
-                result.Add(right_rectangle_bottom_x);
-                result.Add(right_rectangle_bottom_y);
-                result.Add(left_arrow_rectangle_bottom_x);
-                result.Add(left_arrow_rectangle_bottom_y);
-                result.Add(left_arrow_bottom_x);
-                result.Add(left_arrow_bottom_y);
+                result.Add(leftArrowheadX);
+                result.Add(leftArrowheadY);
+                result.Add(leftArrowTopX);
+                result.Add(leftArrowTopY);
+                result.Add(leftArrowRectangleTopX);
+                result.Add(leftArrowRectangleTopY);
+                result.Add(rightRectangleTopX);
+                result.Add(rightRectangleTopY);
+                result.Add(rightRectangleBottomX);
+                result.Add(rightRectangleBottomY);
+                result.Add(leftArrowRectangleBottomX);
+                result.Add(leftArrowRectangleBottomY);
+                result.Add(leftArrowBottomX);
+                result.Add(leftArrowBottomY);
             }
 
             // Если стрелка влево, то добавим нужные координаты 
-            if (cur_shape == "ArrowRight")
+            if (curShape == "ArrowRight")
             {
                 //Добавим нужные координаты
-                result.Add(right_arrowhead_x);
-                result.Add(right_arrowhead_y);
-                result.Add(right_arrow_top_x);
-                result.Add(right_arrow_top_y);
-                result.Add(right_arrow_rectangle_top_x);
-                result.Add(right_arrow_rectangle_top_y);
-                result.Add(left_rectangle_top_x);
-                result.Add(left_rectangle_top_y);
-                result.Add(left_rectangle_bottom_x);
-                result.Add(left_rectangle_bottom_y);
-                result.Add(right_arrow_rectangle_bottom_x);
-                result.Add(right_arrow_rectangle_bottom_y);
-                result.Add(right_arrow_bottom_x);
-                result.Add(right_arrow_bottom_y);
+                result.Add(rightArrowheadX);
+                result.Add(rightArrowheadY);
+                result.Add(rightArrowTopX);
+                result.Add(rightArrowTopY);
+                result.Add(rightArrowRectangleTopX);
+                result.Add(rightArrowRectangleTopY);
+                result.Add(leftRectangleTopX);
+                result.Add(leftRectangleTopY);
+                result.Add(leftRectangleBottomX);
+                result.Add(leftRectangleBottomY);
+                result.Add(rightArrowRectangleBottomX);
+                result.Add(rightArrowRectangleBottomY);
+                result.Add(rightArrowBottomX);
+                result.Add(rightArrowBottomY);
             }
 
             // Если стрелка влево, то добавим нужные координаты 
-            if (cur_shape == "ArrowLeftRight")
+            if (curShape == "ArrowLeftRight")
             {
                 //Добавим нужные координаты
-                result.Add(right_arrowhead_x);
-                result.Add(right_arrowhead_y);
-                result.Add(right_arrow_top_x);
-                result.Add(right_arrow_top_y);
-                result.Add(right_arrow_rectangle_top_x);
-                result.Add(right_arrow_rectangle_top_y);
-                result.Add(left_arrow_rectangle_top_x);
-                result.Add(left_arrow_rectangle_top_y);
-                result.Add(left_arrow_top_x);
-                result.Add(left_arrow_top_y);
-                result.Add(left_arrowhead_x);
-                result.Add(left_arrowhead_y);
-                result.Add(left_arrow_bottom_x);
-                result.Add(left_arrow_bottom_y);
-                result.Add(left_arrow_rectangle_bottom_x);
-                result.Add(left_arrow_rectangle_bottom_y);
-                result.Add(right_arrow_rectangle_bottom_x);
-                result.Add(right_arrow_rectangle_bottom_y);
-                result.Add(right_arrow_bottom_x);
-                result.Add(right_arrow_bottom_y);
+                result.Add(rightArrowheadX);
+                result.Add(rightArrowheadY);
+                result.Add(rightArrowTopX);
+                result.Add(rightArrowTopY);
+                result.Add(rightArrowRectangleTopX);
+                result.Add(rightArrowRectangleTopY);
+                result.Add(leftArrowRectangleTopX);
+                result.Add(leftArrowRectangleTopY);
+                result.Add(leftArrowTopX);
+                result.Add(leftArrowTopY);
+                result.Add(leftArrowheadX);
+                result.Add(leftArrowheadY);
+                result.Add(leftArrowBottomX);
+                result.Add(leftArrowBottomY);
+                result.Add(leftArrowRectangleBottomX);
+                result.Add(leftArrowRectangleBottomY);
+                result.Add(rightArrowRectangleBottomX);
+                result.Add(rightArrowRectangleBottomY);
+                result.Add(rightArrowBottomX);
+                result.Add(rightArrowBottomY);
             }
 
             return result;
         }
 
         //Функция для добалвения стрелки влево или вправо
-        static SvgPolygonElement add_svg_left_right_arrow(List<float> points, string width, List<int> obj_color)
+        static SvgPolygonElement AddSvgLeftRightArrow(List<float> points, string width, List<int> objColor)
         {
             // Создадим полигон из точек
-            var all_points = new List<SvgPoint>();
+            var allPoints = new List<SvgPoint>();
             for (int i = 0; i < points.Count; i += 2)
             {
-                all_points.Add(new SvgPoint(new SvgLength(points[i]), new SvgLength(points[i + 1])));
+                allPoints.Add(new SvgPoint(new SvgLength(points[i]), new SvgLength(points[i + 1])));
             }
 
-            // Рисуем стрелку влево
-            var arrow_left_or_right = new SvgPolygonElement
+            // Рисуем стрелку
+            var arrowLeftOrRight = new SvgPolygonElement
             {
                 // Добавим полигон из точек
-                Points = all_points,
+                Points = allPoints,
 
                 // Задаем ширину обводки
                 StrokeWidth = new SvgLength(float.Parse(width, CultureInfo.InvariantCulture)),
 
                 // Задаем цвет внутри стрелки влево полностью прозрачным
-                //(alfa = 0, если alfa = 255 - НЕ прозрачный)
-                Fill = new SvgPaint(Color.FromArgb(0, 0, 0, 0)),
+                Fill = new SvgPaint(Color.Transparent),
 
                 // Задаем цвет обводки, который берется с ObjectColor
-                Stroke = new SvgPaint(Color.FromArgb(obj_color[0], obj_color[1], obj_color[2], obj_color[3]))
+                //(alfa = 0, если alfa = 255 - НЕ прозрачный)
+                Stroke = new SvgPaint(Color.FromArgb(objColor[0], objColor[1], objColor[2], objColor[3]))
             };
 
-            return arrow_left_or_right;
+            return arrowLeftOrRight;
         }
 
         //Функция для добавления элемента SvgTextElement
-        static SvgTextElement add_svg_text_element(Dictionary<string, string> xmlnode, string? name)
+        static SvgTextElement AddSvgTextElement(Dictionary<string, string> xmlnode, string? name)
         {
-            var cur_text = "";
+            var curText = "";
             // Проверим, есть ли заданное имя или же будем брать значение Default
             if (name != null)
             {
-                cur_text = name;
+                curText = name;
             }
             else
             {
-                cur_text = xmlnode["LabelDefaultText"];
+                curText = xmlnode["LabelDefaultText"];
             }
 
             // Получим значения позиции
             var position = xmlnode["LabelPosition"];
-            var cur_x = float.Parse(xmlnode["LabelPosition"].Split(",")[0], CultureInfo.InvariantCulture);
-            var cur_y = float.Parse(xmlnode["LabelPosition"].Split(",")[1], CultureInfo.InvariantCulture);
+            var curX = float.Parse(xmlnode["LabelPosition"].Split(",")[0], CultureInfo.InvariantCulture);
+            var curY = float.Parse(xmlnode["LabelPosition"].Split(",")[1], CultureInfo.InvariantCulture);
 
             var text = new SvgTextElement
             {
@@ -569,17 +564,17 @@ namespace Diploma_Project // Пространство имен
                 {
                     new SvgContentElement
                     {
-                        Content = cur_text,
+                        Content = curText,
                     },
                 },
 
                 // Задаем расположение надписи по формуле согласно заданным координатам
                 // TODO() - добавить формулу
-                X = new List<SvgLength> { new SvgLength(cur_x) },
-                Y = new List<SvgLength> { new SvgLength(cur_y) },
+                X = new List<SvgLength> { new SvgLength(curX) },
+                Y = new List<SvgLength> { new SvgLength(curY) },
 
                 // Задаем размер текста
-                FontSize = new SvgLength((float)Double.Parse(xmlnode["LabelFontSize"])),
+                FontSize = new SvgLength(float.Parse(xmlnode["LabelFontSize"], CultureInfo.InvariantCulture)),
 
                 // Задаем стандартный цвет надписи (черный НЕ прозрачный цвет)
                 Fill = new SvgPaint(Color.FromArgb(255, 0, 0, 0))
@@ -588,9 +583,9 @@ namespace Diploma_Project // Пространство имен
             // Задаем цвет надписи согласно LabelBrush, если такой узел присутствует
             if (xmlnode.ContainsKey("LabelBrush"))
             {
-                var label_brush_color = convert_argb(xmlnode["LabelBrush"]);
-                text.Fill = new SvgPaint(Color.FromArgb(label_brush_color[0], label_brush_color[1],
-                    label_brush_color[2], label_brush_color[3]));
+                var labelBrushColor = ConvertArgb(xmlnode["LabelBrush"]);
+                text.Fill = new SvgPaint(Color.FromArgb(labelBrushColor[0], labelBrushColor[1],
+                    labelBrushColor[2], labelBrushColor[3]));
             }
 
             // Есть задан стиль текста, то добавим его
@@ -612,54 +607,54 @@ namespace Diploma_Project // Пространство имен
 
 
         //Функция для конвертации строки с цветом в десятичную систему счисления в формате Argb
-        static List<int> convert_argb(string str)
+        static List<int> ConvertArgb(string str)
         {
             List<int> result = new List<int>();
             int length = str.Length;
-            var color_a = 255;
-            var color_r = 0;
-            var color_g = 0;
-            var color_b = 0;
+            var colorA = 255;
+            var colorR = 0;
+            var colorG = 0;
+            var colorB = 0;
             // Если пришел формат rgb
             if (length == 7)
             {
-                color_r = Convert.ToInt32(str.Substring(1, 2), 16);
-                color_g = Convert.ToInt32(str.Substring(3, 2), 16);
-                color_b = Convert.ToInt32(str.Substring(5, 2), 16);
+                colorR = Convert.ToInt32(str.Substring(1, 2), 16);
+                colorG = Convert.ToInt32(str.Substring(3, 2), 16);
+                colorB = Convert.ToInt32(str.Substring(5, 2), 16);
             }
             // Если Argb
             else if (length == 9)
             {
-                color_a = Convert.ToInt32(str.Substring(1, 2), 16);
-                color_r = Convert.ToInt32(str.Substring(3, 2), 16);
-                color_g = Convert.ToInt32(str.Substring(5, 2), 16);
-                color_b = Convert.ToInt32(str.Substring(7, 2), 16);
+                colorA = Convert.ToInt32(str.Substring(1, 2), 16);
+                colorR = Convert.ToInt32(str.Substring(3, 2), 16);
+                colorG = Convert.ToInt32(str.Substring(5, 2), 16);
+                colorB = Convert.ToInt32(str.Substring(7, 2), 16);
             }
 
-            result.Add(color_a);
-            result.Add(color_r);
-            result.Add(color_g);
-            result.Add(color_b);
+            result.Add(colorA);
+            result.Add(colorR);
+            result.Add(colorG);
+            result.Add(colorB);
             return result;
         }
 
         // Функция для парсинга элемента с ToolId = "StandardLibrary.Lamp"
-        static Dictionary<string, string> parser_Lamp(XmlNode current_xmlnode)
+        static Dictionary<string, string> ParserLamp(XmlNode currentXmlnode)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
 
             // Получим дочерний узел Properties
-            XmlNode? properties = current_xmlnode.SelectSingleNode("Properties");
+            XmlNode? properties = currentXmlnode.SelectSingleNode("Properties");
 
             // Разбираемся с узлом Properties
-            XmlNodeList? properties_nodes = properties?.SelectNodes("*");
-            if (properties_nodes != null)
+            XmlNodeList? propertiesNodes = properties?.SelectNodes("*");
+            if (propertiesNodes != null)
             {
-                foreach (XmlNode properties_node in properties_nodes)
+                foreach (XmlNode propertiesNode in propertiesNodes)
                 {
                     // Найдем текущие значения
-                    var name = properties_node.SelectSingleNode("Name")?.InnerText;
-                    var value = properties_node.SelectSingleNode("Value")?.InnerText;
+                    var name = propertiesNode.SelectSingleNode("Name")?.InnerText;
+                    var value = propertiesNode.SelectSingleNode("Value")?.InnerText;
 
                     // Добавим найденные значения в result
                     if (name != null && value != null)
