@@ -4,6 +4,7 @@
 // Подключаем библиотеки
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO.Compression;
@@ -47,10 +48,15 @@ namespace Diploma_Project // Пространство имен
                     Regex rg = new Regex(pattern);
 
                     // Если файл с данными, то добавим его в List со всем именами файлов с данными
+                    // TODO - не испольузется
                     if (rg.IsMatch(entry.FullName))
                     {
                         filesNames.Add(entry.FullName);
                     }
+                    
+                    // Для проверки valueTollId case
+                    // TODO - просто проверка
+                    var defaultList = new List<string>();
 
                     // Пройдемся по всем файлам с данными
                     // Circle - 140, 141
@@ -127,6 +133,10 @@ namespace Diploma_Project // Пространство имен
                                         break;
 
                                     default:
+                                        if (!defaultList.Contains(valueTollId))
+                                        {
+                                            defaultList.Add(valueTollId);
+                                        }
                                         Console.WriteLine("default");
                                         break;
                                 }
@@ -142,6 +152,12 @@ namespace Diploma_Project // Пространство имен
                         }
 
                         Dictionary<string, int> myDictionary = new Dictionary<string, int>();
+                    }
+
+                    // TODO -для тестирования отсутствующий case
+                    foreach (var element in defaultList)
+                    {
+                        Console.Write("{0}\n", element);
                     }
                 }
             }
@@ -178,7 +194,7 @@ namespace Diploma_Project // Пространство имен
             {
                 // Создадим группу для прямоугольника (поворот без этого не осуществить)
                 var rectangleGroup = new SvgGroupElement();
-                
+
                 // Вычислим координаты для прямоугольника
                 var curWidth = curRight - curLeft;
                 var curHeight = curBottom - curTop;
@@ -189,8 +205,12 @@ namespace Diploma_Project // Пространство имен
                 if (curRight < curLeft)
                 {
                     curWidth = curLeft - curRight;
-                    curHeight = curTop - curBottom;
                     curX = curRight;
+                }
+
+                if (curBottom < curTop)
+                {
+                    curHeight = curTop - curBottom;
                     curY = curBottom;
                 }
 
@@ -216,9 +236,12 @@ namespace Diploma_Project // Пространство имен
                 };
 
                 // Если задан RoundRectangle, то установим скругление углов
+                // TODO - Задать стандартное закругление
                 if (xmlnode["Shape"] == "RoundRectangle")
                 {
-                    rectangle.RadiusX = new SvgLength(10f);
+                    var radius = 10f;
+                    rectangle.RadiusX = new SvgLength(radius);
+                    rectangle.RadiusX = new SvgLength(radius);
                 }
 
                 // Если задан параметр, что границу отображать не надо
@@ -227,7 +250,7 @@ namespace Diploma_Project // Пространство имен
                     // Границу отображать не будем
                     rectangle.Stroke = new SvgPaint(Color.Transparent);
                 }
-                
+
                 // Добавим полученный прямоугольник в группу
                 rectangleGroup.Children.Add(rectangle);
 
@@ -278,14 +301,11 @@ namespace Diploma_Project // Пространство имен
                 // Рисуем двухстороннюю стрелку
                 var arrow = AddSvgLeftRightArrow(listPoints, xmlnode["LineWidth"], objColor);
 
-                // Надо ли отображать границу?
-                if (xmlnode.ContainsKey("DrawBorder"))
+                // Если задан параметр, что границу отображать не надо
+                if (xmlnode.ContainsKey("DrawBorder") && xmlnode["DrawBorder"] == "False")
                 {
-                    // Границу отображать не надо
-                    if (xmlnode["DrawBorder"] == "False")
-                    {
-                        arrow.Stroke = new SvgPaint(Color.Transparent);
-                    }
+                    // Границу отображать не будем
+                    arrow.Stroke = new SvgPaint(Color.Transparent);
                 }
 
                 // Добавим полученную стрелку в группу
@@ -306,7 +326,7 @@ namespace Diploma_Project // Пространство имен
                         {
                             Angle = new SvgAngle(angleOfRotation),
                             CenterX = new SvgLength(centerX),
-                            CenterY = new SvgLength(centerY)
+                            CenterY = new SvgLength(centerY),
                         }
                     };
                 }
@@ -328,22 +348,79 @@ namespace Diploma_Project // Пространство имен
             // Отрисовка элемента круг с текстом
             if (xmlnode["Shape"] == "Circle")
             {
-                // Рисуем круг
-                //TODO() - нарисовать круг
-                var circle = new SvgCircleElement();
+                // Создадим группу для эллипса (поворот без этого не осуществить)
+                var ellipseGroup = new SvgGroupElement();
 
-                // Надо ли отображать границу?
-                if (xmlnode.ContainsKey("DrawBorder"))
+                // Вычислим координаты для эллипса
+                var curRadiusX = (curRight - curLeft) / 2;
+                var curRadiusY = (curBottom - curTop) / 2;
+                var curCentreX = curLeft + curRadiusX;
+                var curCentreY = curTop + curRadiusY;
+
+                // Были ли перевернуты координаты (рисовали из правого угла)
+                if (curRight < curLeft)
                 {
-                    // Границу отображать не надо
-                    if (xmlnode["DrawBorder"] == "False")
-                    {
-                        circle.Stroke = new SvgPaint(Color.Transparent);
-                    }
+                    curRadiusX = (curLeft - curRight) / 2;
+                    curCentreX = curRight + curRadiusX;
                 }
 
-                // Добавляем нарисованный элемент прямоугольника на холст
-                result.Children.Add(circle);
+                if (curBottom < curTop)
+                {
+                    curRadiusY = (curTop - curBottom) / 2;
+                    curCentreY = curBottom + curRadiusY;
+                }
+
+                // Создадим эллипс
+                var ellipse = new SvgEllipseElement
+                {
+                    CenterX = new SvgLength(curCentreX),
+                    CenterY = new SvgLength(curCentreY),
+                    RadiusX = new SvgLength(curRadiusX),
+                    RadiusY = new SvgLength(curRadiusY),
+
+                    // Задаем ширину обводки
+                    StrokeWidth = new SvgLength(float.Parse(xmlnode["LineWidth"], CultureInfo.InvariantCulture)),
+
+                    // Задаем цвет внутри ээлипса полностью прозрачным
+                    Fill = new SvgPaint(Color.Transparent),
+
+                    // Задаем цвет обводки, который берется с ObjectColor
+                    //(alfa = 0, если alfa = 255 - НЕ прозрачный)
+                    Stroke = new SvgPaint(Color.FromArgb(objColor[0], objColor[1], objColor[2], objColor[3]))
+                };
+
+                // Если задан параметр, что границу отображать не надо
+                if (xmlnode.ContainsKey("DrawBorder") && xmlnode["DrawBorder"] == "False")
+                {
+                    // Границу отображать не будем
+                    ellipse.Stroke = new SvgPaint(Color.Transparent);
+                }
+
+                // Добавим полученный эллипс в группу
+                ellipseGroup.Children.Add(ellipse);
+
+                // Добавим угол поворота, если он есть
+                if (xmlnode.ContainsKey("Angle") && float.Parse(xmlnode["Angle"], CultureInfo.InvariantCulture) != 0.0f)
+                {
+                    // Вычислим угол поворота
+                    var angleOfRotation = float.Parse(xmlnode["Angle"], CultureInfo.InvariantCulture);
+                    var centerX = curLeft + (curRight - curLeft) / 2;
+                    var centerY = curTop + (curBottom - curTop) / 2;
+
+                    // Добавим угол поворота
+                    ellipseGroup.Transform = new List<SvgTransform>
+                    {
+                        new SvgRotateTransform()
+                        {
+                            Angle = new SvgAngle(angleOfRotation),
+                            CenterX = new SvgLength(centerX),
+                            CenterY = new SvgLength(centerY)
+                        }
+                    };
+                }
+
+                // Добавляем группу нашего эллипса в группу result
+                result.Children.Add(ellipseGroup);
 
                 // Если надо отображать текст, то добавим его
                 if (shouldDrawLabel != null && shouldDrawLabel.Equals("true"))
@@ -384,6 +461,7 @@ namespace Diploma_Project // Пространство имен
             var result = new List<float>();
 
             // Зададим всевозможные координаты для двухсторонней стрелки
+            // TODO - Добавить вычисление по формуле
             // Остриё стрелки справа
             var rightArrowheadX = curRight;
             var rightArrowheadY = curTop + (curBottom - curTop) / 2;
@@ -569,7 +647,7 @@ namespace Diploma_Project // Пространство имен
                 },
 
                 // Задаем расположение надписи по формуле согласно заданным координатам
-                // TODO() - добавить формулу
+                // TODO() - добавить вычисление по формуле
                 X = new List<SvgLength> { new SvgLength(curX) },
                 Y = new List<SvgLength> { new SvgLength(curY) },
 
