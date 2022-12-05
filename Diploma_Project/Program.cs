@@ -52,7 +52,8 @@ namespace Diploma_Project // Пространство имен
                     }
 
                     // Пройдемся по всем файлам с данными
-                    if (rg.IsMatch(entry.FullName) && entry.FullName.Equals("chart_383.chr"))
+                    // Circle - 140, 141
+                    if (rg.IsMatch(entry.FullName) && entry.FullName.Equals("chart_140.chr"))
                     {
                         // открываем этот файл
                         using (var stream = entry.Open())
@@ -161,32 +162,45 @@ namespace Diploma_Project // Пространство имен
             // Вычислим цвет обводки
             var obj_color = convert_argb(xmlnode["ObjectColor"]);
 
-            //Добавление Стиля
-            //TODO()
+            // Добавление Стиля
+            // TODO() - добавить параметр указания стиля
 
-            // Отрисовка элемента прямоугольника с текстом или скругленного прямоугольника
+            // Отрисовка элемента прямоугольник с текстом или скругленного прямоугольника
             if (xmlnode["Shape"] == "Rectangle" || xmlnode["Shape"] == "RoundRectangle")
             {
                 // Рисуем прямоугольник
                 var cur_width = (float)Double.Parse(xmlnode["Right"]) - (float)Double.Parse(xmlnode["Left"]);
                 var cur_height = (float)Double.Parse(xmlnode["Bottom"]) - (float)Double.Parse(xmlnode["Top"]);
+                var cur_x = (float)Double.Parse(xmlnode["Left"]);
+                var cur_y = (float)Double.Parse(xmlnode["Top"]);
+
+                // TODO() - отрицательные координаты?
+                // TODO() - Угол поворота -> сделать элемент в оболочке SvgGroupElement
+                if ((float)Double.Parse(xmlnode["Right"]) < (float)Double.Parse(xmlnode["Left"]))
+                {
+                    cur_width = (float)Double.Parse(xmlnode["Left"]) - (float)Double.Parse(xmlnode["Right"]);
+                    cur_height = (float)Double.Parse(xmlnode["Top"]) - (float)Double.Parse(xmlnode["Bottom"]);
+                    cur_x = (float)Double.Parse(xmlnode["Right"]);
+                    cur_y = (float)Double.Parse(xmlnode["Bottom"]);
+                }
+
                 var rectangle = new SvgRectElement()
                 {
                     Width = new SvgLength(cur_width),
                     Height = new SvgLength(cur_height),
 
                     // Задаем координаты левого верхнего угла
-                    X = new SvgLength((float)Double.Parse(xmlnode["Left"])),
-                    Y = new SvgLength((float)Double.Parse(xmlnode["Top"])),
+                    X = new SvgLength(cur_x),
+                    Y = new SvgLength(cur_y),
 
                     // Задаем ширину обводки
                     StrokeWidth = new SvgLength((float)Double.Parse(xmlnode["LineWidth"])),
 
                     // Задаем цвет внутри прямоугольника полностью прозрачным
-                    //(alfa = 0, если alfa = 255 - НЕ прозрачный)
-                    Fill = new SvgPaint(Color.FromArgb(0, 0, 0, 0)),
+                    Fill = new SvgPaint(Color.Transparent),
 
                     // Задаем цвет обводки, который берется с ObjectColor
+                    //(alfa = 0, если alfa = 255 - НЕ прозрачный)
                     Stroke = new SvgPaint(Color.FromArgb(obj_color[0], obj_color[1], obj_color[2], obj_color[3]))
                 };
 
@@ -194,6 +208,13 @@ namespace Diploma_Project // Пространство имен
                 if (xmlnode["Shape"] == "RoundRectangle")
                 {
                     rectangle.RadiusX = new SvgLength(10f);
+                }
+
+                // Если задан параметр, что границу отображать не надо
+                if (xmlnode.ContainsKey("DrawBorder") && xmlnode["DrawBorder"] == "False")
+                {
+                    // Границу отображать не будем
+                    rectangle.Stroke = new SvgPaint(Color.Transparent);
                 }
 
                 // Добавляем нарисованный элемент прямоугольника на холст
@@ -211,13 +232,24 @@ namespace Diploma_Project // Пространство имен
             }
 
             // Отрисовка элемента стрелка влево/вправо или двухсторонняя стрелка с текстом
-            if (xmlnode["Shape"] == "ArrowLeftRight" || xmlnode["Shape"] == "ArrowLeft" || xmlnode["Shape"] == "ArrowRight")
+            if (xmlnode["Shape"] == "ArrowLeftRight" || xmlnode["Shape"] == "ArrowLeft" ||
+                xmlnode["Shape"] == "ArrowRight")
             {
                 // Создадим List для точек и вычислим их
                 var list_points = get_points_list(xmlnode);
 
                 // Рисуем двухстороннюю стрелку
                 var arrow = add_svg_left_right_arrow(list_points, xmlnode["LineWidth"], obj_color);
+
+                // Надо ли отображать границу?
+                if (xmlnode.ContainsKey("DrawBorder"))
+                {
+                    // Границу отображать не надо
+                    if (xmlnode["DrawBorder"] == "False")
+                    {
+                        arrow.Stroke = new SvgPaint(Color.Transparent);
+                    }
+                }
 
                 // Добавляем нарисованный элемент прямоугольника на холст
                 result.Children.Add(arrow);
@@ -233,7 +265,38 @@ namespace Diploma_Project // Пространство имен
                 }
             }
 
-            // Круг, треугольник и ...
+            // Отрисовка элемента круг с текстом
+            if (xmlnode["Shape"] == "Circle")
+            {
+                // Рисуем круг
+                //TODO() - нарисовать круг
+                var circle = new SvgCircleElement();
+
+                // Надо ли отображать границу?
+                if (xmlnode.ContainsKey("DrawBorder"))
+                {
+                    // Границу отображать не надо
+                    if (xmlnode["DrawBorder"] == "False")
+                    {
+                        circle.Stroke = new SvgPaint(Color.Transparent);
+                    }
+                }
+
+                // Добавляем нарисованный элемент прямоугольника на холст
+                result.Children.Add(circle);
+
+                // Если надо отображать текст, то добавим его
+                if (should_draw_label != null && should_draw_label.Equals("true"))
+                {
+                    // Создадим текст
+                    var svg_text_element = add_svg_text_element(xmlnode, name);
+
+                    // Добавляем созданный текст
+                    result.Children.Add(svg_text_element);
+                }
+            }
+
+            // Треугольник и ...
             //TODO()
 
             return result;
@@ -309,15 +372,15 @@ namespace Diploma_Project // Пространство имен
             // Правый верхний угол прямоугольника
             var right_rectangle_top_x = right_arrowhead_x;
             var right_rectangle_top_y = right_arrow_rectangle_top_y;
-            
+
             // Правый нижний угол прямоугольника
             var right_rectangle_bottom_x = right_arrowhead_x;
             var right_rectangle_bottom_y = right_arrow_rectangle_bottom_y;
-            
+
             // Левый верхний угол прямоугольника
             var left_rectangle_top_x = left_arrowhead_x;
             var left_rectangle_top_y = left_arrow_rectangle_top_y;
-            
+
             var left_rectangle_bottom_x = left_arrowhead_x;
             var left_rectangle_bottom_y = left_arrow_rectangle_bottom_y;
 
@@ -360,7 +423,7 @@ namespace Diploma_Project // Пространство имен
                 result.Add(right_arrow_bottom_x);
                 result.Add(right_arrow_bottom_y);
             }
-            
+
             // Если стрелка влево, то добавим нужные координаты 
             if (xmlnode["Shape"] == "ArrowLeftRight")
             {
@@ -450,16 +513,40 @@ namespace Diploma_Project // Пространство имен
                     },
                 },
 
-                // Задаем расположение надписи
+                // Задаем расположение надписи по формуле согласно заданным координатам
+                // TODO() - добавить формулу
                 X = new List<SvgLength> { new SvgLength((float)Double.Parse(cur_x)) },
                 Y = new List<SvgLength> { new SvgLength((float)Double.Parse(cur_y)) },
 
                 // Задаем размер текста
                 FontSize = new SvgLength((float)Double.Parse(xmlnode["LabelFontSize"])),
 
-                // Задаем цвет надписи (черный НЕ прозрачный цвет)
+                // Задаем стандартный цвет надписи (черный НЕ прозрачный цвет)
                 Fill = new SvgPaint(Color.FromArgb(255, 0, 0, 0))
             };
+
+            // Задаем цвет надписи согласно LabelBrush, если такой узел присутствует
+            if (xmlnode.ContainsKey("LabelBrush"))
+            {
+                var label_brush_color = convert_argb(xmlnode["LabelBrush"]);
+                text.Fill = new SvgPaint(Color.FromArgb(label_brush_color[0], label_brush_color[1],
+                    label_brush_color[2], label_brush_color[3]));
+            }
+
+            // Есть задан стиль текста, то добавим его
+            if (xmlnode.ContainsKey("LabelFontStyle"))
+            {
+                if (xmlnode["LabelFontStyle"] == "Normal")
+                {
+                    text.FontStyle = SvgFontStyle.Normal;
+                }
+
+                if (xmlnode["LabelFontStyle"] == "Italic")
+                {
+                    text.FontStyle = SvgFontStyle.Italic;
+                }
+            }
+
             return text;
         }
 
@@ -474,14 +561,14 @@ namespace Diploma_Project // Пространство имен
             var color_g = 0;
             var color_b = 0;
             // Если пришел формат rgb
-            if (length == 6)
+            if (length == 7)
             {
                 color_r = Convert.ToInt32(str.Substring(1, 2), 16);
                 color_g = Convert.ToInt32(str.Substring(3, 2), 16);
                 color_b = Convert.ToInt32(str.Substring(5, 2), 16);
             }
             // Если Argb
-            else if (length == 8)
+            else if (length == 9)
             {
                 color_a = Convert.ToInt32(str.Substring(1, 2), 16);
                 color_r = Convert.ToInt32(str.Substring(3, 2), 16);
