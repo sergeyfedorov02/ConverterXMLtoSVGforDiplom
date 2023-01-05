@@ -4,6 +4,7 @@
 // Подключаем библиотеки
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -32,7 +33,7 @@ namespace Diploma_Project // Пространство имен
             const string archivePath = @"D:\Imsat\project_24_4287.zip";
 
             //Переменная для хранения имен нужных нам файлов
-            List<string> filesNames = new List<string>();
+           var filesNames = new List<string>();
 
             // Консольный выбор нужного файла при помощи ввода его номера
             //Console.Write("Введите номер интересующего файла: ");
