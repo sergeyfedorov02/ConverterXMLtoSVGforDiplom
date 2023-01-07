@@ -5,15 +5,12 @@ using System.Collections.Generic;
 using System.Xml;
 using static Diploma_Project.Person;
 using System.Xml.Linq;
-
 using GrapeCity.Documents.Imaging;
 using GrapeCity.Documents.Svg;
 using System.Drawing;
 
 namespace Diploma_Project
 {
-
-
     public class Test
     {
         internal static void test()

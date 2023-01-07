@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma_Project", "Diploma_Project\Diploma_Project.csproj", "{4443865A-784D-4003-B2BB-A2D5DEAC1710}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvgConverter", "SvgConverter\SvgConverter.csproj", "{7DD5C4FA-DB75-4213-BC2C-C6EB5079EACC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{ABEF5B6D-8D3A-4639-A668-E0AD79F5D297}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{4443865A-784D-4003-B2BB-A2D5DEAC1710}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4443865A-784D-4003-B2BB-A2D5DEAC1710}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4443865A-784D-4003-B2BB-A2D5DEAC1710}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DD5C4FA-DB75-4213-BC2C-C6EB5079EACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DD5C4FA-DB75-4213-BC2C-C6EB5079EACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DD5C4FA-DB75-4213-BC2C-C6EB5079EACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DD5C4FA-DB75-4213-BC2C-C6EB5079EACC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABEF5B6D-8D3A-4639-A668-E0AD79F5D297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABEF5B6D-8D3A-4639-A668-E0AD79F5D297}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABEF5B6D-8D3A-4639-A668-E0AD79F5D297}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABEF5B6D-8D3A-4639-A668-E0AD79F5D297}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,10 @@
+D:\RiderProjects\Diploma_Project\SvgConverter\bin\Debug\netstandard2.1\SvgConverter.deps.json
+D:\RiderProjects\Diploma_Project\SvgConverter\bin\Debug\netstandard2.1\SvgConverter.dll
+D:\RiderProjects\Diploma_Project\SvgConverter\bin\Debug\netstandard2.1\SvgConverter.pdb
+D:\RiderProjects\Diploma_Project\SvgConverter\obj\Debug\netstandard2.1\SvgConverter.csproj.AssemblyReference.cache
+D:\RiderProjects\Diploma_Project\SvgConverter\obj\Debug\netstandard2.1\SvgConverter.GeneratedMSBuildEditorConfig.editorconfig
+D:\RiderProjects\Diploma_Project\SvgConverter\obj\Debug\netstandard2.1\SvgConverter.AssemblyInfoInputs.cache
+D:\RiderProjects\Diploma_Project\SvgConverter\obj\Debug\netstandard2.1\SvgConverter.AssemblyInfo.cs
+D:\RiderProjects\Diploma_Project\SvgConverter\obj\Debug\netstandard2.1\SvgConverter.csproj.CoreCompileInputs.cache
+D:\RiderProjects\Diploma_Project\SvgConverter\obj\Debug\netstandard2.1\SvgConverter.dll
+D:\RiderProjects\Diploma_Project\SvgConverter\obj\Debug\netstandard2.1\SvgConverter.pdb

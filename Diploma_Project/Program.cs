@@ -22,7 +22,7 @@ namespace Diploma_Project // Пространство имен
 {
     class Program
     {
-        public static void Main(string[] args)
+        public static void Mains(string[] args)
         {
             // Устанавливаем кодировку консоли.
             // Нужно только если при использовании англоязычной Windows
@@ -33,7 +33,7 @@ namespace Diploma_Project // Пространство имен
             const string archivePath = @"D:\Imsat\project_24_4287.zip";
 
             //Переменная для хранения имен нужных нам файлов
-           var filesNames = new List<string>();
+            var filesNames = new List<string>();
 
             // Консольный выбор нужного файла при помощи ввода его номера
             //Console.Write("Введите номер интересующего файла: ");
@@ -54,14 +54,14 @@ namespace Diploma_Project // Пространство имен
                     {
                         filesNames.Add(entry.FullName);
                     }
-                    
+
                     // Для проверки valueTollId case
                     // TODO - просто проверка
                     var defaultList = new List<string>();
 
                     // Пройдемся по всем файлам с данными
                     // Circle - 140, 141
-                    if (rg.IsMatch(entry.FullName) && entry.FullName.Equals("chart_140.chr"))
+                    if (rg.IsMatch(entry.FullName) && entry.FullName.Equals("chart_141.chr"))
                     {
                         // открываем этот файл
                         using (var stream = entry.Open())
@@ -138,17 +138,19 @@ namespace Diploma_Project // Пространство имен
                                         {
                                             defaultList.Add(valueTollId);
                                         }
+
                                         Console.WriteLine("default");
                                         break;
                                 }
                             }
 
+
                             // Сохраним получившийся SVG файл
-                            // C:\Users\fsergey\RiderProjects\Diploma_Project\Diploma_Project\src
+                            // D:\\RiderProjects\\Diploma_Project\\SvgConverter\\src\\
                             // D:\\Imsat\\svg_images\\
                             var curName = entry.FullName.Split(".")[0];
-                            string path = "C:\\Users\\fsergey\\RiderProjects\\Diploma_Project\\Diploma_Project\\src\\" +
-                                          curName + ".svg";
+                            var path = "D:\\RiderProjects\\Diploma_Project\\Diploma_Project\\src\\" +
+                                       curName + ".svg";
                             svgDoc.Save(path);
                         }
 
