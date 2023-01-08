@@ -37,8 +37,7 @@ namespace Diploma_Project
                 var rg = new Regex(pattern);
 
                 // Пройдемся по всем файлам с данными
-                // Circle - 140, 141
-                if (rg.IsMatch(entry.FullName) && entry.FullName.Equals("chart_141.chr"))
+                if (rg.IsMatch(entry.FullName) && entry.FullName.Equals("chart_0.chr"))
                 {
                     // открываем этот файл
                     using var stream = entry.Open();

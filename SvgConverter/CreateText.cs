@@ -43,7 +43,10 @@ namespace SvgConverter
                 FontSize = new SvgLength(curFontSize),
 
                 // Задаем стандартный цвет надписи (чёрный НЕ прозрачный цвет)
-                Fill = new SvgPaint(Color.FromArgb(255, 0, 0, 0))
+                Fill = new SvgPaint(Color.FromArgb(255, 0, 0, 0)),
+                
+                // Делаем его видимым
+                FillOpacity = 1
             };
 
             // Задаем цвет надписи согласно LabelBrush, если такой узел присутствует

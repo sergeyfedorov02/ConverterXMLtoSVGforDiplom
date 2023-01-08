@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using GrapeCity.Documents.Svg;
 
@@ -8,209 +8,200 @@ namespace SvgConverter
 {
     internal static class CreateLamp
     {
-        // Сет для хранения всех типов стрелок (удобная проверка на соответствие в дальнейшем)
-        private static readonly HashSet<string> ArrowShapes = new HashSet<string>
+        // Сет для хранения всех элементов с параметром class = "fill-indicator"
+        private static readonly HashSet<string> FillIndicators = new HashSet<string>
         {
+            "Rectangle",
+            "RoundRectangle",
             "ArrowLeftRight",
             "ArrowLeft",
-            "ArrowRight"
+            "ArrowRight",
+            "Circle",
+            "Triangle",
+            "KeyBarrel"
+        };
+
+        // Сет для хранения всех элементов с параметром class = "line-indicator"
+        private static readonly HashSet<string> LineIndicators = new HashSet<string>
+        {
+            "GroundControl",
+            "RailEndCoupling",
+            "FeedEndCoupling",
+            "RailEndBox",
+            "FeedEndBox"
         };
 
         // Функция для формирования SVG картинки для "StandardLibrary.Lamp"
-        public static SvgGroupElement CreateSvgImageLamp(IReadOnlyDictionary<string, string> xmlNode,
-            string shouldDrawLabel,
-            string name)
+        public static SvgGroupElement CreateSvgImageLamp(IReadOnlyDictionary<string, string> xmlNode)
         {
-            // Приведем координаты к типу float
-            var curLeft = float.Parse(xmlNode["Left"], CultureInfo.InvariantCulture);
-            var curRight = float.Parse(xmlNode["Right"], CultureInfo.InvariantCulture);
-            var curTop = float.Parse(xmlNode["Top"], CultureInfo.InvariantCulture);
-            var curBottom = float.Parse(xmlNode["Bottom"], CultureInfo.InvariantCulture);
+            // Проверка координат 
+            if (!xmlNode.TryGetBounds(out var bounds))
+            {
+                return null;
+            }
+            
+            // Вычислим все координаты
+            var curLeft = bounds.Left;
+            var curRight = bounds.Right;
+            var curTop = bounds.Top;
+            var curBottom = bounds.Bottom;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.Lamp"
             var result = new SvgGroupElement
             {
-                // Добавление кастомного атрибута data-state = "-1" к создаваемой группе, чтобы потом была подсветка, если придет значение
-                CustomAttributes = new List<SvgCustomAttribute> { new SvgCustomAttribute("data-state", "-1") }
+                CustomAttributes = new List<SvgCustomAttribute>
+                {
+                    // Добавление кастомного атрибута data-object-hint = "Shape=..,DrawBorder=..." 
+                    new SvgCustomAttribute("data-object-hint",
+                        "Shape=" + xmlNode["Shape"] + ",DrawBorder=" + xmlNode["DrawBorder"]),
+                    //TODO - drawBorder == null ?
+
+                    // Добавление кастомного атрибута data-object-type = "StandardLibrary.Lamp" (имя этого атрибута - Лампа)
+                    new SvgCustomAttribute("data-object-type", xmlNode["ToolId"]),
+
+                    // Добавление кастомного атрибута data-state = "-2" к создаваемой группе, чтобы потом была подсветка, если придет значение
+                    new SvgCustomAttribute("data-state", "-2")
+                }
             };
 
+            // Если указан ClientId
+            if (xmlNode.TryGetValue("ClientId", out var objectId) && objectId != "0")
+            {
+                // Обновление data-state
+                var dataStateAttribute =
+                    result.CustomAttributes.Find(attribute => attribute.AttributeName == "data-state");
+                dataStateAttribute.Value = "-1";
+                // Добавление object-id
+                result.CustomAttributes.Add(new SvgCustomAttribute("data-object-id", objectId));
+            }
+
             // Вычислим цвет обводки
-            var objColor = GetColor.ConvertArgb(xmlNode["ObjectColor"]);
+            var objColor = xmlNode.GetObjectColor();
 
             // Добавление Стиля
             // TODO() - добавить параметр указания стиля
 
-            // Отрисовка элемента прямоугольник с текстом или скругленного прямоугольника
-            if (xmlNode["Shape"] == "Rectangle" || xmlNode["Shape"] == "RoundRectangle")
+            // Если текущая лампа относится к классу "fill-indicator"
+            var aShape = xmlNode.GetValueOrDefault("Shape", "Rectangle");
+
+            if (FillIndicators.Contains(aShape))
             {
-                // Создадим группу для прямоугольника (поворот без этого не осуществить)
-                var rectangleGroup = new SvgGroupElement();
-
-                // Вычислим координаты для прямоугольника
-                var curWidth = curRight - curLeft;
-                var curHeight = curBottom - curTop;
-                var curX = curLeft;
-                var curY = curTop;
-
-                // Были ли перевернуты координаты (рисовали из правого угла)
-                if (curRight < curLeft)
+                // Выберем тот или иной метод для рисования
+                switch (aShape)
                 {
-                    curWidth = curLeft - curRight;
-                    curX = curRight;
+                    case "Rectangle":
+                    case "RoundRectangle":
+
+                        // Получим прямоугольник
+                        var rectangle = CreateRectangleSvg(xmlNode, curLeft, curRight, curTop, curBottom, objColor);
+
+                        // Добавим стандартные атрибуты
+                        AddStandardAttributesFillIndicator(rectangle, result, xmlNode, curLeft, curRight, curTop,
+                            curBottom);
+                        break;
+
+                    case "ArrowLeftRight":
+                    case "ArrowLeft":
+                    case "ArrowRight":
+                        // Создадим List для точек и вычислим их
+                        var listPoints = GetPointsList(aShape, curLeft, curRight, curTop, curBottom).ToList();
+
+                        // Получим стрелку
+                        var arrow = CreateLeftRightArrowSvg(listPoints, xmlNode.GetLineWidth(), objColor);
+
+                        // Добавим стандартные атрибуты
+                        AddStandardAttributesFillIndicator(arrow, result, xmlNode, curLeft, curRight, curTop,
+                            curBottom);
+
+                        break;
+
+                    case "Circle":
+                        // Получим круг
+                        var circle = CreateCircleSvg(xmlNode, curLeft, curRight, curTop, curBottom, objColor);
+
+                        // Добавим стандартные атрибуты
+                        AddStandardAttributesFillIndicator(circle, result, xmlNode, curLeft, curRight, curTop,
+                            curBottom);
+
+                        break;
+                    case "Triangle":
+                        // Получим треугольник
+                        var triangle = CreateTriangleSvg(xmlNode, curLeft, curRight, curTop, curBottom, objColor);
+
+                        // Добавим стандартные атрибуты
+                        AddStandardAttributesFillIndicator(triangle, result, xmlNode, curLeft, curRight, curTop,
+                            curBottom);
+
+                        break;
+                    case "KeyBarrel":
+                        break;
                 }
-
-                if (curBottom < curTop)
+            }
+            // Иначе к классу "line-indicator"
+            else if (LineIndicators.Contains(xmlNode["Shape"]))
+            {
+                // Выберем тот или иной метод для рисования
+                switch (xmlNode["Shape"])
                 {
-                    curHeight = curTop - curBottom;
-                    curY = curBottom;
+                    case "GroundControl":
+                        break;
+                    case "RailEndCoupling":
+                        break;
+                    case "FeedEndCoupling":
+                        break;
+                    case "RailEndBox":
+                        break;
+                    case "FeedEndBox":
+                        break;
                 }
+            }
 
-                // Создадим стандартный прямоугольник
-                var rectangle = new SvgRectElement()
+            // Контроль заземления - chart_687
+            //TODO
+            /*if (xmlNode["Shape"] == "GroundControl")
+            {
+                // Создадим группу для контроля заземления (поворот без этого не осуществить)
+                var groundControlGroup = new SvgGroupElement();
+
+                // Вычислим координаты для треугольника
+                var leftAngle = new SvgPoint(new SvgLength(curLeft), new SvgLength(curBottom));
+                var topAngle = new SvgPoint(new SvgLength(curLeft + (curRight - curLeft) / 2), new SvgLength(curTop));
+                var rightAngle = new SvgPoint(new SvgLength(curRight), new SvgLength(curBottom));
+
+                // Рисуем контроль заземления
+                var groundControl = new SvgPolylineElement()
                 {
-                    Width = new SvgLength(curWidth),
-                    Height = new SvgLength(curHeight),
-
-                    // Задаем координаты левого верхнего угла
-                    X = new SvgLength(curX),
-                    Y = new SvgLength(curY),
-
+                    
                     // Задаем ширину обводки
                     StrokeWidth = new SvgLength(float.Parse(xmlNode["LineWidth"], CultureInfo.InvariantCulture)),
 
-                    // Задаем цвет внутри прямоугольника полностью прозрачным
+                    // Задаем цвет внутри стрелки влево полностью прозрачным
                     Fill = new SvgPaint(Color.Transparent),
 
                     // Задаем цвет обводки, который берется с ObjectColor
                     //(alfa = 0, если alfa = 255 - НЕ прозрачный)
                     Stroke = new SvgPaint(objColor)
                 };
+                
+                // Добавим стандартные атрибуты в Xml файл
+                AddStandardAttributes(groundControl, groundControlGroup, result, xmlNode, shouldDrawLabel, name, curLeft, curRight,
+                    curTop, curBottom);
+                
+            }*/
 
-                // Если задан RoundRectangle, то установим скругление углов
-                if (xmlNode["Shape"] == "RoundRectangle")
-                {
-                    var radius = curWidth / 4;
-                    rectangle.RadiusX = new SvgLength(radius);
-                    rectangle.RadiusX = new SvgLength(radius);
-                }
+            // Релейный конец РЦ (коробка) - chart_685 (крест в прямоугольнике)
+            //TODO()
 
-                // Удалим границу, если задан есть соответствующий параметр со значением False
-                rectangle.DelDrawBorder(xmlNode);
+            // Релейный конец РЦ (муфта) (крест в круге)
+            //TODO()
 
-                // Добавим полученный прямоугольник в группу
-                rectangleGroup.Children.Add(rectangle);
+            // Питающий конец РЦ (коробка) - chart_685 (круг в прямоугольнике)
+            //TODO()
 
-                // Добавим угол поворота, если он есть
-                rectangleGroup.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
+            // Питающий конец РЦ (муфта) (крест в круге)
+            //TODO()
 
-                // Добавляем группу нашего прямоугольника в группу result
-                result.Children.Add(rectangleGroup);
-
-                // Если надо отображать текст, то добавим его
-                if (CreateText.IsShouldDrawLabel(shouldDrawLabel))
-                {
-                    // Добавляем созданный текст
-                    result.Children.Add(CreateText.AddSvgTextElement(xmlNode, name));
-                }
-            }
-
-            // Отрисовка элемента стрелка влево/вправо или двухсторонняя стрелка с текстом
-            if (ArrowShapes.Contains(xmlNode["Shape"]))
-            {
-                // Создадим группу для стрелки (поворот без этого не осуществить)
-                var arrowGroup = new SvgGroupElement();
-
-                // Создадим List для точек и вычислим их
-                var listPoints = GetPointsList(xmlNode["Shape"], curLeft, curRight, curTop, curBottom).ToList();
-
-                // Рисуем двухстороннюю стрелку
-                var arrow = CreateSvgLeftRightArrow(listPoints, xmlNode["LineWidth"], objColor);
-
-                // Удалим границу, если задан есть соответствующий параметр со значением False
-                arrow.DelDrawBorder(xmlNode);
-
-                // Добавим полученную стрелку в группу
-                arrowGroup.Children.Add(arrow);
-
-                // Добавим угол поворота, если он есть
-                arrowGroup.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
-
-                // Добавляем группу нашей стрелки в группу result
-                result.Children.Add(arrowGroup);
-
-                // Если надо отображать текст, то добавим его
-                if (CreateText.IsShouldDrawLabel(shouldDrawLabel))
-                {
-                    // Добавляем созданный текст
-                    result.Children.Add(CreateText.AddSvgTextElement(xmlNode, name));
-                }
-            }
-
-            // Отрисовка элемента круг с текстом
-            if (xmlNode["Shape"] == "Circle")
-            {
-                // Создадим группу для эллипса (поворот без этого не осуществить)
-                var ellipseGroup = new SvgGroupElement();
-
-                // Вычислим координаты для эллипса
-                var curRadiusX = (curRight - curLeft) / 2;
-                var curRadiusY = (curBottom - curTop) / 2;
-                var curCentreX = curLeft + curRadiusX;
-                var curCentreY = curTop + curRadiusY;
-
-                // Были ли перевернуты координаты (рисовали из правого угла)
-                if (curRight < curLeft)
-                {
-                    curRadiusX = (curLeft - curRight) / 2;
-                    curCentreX = curRight + curRadiusX;
-                }
-
-                if (curBottom < curTop)
-                {
-                    curRadiusY = (curTop - curBottom) / 2;
-                    curCentreY = curBottom + curRadiusY;
-                }
-
-                // Создадим эллипс
-                var ellipse = new SvgEllipseElement
-                {
-                    CenterX = new SvgLength(curCentreX),
-                    CenterY = new SvgLength(curCentreY),
-                    RadiusX = new SvgLength(curRadiusX),
-                    RadiusY = new SvgLength(curRadiusY),
-
-                    // Задаем ширину обводки
-                    StrokeWidth = new SvgLength(float.Parse(xmlNode["LineWidth"], CultureInfo.InvariantCulture)),
-
-                    // Задаем цвет внутри эллипса полностью прозрачным
-                    Fill = new SvgPaint(Color.Transparent),
-
-                    // Задаем цвет обводки, который берется с ObjectColor
-                    //(alfa = 0, если alfa = 255 - НЕ прозрачный)
-                    Stroke = new SvgPaint(objColor)
-                };
-
-                // Удалим границу, если задан есть соответствующий параметр со значением False
-                ellipse.DelDrawBorder(xmlNode);
-
-                // Добавим полученный эллипс в группу
-                ellipseGroup.Children.Add(ellipse);
-
-                // Добавим угол поворота, если он есть
-                ellipseGroup.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
-
-                // Добавляем группу нашего эллипса в группу result
-                result.Children.Add(ellipseGroup);
-
-                // Если надо отображать текст, то добавим его
-                if (CreateText.IsShouldDrawLabel(shouldDrawLabel))
-                {
-                    // Добавляем созданный текст
-                    result.Children.Add(CreateText.AddSvgTextElement(xmlNode, name));
-                }
-            }
-
-            // Треугольник и ...
+            // Ключ Жезл - chart_64 
             //TODO()
 
             return result;
@@ -232,20 +223,179 @@ namespace SvgConverter
             };*/
         }
 
+        // Функция для получения Прямоугольника в формате Svg
+        private static SvgRectElement CreateRectangleSvg(IReadOnlyDictionary<string, string> xmlNode, float curLeft,
+            float curRight, float curTop, float curBottom, Color objColor)
+        {
+            // Вычислим координаты для прямоугольника
+            var curWidth = curRight - curLeft;
+            var curHeight = curBottom - curTop;
+            var curX = curLeft;
+            var curY = curTop;
+
+            // Создадим стандартный прямоугольник
+            var rectangle = new SvgRectElement()
+            {
+                Width = new SvgLength(curWidth),
+                Height = new SvgLength(curHeight),
+
+                // Задаем координаты левого верхнего угла
+                X = new SvgLength(curX),
+                Y = new SvgLength(curY),
+
+                // Задаем ширину обводки
+                StrokeWidth = new SvgLength(xmlNode.GetLineWidth()),
+
+                // Задаем цвет внутри прямоугольника полностью прозрачным
+                Fill = new SvgPaint(Color.Transparent),
+
+                // Задаем цвет обводки, который берется с ObjectColor
+                //(alfa = 0, если alfa = 255 - НЕ прозрачный)
+                Stroke = new SvgPaint(objColor)
+            };
+
+            // Если задан RoundRectangle, то установим скругление углов
+            if (xmlNode["Shape"] == "RoundRectangle")
+            {
+                var radius = curWidth / 4;
+                rectangle.RadiusX = new SvgLength(radius);
+                rectangle.RadiusX = new SvgLength(radius);
+            }
+
+            return rectangle;
+        }
+
+        // Функция для получения Круга в формате Svg
+        private static SvgCircleElement CreateCircleSvg(IReadOnlyDictionary<string, string> xmlNode, float curLeft,
+            float curRight, float curTop, float curBottom, Color objColor)
+        {
+            // Вычислим координаты для круга
+            var curCentreX = curLeft + (curRight - curLeft) / 2;
+            var curCentreY = curTop + (curBottom - curTop) / 2;
+            var radius = Math.Min((curRight - curLeft) / 2, (curBottom - curTop) / 2);
+
+            // Создадим круг
+            var circle = new SvgCircleElement
+            {
+                CenterX = new SvgLength(curCentreX),
+                CenterY = new SvgLength(curCentreY),
+                Radius = new SvgLength(radius),
+
+                // Задаем ширину обводки
+                StrokeWidth = new SvgLength(xmlNode.GetLineWidth()),
+
+                // Задаем цвет внутри круга полностью прозрачным
+                Fill = new SvgPaint(Color.Transparent),
+
+                // Задаем цвет обводки, который берется с ObjectColor
+                //(alfa = 0, если alfa = 255 - НЕ прозрачный)
+                Stroke = new SvgPaint(objColor)
+            };
+
+            return circle;
+        }
+
+        // Функция для получения Треугольника в формате Svg
+        private static SvgPolygonElement CreateTriangleSvg(IReadOnlyDictionary<string, string> xmlNode, float curLeft,
+            float curRight, float curTop, float curBottom, Color objColor)
+        {
+            // Вычислим координаты для треугольника
+            var leftAngle = new SvgPoint(new SvgLength(curLeft), new SvgLength(curBottom));
+            var topAngle = new SvgPoint(new SvgLength(curLeft + (curRight - curLeft) / 2), new SvgLength(curTop));
+            var rightAngle = new SvgPoint(new SvgLength(curRight), new SvgLength(curBottom));
+
+            // Создадим полигон из точек
+            var allPoints = new List<SvgPoint>()
+            {
+                leftAngle,
+                topAngle,
+                rightAngle
+            };
+
+            // Создадим треугольник
+            var triangle = new SvgPolygonElement
+            {
+                // Добавим полигон из точек
+                Points = allPoints,
+
+                // Задаем ширину обводки
+                StrokeWidth = new SvgLength(xmlNode.GetLineWidth()),
+
+                // Задаем цвет внутри стрелки влево полностью прозрачным
+                Fill = new SvgPaint(Color.Transparent),
+
+                // Задаем цвет обводки, который берется с ObjectColor
+                //(alfa = 0, если alfa = 255 - НЕ прозрачный)
+                Stroke = new SvgPaint(objColor)
+            };
+
+            return triangle;
+        }
+
+        // Функция для получения Стрелки в формате Svg
+        private static SvgPolygonElement CreateLeftRightArrowSvg(IEnumerable<SvgPoint> points, float width,
+            Color objColor)
+        {
+            // Создадим полигон из точек
+            var allPoints = points.ToList();
+
+            // Рисуем стрелку
+            return new SvgPolygonElement
+            {
+                // Добавим полигон из точек
+                Points = allPoints,
+
+                // Задаем ширину обводки
+                StrokeWidth = new SvgLength(width),
+
+                // Задаем цвет внутри стрелки влево полностью прозрачным
+                Fill = new SvgPaint(Color.Transparent),
+
+                // Задаем цвет обводки, который берется с ObjectColor
+                //(alfa = 0, если alfa = 255 - НЕ прозрачный)
+                Stroke = new SvgPaint(objColor)
+            };
+        }
+
+        // Функция для добавления стандартных атрибутов к элементу (граница, текущая группа, угол поворота, добавление в result, текст)
+        private static void AddStandardAttributesFillIndicator(SvgGeometryElement curElement, SvgElement curResult,
+            IReadOnlyDictionary<string, string> xmlNode, float curLeft, float curRight, float curTop, float curBottom)
+        {
+            // Добавим указатель класса "fill-indicator"
+            curElement.Class = "fill-indicator";
+
+            // Удалим границу, если задан есть соответствующий параметр со значением False
+            curElement.DelDrawBorder(xmlNode);
+
+            // Добавим угол поворота, если он есть
+            curElement.AddAngles(xmlNode, curLeft, curRight, curTop, curBottom);
+
+            // Добавим полученный элемент в result
+            curResult.Children.Add(curElement);
+
+            // Если надо отображать текст, то добавим его в result
+            if (CreateText.IsShouldDrawLabel(xmlNode["ShouldDrawLabel"]))
+            {
+                // Добавляем созданный текст
+                curResult.Children.Add(CreateText.AddSvgTextElement(xmlNode, xmlNode["Label"]));
+            }
+        }
+
         /// <summary>
         /// Дополнительная функция для создания списка точек для той или иной стрелки
         /// </summary>
         /// <param name="curShape">Форма стрелки</param>
-        /// <param name="curLeft"></param>
-        /// <param name="curRight"></param>
-        /// <param name="curTop"></param>
-        /// <param name="curBottom"></param>
+        /// <param name="curLeft">Координата левого края</param>
+        /// <param name="curRight">Координата правого края</param>
+        /// <param name="curTop">Координата верхнего края</param>
+        /// <param name="curBottom">Координата нижнего края</param>
         /// <returns>Список точек для отрисовки стрелки</returns>
         private static IEnumerable<SvgPoint> GetPointsList(string curShape, float curLeft, float curRight, float curTop,
             float curBottom)
         {
-            // Зададим всевозможные координаты для двухсторонней стрелки
             // TODO - Добавить вычисление по формуле
+
+            // Зададим всевозможные координаты для двухсторонней стрелки
             // Острие стрелки справа
             var rightArrowheadX = curRight;
             var rightArrowheadY = curTop + (curBottom - curTop) / 2;
@@ -351,31 +501,6 @@ namespace SvgConverter
                     yield return new SvgPoint(new SvgLength(rightArrowBottomX), new SvgLength(rightArrowBottomY));
                     break;
             }
-        }
-
-        //Функция для добавления стрелки влево или вправо
-        private static SvgPolygonElement CreateSvgLeftRightArrow(IEnumerable<SvgPoint> points, string width,
-            Color objColor)
-        {
-            // Создадим полигон из точек
-            var allPoints = points.ToList();
-
-            // Рисуем стрелку
-            return new SvgPolygonElement
-            {
-                // Добавим полигон из точек
-                Points = allPoints,
-
-                // Задаем ширину обводки
-                StrokeWidth = new SvgLength(float.Parse(width, CultureInfo.InvariantCulture)),
-
-                // Задаем цвет внутри стрелки влево полностью прозрачным
-                Fill = new SvgPaint(Color.Transparent),
-
-                // Задаем цвет обводки, который берется с ObjectColor
-                //(alfa = 0, если alfa = 255 - НЕ прозрачный)
-                Stroke = new SvgPaint(objColor)
-            };
         }
     }
 }

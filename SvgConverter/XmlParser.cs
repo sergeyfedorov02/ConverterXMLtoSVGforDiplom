@@ -21,6 +21,17 @@ namespace SvgConverter
 
             // для проверки на наличие всех элементов TODO - потом надо убрать
             var defaultList = new List<string>();
+            
+            // Создадим главную группу, которая будет содержать все элементы
+            var mainGroup = new SvgGroupElement
+            {
+                FillOpacity = 0,
+                Class = "main-panel",
+                CustomAttributes = new List<SvgCustomAttribute>
+                {
+                    new SvgCustomAttribute("data-first-color", "0")
+                }
+            };
 
             // Пройдемся по всем полученным узлам
             foreach (XmlNode xmlNode in nodeList)
@@ -29,24 +40,18 @@ namespace SvgConverter
                 var valueTollId = xmlNode.Attributes?["ToolId"]?.InnerText;
 
                 // Получим Dictionary, состоящий из свойств текущего элемента
-                Dictionary<string, string> dictionaryPropertiesFromCurrentNode;
-
+                
+                SvgElement element = null;
+                
+                // Получим Dictionary, состоящий из свойств текущего элемента
+                var dictionaryPropertiesFromCurrentNode = CreateDictionaryFromProperties(xmlNode);
+                
                 // В зависимости от полученного имени нарисуем соответствующий элемент
                 switch (valueTollId)
                 {
                     case "StandardLibrary.Lamp":
-
-                        // Получим Dictionary, состоящий из свойств текущего элемента
-                        dictionaryPropertiesFromCurrentNode = CreateDictionaryFromProperties(xmlNode);
-
                         // Нарисуем элемент типа "StandardLibrary.Lamp"
-                        var svgLamp = CreateLamp.CreateSvgImageLamp(dictionaryPropertiesFromCurrentNode,
-                            xmlNode.SelectSingleNode("ShouldDrawLabel")?.InnerText,
-                            xmlNode.SelectSingleNode("Label")?.InnerText);
-
-                        // Добавим нарисованный элемент на холст
-                        svgDoc.RootSvg.Children.Add(svgLamp);
-
+                        element = CreateLamp.CreateSvgImageLamp(dictionaryPropertiesFromCurrentNode);
                         break;
 
                     case "StandardLibrary.RailUnitEx":
@@ -79,7 +84,16 @@ namespace SvgConverter
 
                         break;
                 }
+
+                if (element != null)
+                {
+                    // Добавим новую группу из элементов в mainGroup
+                    mainGroup.Children.Add(element);
+                }
             }
+            
+            // Добавим нарисованный элемент mainGroup на холст
+            svgDoc.RootSvg.Children.Add(mainGroup);
 
             // Чего-то забыли рассмотреть TODO - потом убрать
             if (defaultList.Count != 0)
@@ -96,7 +110,14 @@ namespace SvgConverter
         // Функция для получения Dictionary из свойств элемента (из Properties: name и value)
         private static Dictionary<string, string> CreateDictionaryFromProperties(XmlNode currentXmlNode)
         {
-            var result = new Dictionary<string, string>();
+            var result = new Dictionary<string, string>
+            {
+                // Добавим ToolId, ClientId, Label и ShouldDrawLabel в result
+                ["Label"] = currentXmlNode.SelectSingleNode("Label")?.InnerText,
+                ["ShouldDrawLabel"] = currentXmlNode.SelectSingleNode("ShouldDrawLabel")?.InnerText,
+                ["ToolId"] = currentXmlNode.Attributes?["ToolId"]?.InnerText,
+                ["ClientId"] = currentXmlNode.Attributes?["ClientId"]?.InnerText
+            };
 
             // Получим дочерний узел Properties
             var properties = currentXmlNode.SelectSingleNode("Properties");
