@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace SvgConverter
@@ -32,6 +31,8 @@ namespace SvgConverter
                     break;
             }
 
+            // Если alfa = 0 - Прозрачный
+            // Если alfa = 255 - НЕ прозрачный
             return Color.FromArgb(colorA, colorR, colorG, colorB);
         }
     }

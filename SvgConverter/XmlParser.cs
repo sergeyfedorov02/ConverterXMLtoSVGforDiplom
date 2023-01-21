@@ -13,11 +13,23 @@ namespace SvgConverter
             // Найдем все узлы с именем "DesignerItem"
             var nodeList = docXml.GetElementsByTagName("DesignerItem");
 
+            // Если ничего не нашли -> выходим
+            if (nodeList.Count == 0)
+            {
+                return "";
+            }
+
             // Создаем холст для рисования (Итоговый Svg файл будет здесь)
             var svgDoc = new GcSvgDocument();
             // TODO - добавить вычисление по формуле
             svgDoc.RootSvg.Width = new SvgLength(4000, SvgLengthUnits.Pixels);
             svgDoc.RootSvg.Height = new SvgLength(2000, SvgLengthUnits.Pixels);
+            
+            // Добавим параметр стандартного шрифта
+            svgDoc.RootSvg.FontFamily = new List<SvgFontFamily>
+            {
+                new SvgFontFamily("Segoe UI")
+            };
 
             // для проверки на наличие всех элементов TODO - потом надо убрать
             var defaultList = new List<string>();
@@ -37,10 +49,17 @@ namespace SvgConverter
             foreach (XmlNode xmlNode in nodeList)
             {
                 // Получим значение атрибута с именем "ToolId"
-                var valueTollId = xmlNode.Attributes?["ToolId"]?.InnerText;
+                var valueTollId = xmlNode.Attributes?["ToolId"] == null
+                    ? string.Empty
+                    : xmlNode.Attributes["ToolId"].InnerText;
 
-                // Получим Dictionary, состоящий из свойств текущего элемента
-                
+                // Если атрибута с именем "ToolId" не оказалось, то ничего не делаем и переходим к следующему xmlNode
+                if (valueTollId.Equals(string.Empty))
+                {
+                    continue;
+                }
+
+                // Переменная, которой будем присваивать значение нарисованной группы элементов
                 SvgElement element = null;
                 
                 // Получим Dictionary, состоящий из свойств текущего элемента
@@ -113,17 +132,22 @@ namespace SvgConverter
             var result = new Dictionary<string, string>
             {
                 // Добавим ToolId, ClientId, Label и ShouldDrawLabel в result
-                ["Label"] = currentXmlNode.SelectSingleNode("Label")?.InnerText,
-                ["ShouldDrawLabel"] = currentXmlNode.SelectSingleNode("ShouldDrawLabel")?.InnerText,
-                ["ToolId"] = currentXmlNode.Attributes?["ToolId"]?.InnerText,
-                ["ClientId"] = currentXmlNode.Attributes?["ClientId"]?.InnerText
+                ["Label"] = currentXmlNode.SelectSingleNode("Label")?.InnerText ?? string.Empty,
+                ["ShouldDrawLabel"] = currentXmlNode.SelectSingleNode("ShouldDrawLabel")?.InnerText ?? "false",
+                ["ToolId"] = currentXmlNode.Attributes?["ToolId"].InnerText,
+                ["ClientId"] = currentXmlNode.Attributes?["ClientId"] == null
+                    ? "0"
+                    : currentXmlNode.Attributes["ClientId"].InnerText
             };
 
             // Получим дочерний узел Properties
             var properties = currentXmlNode.SelectSingleNode("Properties");
 
+            // Если узла "Properties" не существует -> вернём result
+            if (properties == null) return result;
+
             // Разбираемся с узлом Properties
-            var propertiesNodes = properties?.SelectNodes("*");
+            var propertiesNodes = properties.SelectNodes("*");
 
             // Если узел Properties ничего не содержит -> вернём пустой result
             if (propertiesNodes == null) return result;

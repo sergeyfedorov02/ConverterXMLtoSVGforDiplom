@@ -45,6 +45,12 @@ namespace SvgConverter
                 // Задаем стандартный цвет надписи (чёрный НЕ прозрачный цвет)
                 Fill = new SvgPaint(Color.FromArgb(255, 0, 0, 0)),
                 
+                // Ширина обводки
+                StrokeWidth = new SvgLength(0),
+                
+                // Расположение текста и куда будет расти при увеличении ("start")
+                TextAnchor = new SvgTextAnchor(),
+                
                 // Делаем его видимым
                 FillOpacity = 1
             };
