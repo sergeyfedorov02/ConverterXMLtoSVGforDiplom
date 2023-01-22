@@ -49,8 +49,8 @@ namespace SvgConverter
             // Получим значение атрибута "Shape", если такого нет -> берем значение "Rectangle"
             var aShape = xmlNode.GetValueOrDefault("Shape", "Rectangle");
 
-            // Получим значение атрибута "DrawBorder", если такого нет -> берем значение "False"
-            var aDrawBorder = xmlNode.GetValueOrDefault("DrawBorder", "False");
+            // Получим значение атрибута "DrawBorder", если такого нет -> берем значение "True"
+            var aDrawBorder = xmlNode.GetValueOrDefault("DrawBorder", "True");
 
             // Создадим группу для отрисовки текущей "StandardLibrary.Lamp"
             var result = new SvgGroupElement
@@ -84,7 +84,7 @@ namespace SvgConverter
             var objColor = xmlNode.GetObjectColor();
 
             // Добавление Стиля
-            // TODO() - добавить параметр указания стиля
+            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
 
             // Если текущая лампа относится к классу "fill-indicator"
             if (FillIndicators.Contains(aShape))
@@ -235,7 +235,7 @@ namespace SvgConverter
             {
                 var radius = curWidth / 4;
                 rectangle.RadiusX = new SvgLength(radius);
-                rectangle.RadiusX = new SvgLength(radius);
+                rectangle.RadiusY = new SvgLength(radius);
             }
 
             return rectangle;
@@ -651,10 +651,10 @@ namespace SvgConverter
             result.AddLineTo(false, curRight, curTop + (curBottom - curTop) / 1.25f);
 
             // левый нижний угол конца ключа
-            result.AddLineTo(false, curRight - 73 * (curRight - curLeft) / 570, curTop + (curBottom - curTop) / 1.25f);
+            result.AddLineTo(false, curRight - (curBottom - curTop) / 5f, curTop + (curBottom - curTop) / 1.25f);
 
             // правый нижний угол прямоугольника ключа
-            result.AddLineTo(false, curRight - 73 * (curRight - curLeft) / 570, curTop + 3 * (curBottom - curTop) / 5);
+            result.AddLineTo(false, curRight - (curBottom - curTop) / 5f, curTop + 3 * (curBottom - curTop) / 5);
 
             // левый нижний угол прямоугольника ключа
             result.AddLineTo(false, curLeft + (curRight - curLeft) / 2.5f, curTop + 3 * (curBottom - curTop) / 5);
@@ -672,22 +672,28 @@ namespace SvgConverter
             result.AddClosePath();
 
             // Внутренний контур
+            // Найдем значение высоты и ширины квадрата - отверстия под ключ
+            var keyHoleWidth = Math.Min((curRight - curLeft) * 0.4f / 3, (curBottom - curTop) * 0.8f / 2);
+
             // Добавим вторую начальную точку - левый верхний угол внутреннего квадрата
-            result.AddMoveTo(false, curLeft + (curRight - curLeft) / 7.5f, curTop + 289 * (curBottom - curTop) / 730);
+            result.AddMoveTo(false, curLeft + ((curRight - curLeft) * 0.4f - keyHoleWidth) / 2,
+                (curBottom + curTop) / 2 - keyHoleWidth / 2);
 
             // правый верхний угол внутреннего квадрата
-            result.AddLineTo(false, curLeft + (curRight - curLeft) / 3.75f, curTop + 289 * (curBottom - curTop) / 730);
+            result.AddLineTo(false, curLeft + ((curRight - curLeft) * 0.4f - keyHoleWidth) / 2 + keyHoleWidth,
+                (curBottom + curTop) / 2 - keyHoleWidth / 2);
 
             // правый нижний угол внутреннего квадрата
-            result.AddLineTo(false, curLeft + (curRight - curLeft) / 3.75f,
-                curBottom - (curBottom - curTop) / 2.525955f);
+            result.AddLineTo(false, curLeft + ((curRight - curLeft) * 0.4f - keyHoleWidth) / 2 + keyHoleWidth,
+                (curBottom + curTop) / 2 - keyHoleWidth / 2 + keyHoleWidth);
 
             // левый нижний угол внутреннего квадрата
-            result.AddLineTo(false, curLeft + (curRight - curLeft) / 7.5f,
-                curBottom - (curBottom - curTop) / 2.525955f);
+            result.AddLineTo(false, curLeft + ((curRight - curLeft) * 0.4f - keyHoleWidth) / 2,
+                (curBottom + curTop) / 2 - keyHoleWidth / 2 + keyHoleWidth);
 
             // Возвращение в начальную точку
-            result.AddLineTo(false, curLeft + (curRight - curLeft) / 7.5f, curTop + 289 * (curBottom - curTop) / 730);
+            result.AddLineTo(false, curLeft + ((curRight - curLeft) * 0.4f - keyHoleWidth) / 2,
+                (curBottom + curTop) / 2 - keyHoleWidth / 2);
 
             // Закрываем внутренний контур ключа
             result.AddClosePath();
@@ -707,8 +713,6 @@ namespace SvgConverter
         private static IEnumerable<SvgPoint> GetArrowsPointsList(string curShape, float curLeft, float curRight,
             float curTop, float curBottom)
         {
-            // TODO - Добавить вычисление по формуле
-
             // Зададим всевозможные координаты для двухсторонней стрелки
             // Острие стрелки справа
             var rightArrowheadX = curRight;
@@ -720,7 +724,7 @@ namespace SvgConverter
 
             // Правый верхний угол прямоугольника стрелки
             var rightArrowRectangleTopX = rightArrowTopX;
-            var rightArrowRectangleTopY = curTop + (curBottom - curTop) / 3;
+            var rightArrowRectangleTopY = curTop + (curBottom - curTop) / 4;
 
             // Левый верхний угол прямоугольника стрелки
             var leftArrowRectangleTopX = curLeft + (curRight - curLeft) / 3;
@@ -740,7 +744,7 @@ namespace SvgConverter
 
             // Левый нижний угол прямоугольника стрелки
             var leftArrowRectangleBottomX = leftArrowRectangleTopX;
-            var leftArrowRectangleBottomY = curBottom - (curBottom - curTop) / 3;
+            var leftArrowRectangleBottomY = curBottom - (curBottom - curTop) / 4;
 
             // Правый нижний угол прямоугольника стрелки
             var rightArrowRectangleBottomX = rightArrowTopX;
@@ -771,29 +775,33 @@ namespace SvgConverter
                 case "ArrowLeft":
                     //Добавим нужные координаты
                     yield return new SvgPoint(new SvgLength(leftArrowheadX), new SvgLength(leftArrowheadY));
-                    yield return new SvgPoint(new SvgLength(leftArrowTopX), new SvgLength(leftArrowTopY));
-                    yield return new SvgPoint(new SvgLength(leftArrowRectangleTopX),
+                    yield return new SvgPoint(new SvgLength(curLeft + (curRight - curLeft) / 2),
+                        new SvgLength(leftArrowTopY));
+                    yield return new SvgPoint(new SvgLength(curLeft + (curRight - curLeft) / 2),
                         new SvgLength(leftArrowRectangleTopY));
                     yield return new SvgPoint(new SvgLength(rightRectangleTopX), new SvgLength(rightRectangleTopY));
                     yield return new SvgPoint(new SvgLength(rightRectangleBottomX),
                         new SvgLength(rightRectangleBottomY));
-                    yield return new SvgPoint(new SvgLength(leftArrowRectangleBottomX),
+                    yield return new SvgPoint(new SvgLength(curLeft + (curRight - curLeft) / 2),
                         new SvgLength(leftArrowRectangleBottomY));
-                    yield return new SvgPoint(new SvgLength(leftArrowBottomX), new SvgLength(leftArrowBottomY));
+                    yield return new SvgPoint(new SvgLength(curLeft + (curRight - curLeft) / 2),
+                        new SvgLength(leftArrowBottomY));
                     break;
 
                 // Если стрелка вправо, то добавим нужные координаты 
                 case "ArrowRight":
                     //Добавим нужные координаты
                     yield return new SvgPoint(new SvgLength(rightArrowheadX), new SvgLength(rightArrowheadY));
-                    yield return new SvgPoint(new SvgLength(rightArrowTopX), new SvgLength(rightArrowTopY));
-                    yield return new SvgPoint(new SvgLength(rightArrowRectangleTopX),
+                    yield return new SvgPoint(new SvgLength(curRight - (curRight - curLeft) / 2),
+                        new SvgLength(rightArrowTopY));
+                    yield return new SvgPoint(new SvgLength(curRight - (curRight - curLeft) / 2),
                         new SvgLength(rightArrowRectangleTopY));
                     yield return new SvgPoint(new SvgLength(leftRectangleTopX), new SvgLength(leftRectangleTopY));
                     yield return new SvgPoint(new SvgLength(leftRectangleBottomX), new SvgLength(leftRectangleBottomY));
-                    yield return new SvgPoint(new SvgLength(rightArrowRectangleBottomX),
+                    yield return new SvgPoint(new SvgLength(curRight - (curRight - curLeft) / 2),
                         new SvgLength(rightArrowRectangleBottomY));
-                    yield return new SvgPoint(new SvgLength(rightArrowBottomX), new SvgLength(rightArrowBottomY));
+                    yield return new SvgPoint(new SvgLength(curRight - (curRight - curLeft) / 2),
+                        new SvgLength(rightArrowBottomY));
                     break;
 
                 // Если стрелка двухсторонняя, то добавим нужные координаты 
