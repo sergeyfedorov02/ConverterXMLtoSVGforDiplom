@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using GrapeCity.Documents.Svg;
 
 namespace SvgConverter
@@ -34,7 +35,7 @@ namespace SvgConverter
 
             // Получим элемент "Переезд"
             var railCrossingGroup =
-                CreateRailCrossingSvg(xmlNode, curLeft, curRight, curTop, curBottom, typeRailCrossing);
+                CreateRailCrossingSvg(xmlNode, curLeft, curRight, curTop, curBottom, typeRailCrossing, objColor);
 
             // Добавим стандартные атрибуты
             // Добавим угол поворота, если он есть
@@ -58,7 +59,7 @@ namespace SvgConverter
 
         // Функция для получения элемента "Переезд" в формате Svg
         private static SvgGroupElement CreateRailCrossingSvg(IReadOnlyDictionary<string, string> xmlNode, float curLeft,
-            float curRight, float curTop, float curBottom, string typeRailCrossing)
+            float curRight, float curTop, float curBottom, string typeRailCrossing, Color objColor)
         {
             // Создадим общую группу для элемента "Переезд"
             var result = new SvgGroupElement();
@@ -75,17 +76,21 @@ namespace SvgConverter
             // Вычислим стандартное значение длины шлагбаума по Горизонтали -> 5/6 ширины переезда
             var railCrossingBarLineHorizontalLength = rectStandardValue * 5;
 
+            // Создадим флаг, который будет сигнализировать о том, рисовать ли всю конструкцию шлагбаума или нет
+            var railCrossingFlag = true;
+
             // Вычислим стандартное значение длины шлагбаума по Вертикали, учитывая длину переезда
             var railCrossingBarLineVerticalLength = railCrossingBarLineHorizontalLength;
             // Длины по вертикали не хватает для минимального отображения линии шлагбаума -> не рисуем вертикальные линии шлагбаума
             if (curBottom - curTop - railCrossingBarLineHorizontalLength < 0)
             {
-                railCrossingBarLineVerticalLength = 0f; // TODO - что тут делать?
+                railCrossingBarLineVerticalLength = 0f;
+                railCrossingFlag = false;
             }
             // Длины по вертикали не хватает, чтобы нарисовать линию шлагбаума стандартной длины -> вычисляем максимально возможное значение
             else if (railCrossingBarLineHorizontalLength > curBottom - curTop - railCrossingBarLineHorizontalLength)
             {
-                railCrossingBarLineVerticalLength = railCrossingBarLineHorizontalLength - curBottom + curTop;
+                railCrossingBarLineVerticalLength = curBottom - curTop - railCrossingBarLineHorizontalLength;
             }
 
             // Вычислим начальные точки для линий шлагбаума
@@ -123,109 +128,183 @@ namespace SvgConverter
             // Если переезд с шлагбаумом или еще с УЗП
             if (typeRailCrossing == "1" || typeRailCrossing == "2")
             {
-                // Если присутствует шлагбаумом
-                // Создадим группу для двух линии - позиция открытого шлагбаума
-                var railCrossingBarLineOpenGroup = new SvgGroupElement
+                // Если присутствует шлагбаумом и хватает места для того, чтобы его нарисовать
+                if (railCrossingFlag)
                 {
-                    // Сделаем видимым -> переезд открыт
-                    StrokeOpacity = 1,
-
-                    // Добавим сами линии
-                    Children =
+                    // Создадим группу для двух линии - позиция открытого шлагбаума
+                    var railCrossingBarLineOpenGroup = new SvgGroupElement
                     {
-                        // Левая верхняя
-                        new SvgLineElement
+                        // Сделаем видимым -> переезд открыт
+                        StrokeOpacity = 1,
+
+                        // Добавим сами линии
+                        Children =
                         {
-                            Class = "rail-crossing-bar-open",
-                            StrokeWidth = new SvgLength(railBarrierWidth),
+                            // Левая верхняя
+                            new SvgLineElement
+                            {
+                                Class = "rail-crossing-bar-open",
+                                StrokeWidth = new SvgLength(railBarrierWidth),
 
-                            // Верхняя точка
-                            X1 = topLine.X,
-                            Y1 = topLine.Y,
+                                // Верхняя точка
+                                X1 = topLine.X,
+                                Y1 = topLine.Y,
 
-                            // Нижняя точка
-                            X2 = topLine.X,
-                            Y2 = new SvgLength(topLine.Y.Value + railCrossingBarLineVerticalLength)
-                        },
+                                // Нижняя точка
+                                X2 = topLine.X,
+                                Y2 = new SvgLength(topLine.Y.Value + railCrossingBarLineVerticalLength)
+                            },
 
-                        // Правая нижняя
-                        new SvgLineElement
-                        {
-                            Class = "rail-crossing-bar-open",
-                            StrokeWidth = new SvgLength(railBarrierWidth),
+                            // Правая нижняя
+                            new SvgLineElement
+                            {
+                                Class = "rail-crossing-bar-open",
+                                StrokeWidth = new SvgLength(railBarrierWidth),
 
-                            // Нижняя точка
-                            X1 = bottomLine.X,
-                            Y1 = bottomLine.Y,
+                                // Нижняя точка
+                                X1 = bottomLine.X,
+                                Y1 = bottomLine.Y,
 
-                            // Верхняя точка
-                            X2 = bottomLine.X,
-                            Y2 = new SvgLength(bottomLine.Y.Value - railCrossingBarLineVerticalLength)
+                                // Верхняя точка
+                                X2 = bottomLine.X,
+                                Y2 = new SvgLength(bottomLine.Y.Value - railCrossingBarLineVerticalLength)
+                            }
                         }
-                    }
-                };
+                    };
 
-                // Добавим группу линий для открытого шлагбаума в результат
-                result.Children.Add(railCrossingBarLineOpenGroup);
+                    // Добавим группу линий для открытого шлагбаума в результат
+                    result.Children.Add(railCrossingBarLineOpenGroup);
 
-                // Создадим группу для двух линии - позиция закрытого шлагбаума
-                var railCrossingBarLineClosedGroup = new SvgGroupElement
-                {
-                    // Сделаем НЕ видимым, так как изначально переезд открыт -> отображать закрытые линии не надо
-                    StrokeOpacity = 0,
-
-                    // Добавим сами линии
-                    Children =
+                    // Создадим группу для двух линии - позиция закрытого шлагбаума
+                    var railCrossingBarLineClosedGroup = new SvgGroupElement
                     {
-                        // Левая верхняя
-                        new SvgLineElement
+                        // Сделаем НЕ видимым, так как изначально переезд открыт -> отображать закрытые линии не надо
+                        StrokeOpacity = 0,
+
+                        // Добавим сами линии
+                        Children =
                         {
-                            Class = "rail-crossing-bar-closed",
-                            StrokeWidth = new SvgLength(railBarrierWidth),
+                            // Левая верхняя
+                            new SvgLineElement
+                            {
+                                Class = "rail-crossing-bar-closed",
+                                StrokeWidth = new SvgLength(railBarrierWidth),
 
-                            // Верхняя точка
-                            X1 = topLine.X,
-                            Y1 = topLine.Y,
+                                // Верхняя точка
+                                X1 = topLine.X,
+                                Y1 = topLine.Y,
 
-                            // Нижняя точка
-                            X2 = new SvgLength(topLine.X.Value + railCrossingBarLineHorizontalLength),
-                            Y2 = topLine.Y
-                        },
+                                // Нижняя точка
+                                X2 = new SvgLength(topLine.X.Value + railCrossingBarLineHorizontalLength),
+                                Y2 = topLine.Y
+                            },
 
-                        // Правая нижняя
-                        new SvgLineElement
-                        {
-                            Class = "rail-crossing-bar-closed",
-                            StrokeWidth = new SvgLength(railBarrierWidth),
+                            // Правая нижняя
+                            new SvgLineElement
+                            {
+                                Class = "rail-crossing-bar-closed",
+                                StrokeWidth = new SvgLength(railBarrierWidth),
 
-                            // Нижняя точка
-                            X1 = bottomLine.X,
-                            Y1 = bottomLine.Y,
+                                // Нижняя точка
+                                X1 = bottomLine.X,
+                                Y1 = bottomLine.Y,
 
-                            // Верхняя точка
-                            X2 = new SvgLength(bottomLine.X.Value - railCrossingBarLineHorizontalLength),
-                            Y2 = bottomLine.Y
+                                // Верхняя точка
+                                X2 = new SvgLength(bottomLine.X.Value - railCrossingBarLineHorizontalLength),
+                                Y2 = bottomLine.Y
+                            }
                         }
-                    }
-                };
+                    };
 
-                // Добавим группу линий для закрытого шлагбаума в результат
-                result.Children.Add(railCrossingBarLineClosedGroup);
+                    // Добавим группу линий для закрытого шлагбаума в результат
+                    result.Children.Add(railCrossingBarLineClosedGroup);
 
-                // Создадим группу для двух прямоугольника - крепление линий шлагбаума
-                var railCrossingBarRectBaseGroup = new SvgGroupElement
-                {
-                    //TODO
-                    //TODO - Если не хватает длины???
-                };
+                    // Создадим группу для двух прямоугольника - крепление линий шлагбаума
+                    var railCrossingBarRectBaseGroup = new SvgGroupElement
+                    {
+                        // Сделаем цвет заполнения и отобразим его
+                        Fill = new SvgPaint(objColor),
+                        FillOpacity = 1,
 
-                // Добавим группу прямоугольников крепления линий шлагбаума в результат
-                result.Children.Add(railCrossingBarRectBaseGroup);
+                        // Добавим сами прямоугольники
+                        Children =
+                        {
+                            // Левый верхний
+                            new SvgRectElement
+                            {
+                                Class = "rail-crossing-bar-base",
+                                StrokeWidth = new SvgLength(railBarrierWidth),
+
+                                X = new SvgLength(curLeft + rectStandardValue / 2),
+                                Y = new SvgLength(curTop + rectStandardValue * 2),
+                                Width = new SvgLength(rectStandardValue),
+                                Height = new SvgLength(rectStandardValue)
+                            },
+
+                            // Правый нижний
+                            new SvgRectElement
+                            {
+                                Class = "rail-crossing-bar-base",
+                                StrokeWidth = new SvgLength(railBarrierWidth),
+
+                                X = new SvgLength(curRight - 3 * rectStandardValue / 2),
+                                Y = new SvgLength(curBottom - rectStandardValue * 3),
+                                Width = new SvgLength(rectStandardValue),
+                                Height = new SvgLength(rectStandardValue)
+                            }
+                        }
+                    };
+
+                    // Добавим группу прямоугольников крепления линий шлагбаума в результат
+                    result.Children.Add(railCrossingBarRectBaseGroup);
+                }
 
                 // Если помимо шлагбаума есть УЗП
                 if (typeRailCrossing == "2")
                 {
-                    //TODO
+                    // Создадим группу для УЗП - две линии
+                    var railCrossingUzpGroup = new SvgGroupElement
+                    {
+                        // Сделаем видимым
+                        StrokeOpacity = 1,
+
+                        // Добавим сами линии
+                        Children =
+                        {
+                            // Верхняя
+                            new SvgLineElement
+                            {
+                                Class = "rail-crossing-uzp",
+                                StrokeWidth = new SvgLength(railBarrierWidth),
+
+                                // Левая точка
+                                X1 = new SvgLength(curLeft + rectStandardValue * 2),
+                                Y1 = new SvgLength(curTop + rectStandardValue * 2),
+
+                                // Правая точка
+                                X2 = new SvgLength(curRight - rectStandardValue * 2),
+                                Y2 = new SvgLength(curTop + rectStandardValue * 2)
+                            },
+
+                            // Нижняя
+                            new SvgLineElement
+                            {
+                                Class = "rail-crossing-uzp",
+                                StrokeWidth = new SvgLength(railBarrierWidth),
+
+                                // Левая точка
+                                X1 = new SvgLength(curLeft + rectStandardValue * 2),
+                                Y1 = new SvgLength(curBottom - rectStandardValue * 2),
+
+                                // Правая точка
+                                X2 = new SvgLength(curRight - rectStandardValue * 2),
+                                Y2 = new SvgLength(curBottom - rectStandardValue * 2)
+                            }
+                        }
+                    };
+
+                    // Добавим группу линий для закрытого шлагбаума в результат
+                    result.Children.Add(railCrossingUzpGroup);
                 }
             }
 
