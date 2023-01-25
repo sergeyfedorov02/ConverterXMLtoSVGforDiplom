@@ -158,8 +158,27 @@ namespace SvgConverter
             return true;
         }
 
-        // Функция для добавления стандартных кастомных атрибутов к группе
-        public static SvgGroupElement AddStandardResultAttributes(this IReadOnlyDictionary<string, string> xmlNode,
+        // Функция для получения координат для элемента "StandardLibrary.RailTerminator", если чего-то нет -> false
+        public static bool TryGetRailTerminatorBounds(this IReadOnlyDictionary<string, string> properties,
+            out RectangleF rect)
+        {
+            rect = RectangleF.Empty;
+
+            // Проверка атрибута "Left" из переданного Dictionary
+            if (!properties.TryGetValue("Left", out var curLeftText)) return false;
+            var curLeft = float.Parse(curLeftText, CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "Top" из переданного Dictionary
+            if (!properties.TryGetValue("Top", out var curTopText)) return false;
+            var curTop = float.Parse(curTopText, CultureInfo.InvariantCulture);
+
+            rect = new RectangleF(curLeft, curTop, 40, 16);
+
+            return true;
+        }
+
+        // Функция для добавления стандартных кастомных атрибутов к группе в начале работы
+        public static SvgGroupElement AddStandardStartResultAttributes(this IReadOnlyDictionary<string, string> xmlNode,
             string aShape, string aDrawBorder, string railCrossingType)
         {
             var curResult = new SvgGroupElement
@@ -176,14 +195,14 @@ namespace SvgConverter
                         "Shape=" + aShape + ",DrawBorder=" + aDrawBorder)
                 );
             }
-            
+
             // Если рассматриваем переезд -> есть три разных RailCrossingType
             if (railCrossingType != null)
             {
                 curResult.CustomAttributes.Add
                 (
                     new SvgCustomAttribute("data-object-hint",
-                        "RailCrossingType==" + railCrossingType)
+                        "RailCrossingType=" + railCrossingType)
                 );
             }
 
@@ -211,6 +230,28 @@ namespace SvgConverter
             }
 
             return curResult;
+        }
+
+        // Функция для добавления стандартных кастомных атрибутов к группе в конце работы
+        public static void AddStandardEndResultAttributes(SvgElement curElement, SvgElement curResult,
+            IReadOnlyDictionary<string, string> xmlNode, float curLeft, float curRight, float curTop, float curBottom,
+            bool addAngle)
+        {
+            // Добавим угол поворота, если он есть
+            if (addAngle)
+            {
+                curElement.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
+            }
+
+            // Добавим полученный элемент в result
+            curResult.Children.Add(curElement);
+
+            // Если надо отображать текст, то добавим его в result
+            if (CreateText.IsShouldDrawLabel(xmlNode["ShouldDrawLabel"]))
+            {
+                // Добавляем созданный текст
+                curResult.Children.Add(CreateText.AddSvgTextElement(xmlNode, xmlNode["Label"]));
+            }
         }
     }
 }

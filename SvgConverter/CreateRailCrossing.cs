@@ -25,7 +25,7 @@ namespace SvgConverter
             var curBottom = bounds.Bottom;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailCrossing" со стандартными атрибутами
-            var result = xmlNode.AddStandardResultAttributes(null, null, typeRailCrossing);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, typeRailCrossing);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
@@ -38,21 +38,11 @@ namespace SvgConverter
                 CreateRailCrossingSvg(xmlNode, curLeft, curRight, curTop, curBottom, typeRailCrossing, objColor);
 
             // Добавим стандартные атрибуты
-            // Добавим угол поворота, если он есть
-            railCrossingGroup.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
-
+            DictionaryExtension.AddStandardEndResultAttributes(railCrossingGroup, result, xmlNode, curLeft, curRight, curTop,
+                curBottom, true);
+            
             // Задаем цвет линий
-            railCrossingGroup.Stroke = new SvgPaint(objColor);
-
-            // Добавим полученный элемент в result
-            result.Children.Add(railCrossingGroup);
-
-            // Если надо отображать текст, то добавим его в result
-            if (CreateText.IsShouldDrawLabel(xmlNode["ShouldDrawLabel"]))
-            {
-                // Добавляем созданный текст
-                result.Children.Add(CreateText.AddSvgTextElement(xmlNode, xmlNode["Label"]));
-            }
+            result.Children[0].Stroke = new SvgPaint(objColor);
 
             return result;
         }

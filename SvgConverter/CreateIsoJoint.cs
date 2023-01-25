@@ -28,7 +28,7 @@ namespace SvgConverter
             var curBottom = bounds.Bottom;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.IsoJoint" со стандартными атрибутами
-            var result = xmlNode.AddStandardResultAttributes(null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null);
 
             // Добавление Стиля
             // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
@@ -37,19 +37,9 @@ namespace SvgConverter
             var isoJoint = CreateIsoJointSvg(xmlNode, curLeft, curRight, curTop, curBottom, typeIsoJoint);
 
             // Добавим стандартные атрибуты
-            // Добавим угол поворота, если он есть
-            isoJoint.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
-
-            // Добавим полученный элемент в result
-            result.Children.Add(isoJoint);
-
-            // Если надо отображать текст, то добавим его в result
-            if (CreateText.IsShouldDrawLabel(xmlNode["ShouldDrawLabel"]))
-            {
-                // Добавляем созданный текст
-                result.Children.Add(CreateText.AddSvgTextElement(xmlNode, xmlNode["Label"]));
-            }
-
+            DictionaryExtension.AddStandardEndResultAttributes(isoJoint, result, xmlNode, curLeft, curRight, curTop,
+                curBottom, true);
+            
             return result;
         }
 
@@ -57,21 +47,16 @@ namespace SvgConverter
             float curRight, float curTop, float curBottom, string typeIsoJoint)
         {
             // Получим элемент "Изостык"
-            switch (typeIsoJoint)
+            return typeIsoJoint switch
             {
-                case "NoOverall":
-                    // Не габаритный изостык
-                    var noOverallIsoJoint =
-                        CreateNoOverallIsoJointSvg(xmlNode, curLeft, curRight, curTop, curBottom);
-                    return noOverallIsoJoint;
-
-                case "Cell":
-                    // Ячейка изостык
-                    var cellIsoJoint = CreateCellIsoJointSvg(xmlNode, curLeft, curRight, curTop, curBottom);
-                    return cellIsoJoint;
-            }
-
-            return null;
+                // Не габаритный изостык
+                "NoOverall" => CreateNoOverallIsoJointSvg(xmlNode, curLeft, curRight, curTop, curBottom),
+                
+                // Ячейка изостык
+                "Cell" => CreateCellIsoJointSvg(xmlNode, curLeft, curRight, curTop, curBottom),
+                
+                _ => null
+            };
         }
 
         // Функция для получения элемента "Не габаритный изостык" в формате Svg
@@ -104,7 +89,7 @@ namespace SvgConverter
                 Stroke = new SvgPaint(Color.DarkGray)
             };
         }
-        
+
         // Функция для получения элемента "Ячейка изостык" в формате Svg
         private static SvgRectElement CreateCellIsoJointSvg(IReadOnlyDictionary<string, string> xmlNode,
             float curLeft, float curRight, float curTop, float curBottom)
@@ -125,7 +110,7 @@ namespace SvgConverter
                 // Задаем координаты левого верхнего угла
                 X = new SvgLength(curCentreX - 1),
                 Y = new SvgLength(curCentreY - 1),
-                
+
                 // Задаем ширину обводки
                 StrokeWidth = new SvgLength(strokeWidthValue),
 

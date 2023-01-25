@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using GrapeCity.Documents.Svg;
 
 namespace SvgConverter
@@ -20,8 +21,17 @@ namespace SvgConverter
             var curTop = bounds.Top;
             var curWidth = bounds.Width;
 
+            // Данный элемент вращается относительно своего начала -> вычислим координату правого края
+            // Если элемент рисовали слева направо -> центр будет в левой точке
+            var curRight = curLeft;
+            // Если элемент рисовали справа налево -> центр будет в правой точке
+            if (float.Parse(xmlNode["OffsetEnd"], CultureInfo.InvariantCulture) < 0)
+            {
+                curRight = curLeft + curWidth * 2;
+            }
+
             // Создадим группу для отрисовки текущей "StandardLibrary.RailUnitEx" со стандартными атрибутами
-            var result = xmlNode.AddStandardResultAttributes(null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
@@ -33,18 +43,8 @@ namespace SvgConverter
             var railUnitEx = CreateRailUnitExSvg(xmlNode, curLeft, curTop, curWidth, objColor);
 
             // Добавим стандартные атрибуты
-            // Добавим угол поворота, если он есть
-            railUnitEx.AddAngle(xmlNode, curLeft, curLeft + curWidth, curTop, curTop);
-
-            // Добавим полученный элемент в result
-            result.Children.Add(railUnitEx);
-
-            // Если надо отображать текст, то добавим его в result
-            if (CreateText.IsShouldDrawLabel(xmlNode["ShouldDrawLabel"]))
-            {
-                // Добавляем созданный текст
-                result.Children.Add(CreateText.AddSvgTextElement(xmlNode, xmlNode["Label"]));
-            }
+            DictionaryExtension.AddStandardEndResultAttributes(railUnitEx, result, xmlNode, curLeft, curRight,
+                curTop, curTop, true);
 
             return result;
         }

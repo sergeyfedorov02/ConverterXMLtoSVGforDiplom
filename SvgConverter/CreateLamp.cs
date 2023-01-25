@@ -53,7 +53,7 @@ namespace SvgConverter
             var aDrawBorder = xmlNode.GetValueOrDefault("DrawBorder", "True");
 
             // Создадим группу для отрисовки текущей "StandardLibrary.Lamp" со стандартными атрибутами
-            var result = xmlNode.AddStandardResultAttributes(aShape, aDrawBorder, null);
+            var result = xmlNode.AddStandardStartResultAttributes(aShape, aDrawBorder, null);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();

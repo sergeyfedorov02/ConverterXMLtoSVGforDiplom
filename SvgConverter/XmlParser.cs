@@ -108,12 +108,17 @@ namespace SvgConverter
 
                     case "StandardLibrary.RailTerminator":
                         // Нарисуем элемент типа "StandardLibrary.RailTerminator" - Тупик
-                        //element = CreateRailTerminator.CreateSvgImageRailTerminator(dictionaryPropertiesFromCurrentNode);
+                        element = CreateRailTerminator.CreateSvgImageRailTerminator(dictionaryPropertiesFromCurrentNode);
                         break;
 
                     case "StandardLibrary.RailCrossing":
                         // Нарисуем элемент типа "StandardLibrary.RailCrossing" - Переезд
                         element = CreateRailCrossing.CreateSvgImageRailCrossing(dictionaryPropertiesFromCurrentNode);
+                        break;
+                    
+                    case "StandardLibrary.Relay":
+                        // Нарисуем элемент типа "StandardLibrary.Relay" - Контакт/Реле
+                        element = CreateRelay.CreateSvgImageRelay(dictionaryPropertiesFromCurrentNode);
                         break;
 
                     case "StandardLibrary.RailJunctionEx":

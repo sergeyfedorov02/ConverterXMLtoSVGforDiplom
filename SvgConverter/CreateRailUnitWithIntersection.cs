@@ -24,7 +24,7 @@ namespace SvgConverter
             var curTop = bounds[0].Top;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailUnitWithIntersection" со стандартными атрибутами
-            var result = xmlNode.AddStandardResultAttributes(null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
@@ -41,16 +41,9 @@ namespace SvgConverter
             railUnitWithIntersection.AddAngle(xmlNode, firstLineLeft, firstLineLeft + firstLineWidth, curTop, curTop);
             railUnitWithIntersection.AddAngle(xmlNode, secondLineLeft, secondLineLeft + secondLineWidth, curTop,
                 curTop);
-
-            // Добавим полученный элемент в result
-            result.Children.Add(railUnitWithIntersection);
-
-            // Если надо отображать текст, то добавим его в result
-            if (CreateText.IsShouldDrawLabel(xmlNode["ShouldDrawLabel"]))
-            {
-                // Добавляем созданный текст
-                result.Children.Add(CreateText.AddSvgTextElement(xmlNode, xmlNode["Label"]));
-            }
+            
+            DictionaryExtension.AddStandardEndResultAttributes(railUnitWithIntersection, result, xmlNode, firstLineLeft, firstLineLeft + firstLineWidth,
+                curTop, curTop, false);
 
             return result;
         }
