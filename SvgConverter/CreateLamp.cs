@@ -52,33 +52,8 @@ namespace SvgConverter
             // Получим значение атрибута "DrawBorder", если такого нет -> берем значение "True"
             var aDrawBorder = xmlNode.GetValueOrDefault("DrawBorder", "True");
 
-            // Создадим группу для отрисовки текущей "StandardLibrary.Lamp"
-            var result = new SvgGroupElement
-            {
-                CustomAttributes = new List<SvgCustomAttribute>
-                {
-                    // Добавление кастомного атрибута data-object-hint = "Shape=..,DrawBorder=..." 
-                    new SvgCustomAttribute("data-object-hint",
-                        "Shape=" + aShape + ",DrawBorder=" + aDrawBorder),
-
-                    // Добавление кастомного атрибута data-object-type = "StandardLibrary.Lamp" (имя этого атрибута - Лампа)
-                    new SvgCustomAttribute("data-object-type", xmlNode["ToolId"]),
-
-                    // Добавление кастомного атрибута data-state = "-2" к создаваемой группе, чтобы потом была подсветка, если придет значение
-                    new SvgCustomAttribute("data-state", "-2")
-                }
-            };
-
-            // Если указан ClientId
-            if (xmlNode.TryGetValue("ClientId", out var objectId) && objectId != "0")
-            {
-                // Обновление data-state
-                var dataStateAttribute =
-                    result.CustomAttributes.Find(attribute => attribute.AttributeName == "data-state");
-                dataStateAttribute.Value = "-1";
-                // Добавление data-object-id
-                result.CustomAttributes.Add(new SvgCustomAttribute("data-object-id", objectId));
-            }
+            // Создадим группу для отрисовки текущей "StandardLibrary.Lamp" со стандартными атрибутами
+            var result = xmlNode.AddStandardResultAttributes(aShape, aDrawBorder, null);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
@@ -145,6 +120,9 @@ namespace SvgConverter
 
                         // Получим ключ жезл
                         var keyBarrel = CreateKeyBarrelSvg(keyBarrelListPoints, xmlNode.GetLineWidth(), objColor);
+                        
+                        // Добавим угол поворота, если он есть
+                        keyBarrel.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
 
                         // Добавим полученный элемент в result
                         result.Children.Add(keyBarrel);
@@ -170,7 +148,8 @@ namespace SvgConverter
                         var groundControl = CreateGroundControlSvg(curLeft, curRight, curTop, curBottom);
 
                         // Добавим стандартные атрибуты
-                        AddStandardAttributesLineIndicator(groundControl, result, xmlNode, objColor, aShape);
+                        AddStandardAttributesLineIndicator(groundControl, result, xmlNode, objColor, aShape, curLeft,
+                            curRight, curTop, curBottom);
 
                         break;
 
@@ -180,7 +159,8 @@ namespace SvgConverter
                         var railEndElement = CreateRailEndCouplingBoxSvg(curLeft, curRight, curTop, curBottom, aShape);
 
                         // Добавим стандартные атрибуты
-                        AddStandardAttributesLineIndicator(railEndElement, result, xmlNode, objColor, aShape);
+                        AddStandardAttributesLineIndicator(railEndElement, result, xmlNode, objColor, aShape, curLeft,
+                            curRight, curTop, curBottom);
 
                         break;
 
@@ -191,7 +171,8 @@ namespace SvgConverter
                             CreateFeedEndCouplingBoxSvg(curLeft, curRight, curTop, curBottom, aShape, objColor);
 
                         // Добавим стандартные атрибуты
-                        AddStandardAttributesLineIndicator(feedEndElement, result, xmlNode, objColor, aShape);
+                        AddStandardAttributesLineIndicator(feedEndElement, result, xmlNode, objColor, aShape, curLeft,
+                            curRight, curTop, curBottom);
                         break;
                 }
             }
@@ -586,7 +567,7 @@ namespace SvgConverter
             curElement.DelDrawBorder(aDrawBorder);
 
             // Добавим угол поворота, если он есть
-            curElement.AddAngles(xmlNode, curLeft, curRight, curTop, curBottom);
+            curElement.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
 
             // Добавим полученный элемент в result
             curResult.Children.Add(curElement);
@@ -601,7 +582,8 @@ namespace SvgConverter
 
         // Функция для добавления стандартных атрибутов к элементу LineIndicator(класс, ширина линий, добавление в result, текст)
         private static void AddStandardAttributesLineIndicator(SvgElement curElementGroup, SvgElement curResult,
-            IReadOnlyDictionary<string, string> xmlNode, Color objColor, string aShape)
+            IReadOnlyDictionary<string, string> xmlNode, Color objColor, string aShape, float curLeft, float curRight,
+            float curTop, float curBottom)
         {
             if (aShape != "FeedEndCoupling" && aShape != "FeedEndBox")
             {
@@ -615,6 +597,9 @@ namespace SvgConverter
             // Задаем цвет обводки, который берется с ObjectColor
             //(alfa = 0, если alfa = 255 - НЕ прозрачный)
             curElementGroup.Stroke = new SvgPaint(objColor);
+
+            // Добавим угол поворота, если он есть
+            curElementGroup.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
 
             // Добавим полученный элемент в result
             curResult.Children.Add(curElementGroup);

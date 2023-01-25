@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -19,9 +18,6 @@ namespace Diploma_Project
 
             // путь к архиву
             const string archivePath = @"D:\Imsat\project_24_4287.zip";
-
-            //Переменная для хранения имен нужных нам файлов
-            var filesNames = new List<string>();
 
             // Console выбор нужного файла при помощи ввода его номера
             //Console.Write("Введите номер интересующего файла: ");

@@ -86,26 +86,43 @@ namespace SvgConverter
                 switch (valueTollId)
                 {
                     case "StandardLibrary.Lamp":
-                        // Нарисуем элемент типа "StandardLibrary.Lamp"
+                        // Нарисуем элемент типа "StandardLibrary.Lamp" - Индикатор
                         element = CreateLamp.CreateSvgImageLamp(dictionaryPropertiesFromCurrentNode);
                         break;
 
                     case "StandardLibrary.RailUnitEx":
+                        // Нарисуем элемент типа "StandardLibrary.RailUnitEx" - Путь
+                        element = CreateRailUnit.CreateSvgImageRailUnit(dictionaryPropertiesFromCurrentNode);
                         break;
 
-                    case "StandardLibrary.RailJunctionEx":
+                    case "StandardLibrary.RailUnitWithIntersection":
+                        // Нарисуем элемент типа "StandardLibrary.RailUnitWithIntersection" - Путь с разрывом
+                        element = CreateRailUnitWithIntersection.CreateSvgImageRailUnitWithIntersection(
+                            dictionaryPropertiesFromCurrentNode);
                         break;
 
                     case "StandardLibrary.IsoJoint":
+                        // Нарисуем элемент типа "StandardLibrary.IsoJoint" - Изостык
+                        element = CreateIsoJoint.CreateSvgImageIsoJoint(dictionaryPropertiesFromCurrentNode);
+                        break;
+
+                    case "StandardLibrary.RailTerminator":
+                        // Нарисуем элемент типа "StandardLibrary.RailTerminator" - Тупик
+                        //element = CreateRailTerminator.CreateSvgImageRailTerminator(dictionaryPropertiesFromCurrentNode);
+                        break;
+
+                    case "StandardLibrary.RailCrossing":
+                        // Нарисуем элемент типа "StandardLibrary.RailCrossing" - Переезд
+                        element = CreateRailCrossing.CreateSvgImageRailCrossing(dictionaryPropertiesFromCurrentNode);
+                        break;
+
+                    case "StandardLibrary.RailJunctionEx":
                         break;
 
                     case "StandardLibrary.Semaphore":
                         break;
 
                     case "StandardLibrary.Label":
-                        break;
-
-                    case "StandardLibrary.RailCrossing":
                         break;
 
                     case "StandardLibrary.Measure":
@@ -192,6 +209,7 @@ namespace SvgConverter
         // Дополнительная функция для вычисления размеров поля
         private static List<float> GetCurrentRightBottomValues(IReadOnlyDictionary<string, string> currentDictionary)
         {
+            // TODO - учитывать позицию метки
             var result = new List<float>();
 
             var valueRight = currentDictionary.TryGetValue("Right", out var right) ? right : "";
@@ -201,11 +219,23 @@ namespace SvgConverter
             var valueTop = currentDictionary.TryGetValue("Top", out var top) ? top : "";
 
             var valueStart = currentDictionary.TryGetValue("Start", out var start) ? start : "";
-            var valueEnd = currentDictionary.TryGetValue("OffsetEnd", out var end) ? end : "";
+            var valueOffsetEnd = currentDictionary.TryGetValue("OffsetEnd", out var offsetEnd) ? offsetEnd : "";
+
+            var valueOffsetIntervalEnd = currentDictionary.TryGetValue("OffsetIntervalEnd", out var offsetIntervalEnd)
+                ? offsetIntervalEnd
+                : "";
+            var valueOffsetIntervalStart =
+                currentDictionary.TryGetValue("OffsetIntervalStart", out var offsetIntervalStart)
+                    ? offsetIntervalStart
+                    : "";
+            var valueIntervalLength = currentDictionary.TryGetValue("IntervalLength", out var intervalLength)
+                ? intervalLength
+                : "";
 
             var curRight = 0f;
             var curBottom = 0f;
 
+            // Если фигура вписана в прямоугольник
             if (valueRight != "")
             {
                 curRight = float.Parse(float.Parse(valueRight, CultureInfo.InvariantCulture) >
@@ -219,16 +249,45 @@ namespace SvgConverter
                     : valueTop, CultureInfo.InvariantCulture);
             }
 
+            // Если у фигуры задан параметр "Start"
             else if (valueStart != "")
             {
                 var curLeft = valueStart.Split(",")[0];
 
-                curRight = float.Parse(valueEnd, CultureInfo.InvariantCulture) > 0f
-                    ? float.Parse(curLeft, CultureInfo.InvariantCulture) +
-                      float.Parse(valueEnd, CultureInfo.InvariantCulture)
-                    : float.Parse(curLeft, CultureInfo.InvariantCulture);
+                // Путь без разрыва
+                if (valueOffsetEnd != "")
+                {
+                    curRight = float.Parse(valueOffsetEnd, CultureInfo.InvariantCulture) > 0f
+                        ? float.Parse(curLeft, CultureInfo.InvariantCulture) +
+                          float.Parse(valueOffsetEnd, CultureInfo.InvariantCulture)
+                        : float.Parse(curLeft, CultureInfo.InvariantCulture);
+                }
+                // Путь с разрывом
+                else if (valueOffsetIntervalEnd != "")
+                {
+                    curRight = float.Parse(valueOffsetIntervalEnd, CultureInfo.InvariantCulture) > 0f
+                        ? float.Parse(curLeft, CultureInfo.InvariantCulture) +
+                          float.Parse(valueOffsetIntervalEnd, CultureInfo.InvariantCulture) +
+                          float.Parse(valueOffsetIntervalStart, CultureInfo.InvariantCulture) +
+                          float.Parse(valueIntervalLength, CultureInfo.InvariantCulture)
+                        : float.Parse(curLeft, CultureInfo.InvariantCulture);
+                }
 
                 curBottom = float.Parse(valueStart.Split(",")[1], CultureInfo.InvariantCulture);
+            }
+
+            // Если изостык
+            else if (currentDictionary["ToolId"] == "StandardLibrary.IsoJoint")
+            {
+                curRight = float.Parse(valueLeft, CultureInfo.InvariantCulture) + 16f;
+                curBottom = float.Parse(valueTop, CultureInfo.InvariantCulture) + 16f;
+            }
+
+            // Если тупик
+            else if (currentDictionary["ToolId"] == "StandardLibrary.RailTerminator")
+            {
+                curRight = float.Parse(valueLeft, CultureInfo.InvariantCulture) + 40f;
+                curBottom = float.Parse(valueTop, CultureInfo.InvariantCulture) + 20f;
             }
 
             result.Add(curRight);
