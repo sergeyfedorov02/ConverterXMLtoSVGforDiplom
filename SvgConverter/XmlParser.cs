@@ -124,8 +124,11 @@ namespace SvgConverter
 
                     case "StandardLibrary.JunctionSwitch":
                     case "StandardLibrary.JunctionSwitchWithoutNoControl":
+                    case "StandardLibrary.Uksps":
                         // Нарисуем элемент типа "StandardLibrary.JunctionSwitch" и "JunctionSwitchWithoutNoControl"- Стрелочный коммутатор
-                        element = CreateJunctionSwitch.CreateSvgImageJunctionSwitch(dictionaryPropertiesFromCurrentNode);
+                        // Также элемент типа "StandardLibrary.Uksps" - УКСПС
+                        element = CreateJunctionSwitch.CreateSvgImageJunctionSwitch(
+                            dictionaryPropertiesFromCurrentNode);
                         break;
 
                     case "StandardLibrary.RailJunctionEx":
@@ -307,9 +310,10 @@ namespace SvgConverter
                 curBottom = float.Parse(valueTop, CultureInfo.InvariantCulture) + 20f;
             }
 
-            // Если стрелочный коммутатор
+            // Если стрелочный коммутатор или УКСПС
             else if (currentDictionary["ToolId"] == "StandardLibrary.JunctionSwitch" ||
-                     currentDictionary["ToolId"] == "StandardLibrary.JunctionSwitchWithoutNoControl")
+                     currentDictionary["ToolId"] == "StandardLibrary.JunctionSwitchWithoutNoControl" ||
+                     currentDictionary["ToolId"] == "StandardLibrary.Uksps")
             {
                 var curLeft = float.Parse(valueLeftTop.Split(",")[0], CultureInfo.InvariantCulture);
                 var curTop = float.Parse(valueLeftTop.Split(",")[1], CultureInfo.InvariantCulture);

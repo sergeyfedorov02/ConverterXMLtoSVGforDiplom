@@ -44,8 +44,8 @@ namespace SvgConverter
         }
 
         // Функция для получения элемента "Стрелочный коммутатор" в формате Svg
-        private static SvgGroupElement CreateJunctionSwitchSvg(IReadOnlyDictionary<string, string> xmlNode, float curLeft,
-            float curTop, float curLampWidth, float curLampHeight, float curLampSpace, float curRowSpace,
+        private static SvgGroupElement CreateJunctionSwitchSvg(IReadOnlyDictionary<string, string> xmlNode,
+            float curLeft, float curTop, float curLampWidth, float curLampHeight, float curLampSpace, float curRowSpace,
             Color objColor)
         {
             // Получим значение ширины  линии
@@ -98,6 +98,13 @@ namespace SvgConverter
                         Height = new SvgLength(curLampHeight)
                     }
                 );
+
+                // Если отображаем элемент "УКСПС" -> меняем цвет внутри двух прямоугольников
+                if (xmlNode["ToolId"].Equals("StandardLibrary.Uksps"))
+                {
+                    result.Children[1].Fill = new SvgPaint(Color.Red);
+                    result.Children[2].Fill = new SvgPaint(Color.Red);
+                }
             }
             // Иначе рассматриваем элемент "StandardLibrary.JunctionSwitchWithoutNoControl" -> два прямоугольника
             else
