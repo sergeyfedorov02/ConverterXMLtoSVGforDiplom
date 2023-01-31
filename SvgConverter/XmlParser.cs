@@ -386,6 +386,14 @@ namespace SvgConverter
                         break;
                 }
             }
+            
+            // Если заградительный светофор
+            else if (currentDictionary["ToolId"] == "StandardLibrary.Semaphore")
+            {
+                curRight = float.Parse(valueLeft, CultureInfo.InvariantCulture) + 
+                           2 * float.Parse(valueLineWidth, CultureInfo.InvariantCulture) + 8 * 2 + 6;
+                curBottom = float.Parse(valueTop, CultureInfo.InvariantCulture) + 16f;
+            }
 
             result.Add(curRight);
             result.Add(curBottom);
