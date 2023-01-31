@@ -108,17 +108,24 @@ namespace SvgConverter
 
                     case "StandardLibrary.RailTerminator":
                         // Нарисуем элемент типа "StandardLibrary.RailTerminator" - Тупик
-                        element = CreateRailTerminator.CreateSvgImageRailTerminator(dictionaryPropertiesFromCurrentNode);
+                        element = CreateRailTerminator.CreateSvgImageRailTerminator(
+                            dictionaryPropertiesFromCurrentNode);
                         break;
 
                     case "StandardLibrary.RailCrossing":
                         // Нарисуем элемент типа "StandardLibrary.RailCrossing" - Переезд
                         element = CreateRailCrossing.CreateSvgImageRailCrossing(dictionaryPropertiesFromCurrentNode);
                         break;
-                    
+
                     case "StandardLibrary.Relay":
                         // Нарисуем элемент типа "StandardLibrary.Relay" - Контакт/Реле
                         element = CreateRelay.CreateSvgImageRelay(dictionaryPropertiesFromCurrentNode);
+                        break;
+
+                    case "StandardLibrary.JunctionSwitch":
+                    case "StandardLibrary.JunctionSwitchWithoutNoControl":
+                        // Нарисуем элемент типа "StandardLibrary.JunctionSwitch" и "JunctionSwitchWithoutNoControl"- Стрелочный коммутатор
+                        element = CreateJunctionSwitch.CreateSvgImageJunctionSwitch(dictionaryPropertiesFromCurrentNode);
                         break;
 
                     case "StandardLibrary.RailJunctionEx":
@@ -237,6 +244,11 @@ namespace SvgConverter
                 ? intervalLength
                 : "";
 
+            var valueLeftTop = currentDictionary.TryGetValue("LeftTop", out var leftTop) ? leftTop : "";
+            var valueLampSize = currentDictionary.TryGetValue("LampSize", out var lampSize) ? lampSize : "";
+            var valueLampSpace = currentDictionary.TryGetValue("LampSpace", out var lampSpace) ? lampSpace : "";
+            var valueRowSpace = currentDictionary.TryGetValue("RowSpace", out var rowSpace) ? rowSpace : "-1.0";
+
             var curRight = 0f;
             var curBottom = 0f;
 
@@ -293,6 +305,27 @@ namespace SvgConverter
             {
                 curRight = float.Parse(valueLeft, CultureInfo.InvariantCulture) + 40f;
                 curBottom = float.Parse(valueTop, CultureInfo.InvariantCulture) + 20f;
+            }
+
+            // Если стрелочный коммутатор
+            else if (currentDictionary["ToolId"] == "StandardLibrary.JunctionSwitch" ||
+                     currentDictionary["ToolId"] == "StandardLibrary.JunctionSwitchWithoutNoControl")
+            {
+                var curLeft = float.Parse(valueLeftTop.Split(",")[0], CultureInfo.InvariantCulture);
+                var curTop = float.Parse(valueLeftTop.Split(",")[1], CultureInfo.InvariantCulture);
+
+                curRight = curLeft + float.Parse(valueLampSpace, CultureInfo.InvariantCulture) +
+                           2 * float.Parse(valueLampSize.Split(",")[0], CultureInfo.InvariantCulture);
+
+                if (float.Parse(valueRowSpace, CultureInfo.InvariantCulture) >= 0)
+                {
+                    curBottom = curTop + float.Parse(valueRowSpace, CultureInfo.InvariantCulture) +
+                                2 * float.Parse(valueLampSize.Split(",")[1], CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    curBottom = curTop + float.Parse(valueLampSize.Split(",")[1], CultureInfo.InvariantCulture);
+                }
             }
 
             result.Add(curRight);

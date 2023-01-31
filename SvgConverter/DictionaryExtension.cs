@@ -177,6 +177,40 @@ namespace SvgConverter
             return true;
         }
 
+        // Функция для получения координат для элемента "StandardLibrary.RailJunctionEx" и "JunctionSwitchWithoutNoControl", если чего-то нет -> false
+        public static bool TryGetJunctionSwitchBounds(this IReadOnlyDictionary<string, string> properties,
+            out Dictionary<string, float> curProperties)
+        {
+            curProperties = new Dictionary<string, float>();
+
+            // Проверка атрибута "LeftTop" из переданного Dictionary
+            if (!properties.TryGetValue("LeftTop", out var curLeftTopText)) return false;
+            var curLeft = float.Parse(curLeftTopText.Split(",")[0], CultureInfo.InvariantCulture);
+            var curTop = float.Parse(curLeftTopText.Split(",")[1], CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "LampSize" из переданного Dictionary
+            if (!properties.TryGetValue("LampSize", out var curLampSizeText)) return false;
+            var curLampWidth = float.Parse(curLampSizeText.Split(",")[0], CultureInfo.InvariantCulture);
+            var curLampHeight = float.Parse(curLampSizeText.Split(",")[1], CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "LampSpace" из переданного Dictionary
+            if (!properties.TryGetValue("LampSpace", out var curLampSpaceText)) return false;
+            var curLampSpace = float.Parse(curLampSpaceText, CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "RowSpace" из переданного Dictionary
+            var curRowSpaceText = properties.TryGetValue("RowSpace", out var rowSpace) ? rowSpace : "-1.0";
+            var curRowSpace = float.Parse(curRowSpaceText, CultureInfo.InvariantCulture);
+
+            curProperties["curLeft"] = curLeft;
+            curProperties["curTop"] = curTop;
+            curProperties["curLampWidth"] = curLampWidth;
+            curProperties["curLampHeight"] = curLampHeight;
+            curProperties["curLampSpace"] = curLampSpace;
+            curProperties["curRowSpace"] = curRowSpace;
+
+            return true;
+        }
+
         // Функция для добавления стандартных кастомных атрибутов к группе в начале работы
         public static SvgGroupElement AddStandardStartResultAttributes(this IReadOnlyDictionary<string, string> xmlNode,
             string aShape, string aDrawBorder, string railCrossingType)
