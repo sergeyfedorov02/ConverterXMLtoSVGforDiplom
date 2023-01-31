@@ -211,9 +211,28 @@ namespace SvgConverter
             return true;
         }
 
+        // Функция для получения координат для элемента "StandardLibrary.Semaphore", если чего-то нет -> false
+        public static bool TryGetSemaphoreBounds(this IReadOnlyDictionary<string, string> properties,
+            out RectangleF rect)
+        {
+            rect = RectangleF.Empty;
+
+            // Проверка атрибута "Left" из переданного Dictionary
+            if (!properties.TryGetValue("Left", out var curLeftText)) return false;
+            var curLeft = float.Parse(curLeftText, CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "Top" из переданного Dictionary
+            if (!properties.TryGetValue("Top", out var curTopText)) return false;
+            var curTop = float.Parse(curTopText, CultureInfo.InvariantCulture);
+
+            rect = new RectangleF(curLeft, curTop, 0, 0);
+
+            return true;
+        }
+
         // Функция для добавления стандартных кастомных атрибутов к группе в начале работы
         public static SvgGroupElement AddStandardStartResultAttributes(this IReadOnlyDictionary<string, string> xmlNode,
-            string aShape, string aDrawBorder, string railCrossingType)
+            string aShape, string aDrawBorder, string railCrossingType, string semaphoreHint)
         {
             var curResult = new SvgGroupElement
             {
@@ -237,6 +256,18 @@ namespace SvgConverter
                 (
                     new SvgCustomAttribute("data-object-hint",
                         "RailCrossingType=" + railCrossingType)
+                );
+            }
+
+            // Если рассматриваем светофор -> есть несколько вариаций светофора
+            if (semaphoreHint != null)
+            {
+                var curSemaphoreHint = semaphoreHint.Split(",");
+                curResult.CustomAttributes.Add
+                (
+                    new SvgCustomAttribute("data-object-hint",
+                        "SemaphoreType=" + curSemaphoreHint[0] + ",LegType=" + curSemaphoreHint[1] + ",LampShape=" +
+                        curSemaphoreHint[2])
                 );
             }
 

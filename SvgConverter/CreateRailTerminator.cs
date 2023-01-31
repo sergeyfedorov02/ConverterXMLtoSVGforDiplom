@@ -22,7 +22,7 @@ namespace SvgConverter
             var curHeight = bounds.Height;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailTerminator" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();

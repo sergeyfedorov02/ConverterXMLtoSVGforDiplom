@@ -28,7 +28,7 @@ namespace SvgConverter
             var curBottom = bounds.Bottom;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.Relay" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
 
             // Добавим указатель типа
             result.CustomAttributes.Add

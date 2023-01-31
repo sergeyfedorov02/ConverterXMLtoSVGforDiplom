@@ -31,7 +31,7 @@ namespace SvgConverter
             }
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailUnitEx" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();

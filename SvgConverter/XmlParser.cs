@@ -68,20 +68,6 @@ namespace SvgConverter
                 // Получим Dictionary, состоящий из свойств текущего элемента
                 var dictionaryPropertiesFromCurrentNode = CreateDictionaryFromProperties(xmlNode);
 
-                // Для обновления размеров поля вычислим координаты правого и нижнего краев
-                var currentValues = GetCurrentRightBottomValues(dictionaryPropertiesFromCurrentNode);
-
-                // Если координаты больше текущих(максимальных), то обновим максимальные
-                if (currentValues[0] > maxRightValue)
-                {
-                    maxRightValue = currentValues[0];
-                }
-
-                if (currentValues[1] > maxBottomValue)
-                {
-                    maxBottomValue = currentValues[1];
-                }
-
                 // В зависимости от полученного имени нарисуем соответствующий элемент
                 switch (valueTollId)
                 {
@@ -135,6 +121,13 @@ namespace SvgConverter
                         break;
 
                     case "StandardLibrary.Semaphore":
+                        // Нарисуем элемент типа "StandardLibrary.Semaphore" - Светофор
+                        element = CreateSemaphore.CreateSvgImageSemaphore(dictionaryPropertiesFromCurrentNode);
+                        break;
+                    
+                    case "StandardLibrary.FenceSemaphore":
+                        // Нарисуем элемент типа "StandardLibrary.FenceSemaphore" - Заградительный светофор
+                        element = CreateFenceSemaphore.CreateSvgImageFenceSemaphore(dictionaryPropertiesFromCurrentNode);
                         break;
 
                     case "StandardLibrary.Label":
@@ -157,6 +150,20 @@ namespace SvgConverter
                 {
                     // Добавим новую группу из элементов в mainGroup
                     mainGroup.Children.Add(element);
+                    
+                    // Для обновления размеров поля вычислим координаты правого и нижнего краев
+                    var currentValues = GetCurrentRightBottomValues(dictionaryPropertiesFromCurrentNode);
+
+                    // Если координаты больше текущих(максимальных), то обновим максимальные
+                    if (currentValues[0] > maxRightValue)
+                    {
+                        maxRightValue = currentValues[0];
+                    }
+
+                    if (currentValues[1] > maxBottomValue)
+                    {
+                        maxBottomValue = currentValues[1];
+                    }
                 }
             }
 
@@ -250,7 +257,15 @@ namespace SvgConverter
             var valueLeftTop = currentDictionary.TryGetValue("LeftTop", out var leftTop) ? leftTop : "";
             var valueLampSize = currentDictionary.TryGetValue("LampSize", out var lampSize) ? lampSize : "";
             var valueLampSpace = currentDictionary.TryGetValue("LampSpace", out var lampSpace) ? lampSpace : "";
-            var valueRowSpace = currentDictionary.TryGetValue("RowSpace", out var rowSpace) ? rowSpace : "-1.0";
+            var valueRowSpace = currentDictionary.TryGetValue("RowSpace", out var rowSpace) ? rowSpace : "";
+
+            var valueSemaphoreType = currentDictionary.TryGetValue("SemaphoreType", out var semaphoreType)
+                ? semaphoreType
+                : "";
+            var valueSemaphoreLegType = currentDictionary.TryGetValue("LegType", out var semaphoreLegType)
+                ? semaphoreLegType
+                : "";
+            var valueLineWidth = currentDictionary.TryGetValue("LineWidth", out var lineWidth) ? lineWidth : "";
 
             var curRight = 0f;
             var curBottom = 0f;
@@ -321,7 +336,7 @@ namespace SvgConverter
                 curRight = curLeft + float.Parse(valueLampSpace, CultureInfo.InvariantCulture) +
                            2 * float.Parse(valueLampSize.Split(",")[0], CultureInfo.InvariantCulture);
 
-                if (float.Parse(valueRowSpace, CultureInfo.InvariantCulture) >= 0)
+                if (valueRowSpace != "")
                 {
                     curBottom = curTop + float.Parse(valueRowSpace, CultureInfo.InvariantCulture) +
                                 2 * float.Parse(valueLampSize.Split(",")[1], CultureInfo.InvariantCulture);
@@ -329,6 +344,46 @@ namespace SvgConverter
                 else
                 {
                     curBottom = curTop + float.Parse(valueLampSize.Split(",")[1], CultureInfo.InvariantCulture);
+                }
+            }
+
+            // Если светофор
+            else if (currentDictionary["ToolId"] == "StandardLibrary.Semaphore")
+            {
+                switch (valueSemaphoreLegType)
+                {
+                    // Если тип светофора - карликовый
+                    case "0":
+                        // Если меньше 4 индикаторов -> они расположены в линию
+                        if (float.Parse(valueSemaphoreType, CultureInfo.InvariantCulture) < 4)
+                        {
+                            curRight = float.Parse(valueLeft, CultureInfo.InvariantCulture) +
+                                       2 * float.Parse(valueLineWidth, CultureInfo.InvariantCulture) +
+                                       8 * 2 * float.Parse(valueSemaphoreType, CultureInfo.InvariantCulture);
+                            curBottom = float.Parse(valueTop, CultureInfo.InvariantCulture) +
+                                        8 * 2;
+                        }
+                        // Если 4 или 5 индикаторов -> они расположены в прямоугольнике длиной 3 или 2 индикатора
+                        else
+                        {
+                            curRight = valueSemaphoreType.Equals("4")
+                                ? float.Parse(valueLeft, CultureInfo.InvariantCulture) +
+                                  2 * float.Parse(valueLineWidth, CultureInfo.InvariantCulture) + 8 * 2 * 2
+                                : float.Parse(valueLeft, CultureInfo.InvariantCulture) +
+                                  2 * float.Parse(valueLineWidth, CultureInfo.InvariantCulture) + 8 * 2 * 3;
+                            curBottom = float.Parse(valueTop, CultureInfo.InvariantCulture) +
+                                        8 * 2 * 2;
+                        }
+                        break;
+                    
+                    // Если тип светофора - мачтовый
+                    case "1":
+                        curRight = float.Parse(valueLeft, CultureInfo.InvariantCulture) +
+                                   2 * float.Parse(valueLineWidth, CultureInfo.InvariantCulture) +
+                                   8 * 2 * float.Parse(valueSemaphoreType, CultureInfo.InvariantCulture) +
+                                   6;
+                        curBottom = float.Parse(valueTop, CultureInfo.InvariantCulture) + 16f;
+                        break;
                 }
             }
 

@@ -24,7 +24,7 @@ namespace SvgConverter
             var curTop = bounds[0].Top;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailUnitWithIntersection" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();

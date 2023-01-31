@@ -25,7 +25,7 @@ namespace SvgConverter
             var curBottom = bounds.Bottom;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailCrossing" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, typeRailCrossing);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, typeRailCrossing, null);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
