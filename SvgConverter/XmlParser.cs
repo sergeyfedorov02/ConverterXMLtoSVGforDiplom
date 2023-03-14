@@ -117,9 +117,6 @@ namespace SvgConverter
                             dictionaryPropertiesFromCurrentNode);
                         break;
 
-                    case "StandardLibrary.RailJunctionEx":
-                        break;
-
                     case "StandardLibrary.Semaphore":
                         // Нарисуем элемент типа "StandardLibrary.Semaphore" - Светофор
                         element = CreateSemaphore.CreateSvgImageSemaphore(dictionaryPropertiesFromCurrentNode);
@@ -129,12 +126,21 @@ namespace SvgConverter
                         // Нарисуем элемент типа "StandardLibrary.FenceSemaphore" - Заградительный светофор
                         element = CreateFenceSemaphore.CreateSvgImageFenceSemaphore(dictionaryPropertiesFromCurrentNode);
                         break;
+                    
+                    case "StandardLibrary.RailJunctionEx":
+                        // Нарисуем элемент типа "StandardLibrary.RailJunctionEx" - Стрелочная секция
+                        //element = CreateRailJunction.CreateSvgImageRailJunction(dictionaryPropertiesFromCurrentNode);
+                        break;
 
                     case "StandardLibrary.Label":
+                        // Нарисуем элемент типа "StandardLibrary.Measure" - Текстовая метка
                         break;
 
                     case "StandardLibrary.Measure":
+                        // Нарисуем элемент типа "StandardLibrary.Measure" - Измерение
                         break;
+                    
+                    //TODO - составные
 
                     // Если чего-то сверху не рассмотрели TODO - потом убрать
                     default:
