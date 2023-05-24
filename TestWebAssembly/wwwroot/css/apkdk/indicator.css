@@ -1,0 +1,544 @@
+﻿/* Индикаторы */
+/* Все прочие состояния - неопределено */
+g .fill-indicator {
+    fill-opacity: 1;
+    fill: #FF00FF;
+}
+
+g .line-indicator {
+    stroke: #FF00FF;
+}
+/* красный индикатор, земля в норме, перегон занят, УУ занят, Ключ-жезл изъят */
+g[data-state='14'] .fill-indicator, g[data-state='63'] .fill-indicator, g[data-state='66'] .fill-indicator, g[data-state='72'] .fill-indicator, g[data-state='70'] .fill-indicator {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='14'] .line-indicator, g[data-state='63'] .line-indicator, g[data-state='66'] .line-indicator, g[data-state='72'] .line-indicator, g[data-state='70'] .line-indicator {
+    stroke: red;
+}
+/* черный индикатор, ДГА выключен, Отсутствие напряжения на фидере, Перегон свободен, Участок удаления свободен, Разрешения на отправления нет,
+    Вспомогательное управление выключено, Ключ-жезл не изъят
+*/
+g[data-state='15'] .fill-indicator, g[data-state='61'] .fill-indicator, g[data-state='58'] .fill-indicator, g[data-state='65'] .fill-indicator, g[data-state='71'] .fill-indicator, g[data-state='67'] .fill-indicator, g[data-state='75'] .fill-indicator, g[data-state='69'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='15'] .line-indicator, g[data-state='61'] .line-indicator, g[data-state='58'] .line-indicator, g[data-state='65'] .line-indicator, g[data-state='71'] .line-indicator, g[data-state='67'] .line-indicator, g[data-state='75'] .line-indicator, g[data-state='69'] .line-indicator {
+    stroke: black;
+}
+/* индикатор мигает черный красный, Включено вспомогательное управление произошел отказ маршрутного набора, Понижение сопротивления изоляции */
+g.main-panel[data-first-color='1'] g[data-state='16'] .fill-indicator, g.main-panel[data-first-color='1'] g[data-state='76'] .fill-indicator, g.main-panel[data-first-color='1'] g[data-state='64'] .fill-indicator {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='16'] .fill-indicator, g.main-panel[data-first-color='0'] g[data-state='76'] .fill-indicator, g.main-panel[data-first-color='0'] g[data-state='64'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+/* белый индикатор, ДГА под нагрузкой, Фидер под нагрузкой */
+g[data-state='30'] .fill-indicator, g[data-state='62'] .fill-indicator, g[data-state='59'] .fill-indicator {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='30'] .line-indicator, g[data-state='62'] .line-indicator, g[data-state='59'] .line-indicator {
+    stroke: white;
+}
+/* индикатор мигает черный белый */
+g.main-panel[data-first-color='1'] g[data-state='50'] .fill-indicator {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='50'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='50'] .line-indicator {
+    stroke: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='50'] .line-indicator {
+    stroke: black;
+}
+
+/* индикатор зеленый, ДГА включен, Наличие напряжения на фидере, Разрешение на отправление есть */
+g[data-state='51'] .fill-indicator, g[data-state='60'] .fill-indicator, g[data-state='57'] .fill-indicator, g[data-state='68'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g[data-state='51'] .line-indicator, g[data-state='60'] .line-indicator, g[data-state='57'] .line-indicator, g[data-state='68'] .line-indicator {
+    stroke: #00BF00;
+}
+
+/* индикатор мигает черный зеленый */
+g.main-panel[data-first-color='1'] g[data-state='52'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='52'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='52'] .line-indicator {
+    stroke: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='52'] .line-indicator {
+    stroke: black;
+}
+
+/* индикатор желтый */
+g[data-state='53'] .fill-indicator {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='53'] .line-indicator {
+    stroke: yellow;
+}
+/* индикатор мигает черный желтый */
+g.main-panel[data-first-color='1'] g[data-state='54'] .fill-indicator {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='54'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='54'] .line-indicator {
+    stroke: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='54'] .line-indicator {
+    stroke: black;
+}
+
+/* индикатор темно-серый */
+g[data-state='55'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+g[data-state='55'] .line-indicator {
+    stroke: #7F7F7F;
+}
+
+/* индикатор мигает черный темносерый */
+g.main-panel[data-first-color='1'] g[data-state='56'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='56'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='56'] .line-indicator {
+    stroke: #7F7F7F;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='56'] .line-indicator {
+    stroke: black;
+}
+
+
+/* индикатор прозрачный */
+g[data-state='106'] .fill-indicator {
+    fill-opacity: 0;
+}
+
+g[data-state='106'] .line-indicator {
+    stroke-width: 0;
+}
+
+/*  Нет достоверных данных, мигающий фиолетовый */
+g.main-panel[data-first-color='1'] g[data-state='107'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #FF00FF;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='107'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='107'] .line-indicator {
+    stroke: #FF00FF;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='107'] .line-indicator {
+    stroke: black;
+}
+/* индикатор мигает белый красный */
+g.main-panel[data-first-color='1'] g[data-state='108'] .fill-indicator {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='108'] .fill-indicator {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='108'] .line-indicator {
+    stroke: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='108'] .line-indicator {
+    stroke: white;
+}
+
+/* индикатор мигает белый зеленый */
+g.main-panel[data-first-color='1'] g[data-state='109'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='109'] .fill-indicator {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='109'] .line-indicator {
+    stroke: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='109'] .line-indicator {
+    stroke: white;
+}
+
+/* индикатор мигает белый желтый */
+g.main-panel[data-first-color='1'] g[data-state='110'] .fill-indicator {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='110'] .fill-indicator {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='110'] .line-indicator {
+    stroke: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='110'] .line-indicator {
+    stroke: white;
+}
+
+/* индикатор мигает желтый красный */
+g.main-panel[data-first-color='1'] g[data-state='112'] .fill-indicator {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='112'] .fill-indicator {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='112'] .line-indicator {
+    stroke: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='112'] .line-indicator {
+    stroke: yellow;
+}
+
+/* индикатор мигает желтый зеленый */
+g.main-panel[data-first-color='1'] g[data-state='113'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='113'] .fill-indicator {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='113'] .line-indicator {
+    stroke: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='113'] .line-indicator {
+    stroke: yellow;
+}
+
+/* индикатор мигает зеленый красный */
+g.main-panel[data-first-color='1'] g[data-state='114'] .fill-indicator {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='114'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+/* индикатор мигает прозрачный темносерый */
+g.main-panel[data-first-color='1'] g[data-state='115'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='115'] .fill-indicator {
+    fill-opacity: 0;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='115'] .line-indicator {
+    stroke: #7F7F7F;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='115'] .line-indicator {
+    stroke-width: 0;
+}
+
+/* индикатор мигает прозрачный белый */
+g.main-panel[data-first-color='1'] g[data-state='116'] .fill-indicator {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='116'] .fill-indicator {
+    fill-opacity: 0;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='116'] .line-indicator {
+    stroke: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='116'] .line-indicator {
+    stroke-width: 0;
+}
+
+/* индикатор мигает прозрачный черный */
+g.main-panel[data-first-color='1'] g[data-state='117'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='117'] .fill-indicator {
+    fill-opacity: 0;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='117'] .line-indicator {
+    stroke: black;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='117'] .line-indicator {
+    stroke-width: 0;
+}
+
+/* индикатор мигает прозрачный желтый */
+g.main-panel[data-first-color='1'] g[data-state='118'] .fill-indicator {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='118'] .fill-indicator {
+    fill-opacity: 0;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='118'] .line-indicator {
+    stroke: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='118'] .line-indicator {
+    stroke-width: 0;
+}
+
+/* индикатор мигает прозрачный красный */
+g.main-panel[data-first-color='1'] g[data-state='119'] .fill-indicator {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='119'] .fill-indicator {
+    fill-opacity: 0;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='119'] .line-indicator {
+    stroke: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='119'] .line-indicator {
+    stroke-width: 0;
+}
+
+/* индикатор мигает прозрачный зеленый */
+g.main-panel[data-first-color='1'] g[data-state='120'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='120'] .fill-indicator {
+    fill-opacity: 0;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='120'] .line-indicator {
+    stroke: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='120'] .line-indicator {
+    stroke-width: 0;
+}
+
+/* индикатор мигает темносерый белый */
+g.main-panel[data-first-color='1'] g[data-state='121'] .fill-indicator {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='121'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='121'] .line-indicator {
+    stroke: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='121'] .line-indicator {
+    stroke: #7F7F7F;
+}
+
+/* индикатор мигает темносерый желтый */
+g.main-panel[data-first-color='1'] g[data-state='122'] .fill-indicator {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='122'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='122'] .line-indicator {
+    stroke: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='122'] .line-indicator {
+    stroke: #7F7F7F;
+}
+
+/* индикатор мигает темносерый красный */
+g.main-panel[data-first-color='1'] g[data-state='123'] .fill-indicator {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='123'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='123'] .line-indicator {
+    stroke: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='123'] .line-indicator {
+    stroke: #7F7F7F;
+}
+
+/* индикатор мигает темносерый зеленый */
+g.main-panel[data-first-color='1'] g[data-state='124'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='124'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='124'] .line-indicator {
+    stroke: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='124'] .line-indicator {
+    stroke: #7F7F7F;
+}
+
+g[data-state='144'] .fill-indicator {
+    fill-opacity: 1;
+    fill: blue;
+}
+
+g[data-state='144'] .line-indicator {
+    stroke: blue;
+}
+
+g[data-state='145'] .fill-indicator {
+    fill-opacity: 1;
+    fill: orange;
+}
+
+g[data-state='145'] .line-indicator {
+    stroke: orange;
+}
+/* индикатор мигает черный синий */
+g.main-panel[data-first-color='1'] g[data-state='146'] .fill-indicator {
+    fill-opacity: 1;
+    fill: blue;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='146'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='146'] .line-indicator {
+    stroke: blue;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='146'] .line-indicator {
+    stroke: black;
+}
+
+/* индикатор мигает черный оранжевый */
+g.main-panel[data-first-color='1'] g[data-state='147'] .fill-indicator {
+    fill-opacity: 1;
+    fill: orange;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='147'] .fill-indicator {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='147'] .line-indicator {
+    stroke: orange;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='147'] .line-indicator {
+    stroke: black;
+}
+
+/* Состояние по умолчанию */
+g[data-state='-1'] .fill-indicator {
+    fill-opacity: 0;
+}
+
+g[data-state='-1'] .line-indicator {
+    stroke: black;
+}
+/* Непривязанный индикатор */
+g[data-state='-2'] .fill-indicator {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+g[data-state='-2'] .line-indicator {
+    stroke: #7F7F7F;
+}

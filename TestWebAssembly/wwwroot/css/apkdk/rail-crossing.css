@@ -1,0 +1,187 @@
+﻿/* Переезд */
+/* Все прочие состояния - неопределено */
+g .rail-crossing,
+g .rail-crossing-uzp,
+g .rail-crossing-bar-open {
+    stroke-opacity: 1;
+    stroke: #FF00FF;
+}
+
+g .rail-crossing-bar-closed {
+    stroke-opacity: 0;
+}
+
+g .rail-crossing-bar-base {
+    fill: #FF00FF;
+    fill-opacity: 1;
+}
+
+/* Переезд открыт */
+g[data-state='44'] .rail-crossing {
+    stroke-opacity: 1;
+    stroke: #00BF00;
+}
+
+g[data-state='44'] .rail-crossing-uzp,
+g[data-state='44'] .rail-crossing-bar-open {
+    stroke-opacity: 1;
+    stroke: black;
+}
+
+g[data-state='44'] .rail-crossing-bar-closed {
+    stroke-opacity: 0;
+}
+
+g[data-state='44'] .rail-crossing-bar-base {
+    fill: black;
+    fill-opacity: 1;
+}
+
+/* Переезд открыт, включено извещение */
+g[data-state='45'] .rail-crossing {
+    stroke-opacity: 1;
+    stroke: white;
+}
+
+g[data-state='45'] .rail-crossing-uzp,
+g[data-state='45'] .rail-crossing-bar-open {
+    stroke-opacity: 1;
+    stroke: black;
+}
+
+g[data-state='45'] .rail-crossing-bar-closed {
+    stroke-opacity: 0;
+}
+
+g[data-state='45'] .rail-crossing-bar-base {
+    fill: black;
+    fill-opacity: 1;
+}
+
+
+/* Переезд закрыт */
+g[data-state='46'] .rail-crossing {
+    stroke-opacity: 1;
+    stroke: red;
+}
+
+g[data-state='46'] .rail-crossing-uzp,
+g[data-state='46'] .rail-crossing-bar-open {
+    stroke-opacity: 1;
+    stroke: black;
+}
+
+g[data-state='46'] .rail-crossing-bar-closed {
+    stroke-opacity: 0;
+}
+
+g[data-state='46'] .rail-crossing-bar-base {
+    fill: black;
+    fill-opacity: 1;
+}
+
+
+/* Переезд и шлагбаум закрыт */
+g[data-state='47'] .rail-crossing {
+    stroke-opacity: 1;
+    stroke: red;
+}
+
+g[data-state='47'] .rail-crossing-uzp,
+g[data-state='47'] .rail-crossing-bar-closed {
+    stroke-opacity: 1;
+    stroke: black;
+}
+
+g[data-state='47'] .rail-crossing-bar-open {
+    stroke-opacity: 0;
+}
+
+g[data-state='47'] .rail-crossing-bar-base {
+    fill: black;
+    fill-opacity: 1;
+}
+
+/* Переезд и шлагбаум закрыт, УЗП поднят */
+g[data-state='48'] .rail-crossing,
+g[data-state='48'] .rail-crossing-uzp {
+    stroke-opacity: 1;
+    stroke: red;
+}
+
+g[data-state='48'] .rail-crossing-bar-closed {
+    stroke-opacity: 1;
+    stroke: black;
+}
+
+g[data-state='48'] .rail-crossing-bar-open {
+    stroke-opacity: 0;
+}
+
+g[data-state='48'] .rail-crossing-bar-base {
+    fill: black;
+    fill-opacity: 1;
+}
+
+/*  Нет достоверных данных, мигающий фиолетовый */
+g.main-panel[data-first-color='1'] g[data-state='107'] .rail-crossing,
+g.main-panel[data-first-color='1'] g[data-state='107'] .rail-crossing-uzp,
+g.main-panel[data-first-color='1'] g[data-state='107'] .rail-crossing-bar-open {
+    stroke-opacity: 1;
+    stroke: #FF00FF;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='107'] .rail-crossing-bar-base {
+    fill-opacity: 1;
+    fill: #FF00FF;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='107'] .rail-crossing,
+g.main-panel[data-first-color='0'] g[data-state='107'] .rail-crossing-uzp,
+g.main-panel[data-first-color='0'] g[data-state='107'] .rail-crossing-bar-open {
+    stroke-opacity: 1;
+    stroke: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='107'] .rail-crossing-bar-base {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='107'] .rail-crossing-bar-closed {
+    stroke-opacity: 0;
+}
+
+/* Состояние по умолчанию */
+g[data-state='-1'] .rail-crossing,
+g[data-state='-1'] .rail-crossing-uzp,
+g[data-state='-1'] .rail-crossing-bar-open {
+    stroke-opacity: 1;
+    stroke: black;
+}
+
+g[data-state='-1'] .rail-crossing-bar-closed {
+    stroke-opacity: 0;
+}
+
+g[data-state='-1'] .rail-crossing-bar-base {
+    fill: black;
+    fill-opacity: 1;
+}
+
+/* Непривязанный переезд */
+g[data-state='-2'] .rail-crossing,
+g[data-state='-2'] .rail-crossing-uzp,
+g[data-state='-2'] .rail-crossing-bar-open {
+    stroke-opacity: 1;
+    stroke: #7F7F7F;
+}
+
+g[data-state='-2'] .rail-crossing-bar-closed {
+    stroke-opacity: 0;
+}
+
+g[data-state='-2'] .rail-crossing-bar-base {
+    fill: #7F7F7F;
+    fill-opacity: 1;
+}

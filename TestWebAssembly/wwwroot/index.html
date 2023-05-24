@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>АПК-ДК</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="css/apkdk/rail-circuit.css" rel="stylesheet" />
+    <link href="css/apkdk/indicator.css" rel="stylesheet" />
+    <link href="css/apkdk/rail-crossing.css" rel="stylesheet" />
+    <link href="css/apkdk/rail-junction.css" rel="stylesheet" />
+    <link href="css/apkdk/rail-terminator.css" rel="stylesheet" />
+    <link href="css/apkdk/semaphore.css" rel="stylesheet" />
+    <link href="TestWebAssembly.styles.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">Loading...</div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+</body>
+
+<script>
+    function SetSvg(svg) {
+        document.getElementById("svg-placeholder").innerHTML = svg;
+    }
+
+    function ChangeBlinkState() {
+        const svgPanels = document.querySelectorAll('svg g.main-panel');
+
+        svgPanels.forEach(function(rect) {
+            var attr = rect.getAttribute("data-first-color");
+
+            if (attr === "0") {
+                rect.setAttribute("data-first-color", "1");
+            } else {
+                rect.setAttribute("data-first-color", "0");
+            }
+        });
+    }
+
+    function SetMeasure(objectId, measureId, newValue, measureUnit) {
+        const allItems = document.querySelectorAll(`text[data-measure-objectid="${objectId}"][data-measure-id="${measureId}"]`);
+
+        allItems.forEach(item => {
+            if (newValue === null) {
+                item.textContent = '?';
+            } else {
+                var newTextValue;
+
+                if (item.getAttribute("data-measure-showzerosafterpoint") === 'false') {
+                    newTextValue = `${newValue|0}`;
+                } else {
+                    newTextValue = `${newValue.toFixed(3)}`;
+                }
+
+                if (measureUnit && measureUnit.length === 0) {
+                    item.textContent = newTextValue;
+                } else {
+                    item.textContent = `${newTextValue} ${measureUnit}`;
+                }
+            }
+        });
+    }
+
+    function SetObjectState(objectId, newState) {
+        const allItems = document.querySelectorAll(`g[data-object-id="${objectId}"]`);
+        allItems.forEach(item => item.setAttribute("data-state", newState));
+    }
+</script>
+
+</html>

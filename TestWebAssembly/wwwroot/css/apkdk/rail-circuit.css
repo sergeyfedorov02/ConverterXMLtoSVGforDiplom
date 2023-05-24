@@ -1,0 +1,69 @@
+﻿/* Рельсовые цепи */
+g .rc-line-inner, g .rc-line-outer {
+    stroke: #FF00FF;
+}
+
+/* состояние по умолчанию, РЦ свободна,не замкнута*/
+g[data-state='-1'] .rc-line-inner, g[data-state='2'] .rc-line-inner,
+g[data-state='-1'] .rc-line-outer, g[data-state='2'] .rc-line-outer {
+    stroke: black;
+}
+
+/* Нет привязки */
+g[data-state='-2'] .rc-line-inner, g[data-state='-2'] .rc-line-outer {
+    stroke: #7F7F7F;
+}
+
+/* РЦ занята,не замкнута*/
+g[data-state='1'] .rc-line-inner, g[data-state='1'] .rc-line-outer {
+    stroke: red;
+}
+
+/* РЦ свободна,замкнута */
+g[data-state='3'] .rc-line-inner, g[data-state='3'] .rc-line-outer {
+    stroke: yellow;
+}
+
+/* РЦ свободна,замкнута,искусственно размыкается */
+g.main-panel[data-first-color='1'] g[data-state='4'] .rc-line-inner,
+g.main-panel[data-first-color='1'] g[data-state='4'] .rc-line-outer {
+    stroke: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='4'] .rc-line-inner,
+g.main-panel[data-first-color='0'] g[data-state='4'] .rc-line-outer {
+    stroke: black;
+}
+
+/* РЦ занята,замкнута */
+g[data-state='5'] .rc-line-outer {
+    stroke: yellow;
+}
+
+g[data-state='5'] .rc-line-inner {
+    stroke: red;
+}
+
+/* РЦ занята,замкнута,искусственно размыкается */
+g[data-state='7'] .rc-line-outer {
+    stroke: yellow;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='7'] .rc-line-inner {
+    stroke: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='7'] .rc-line-inner {
+    stroke: black;
+}
+
+/*  Нет достоверных данных, мигающий фиолетовый */
+g.main-panel[data-first-color='1'] g[data-state='107'] .rc-line-inner,
+g.main-panel[data-first-color='1'] g[data-state='107'] .rc-line-outer {
+    stroke: #FF00FF;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='107'] .rc-line-inner,
+g.main-panel[data-first-color='0'] g[data-state='107'] .rc-line-outer {
+    stroke: black;
+}
