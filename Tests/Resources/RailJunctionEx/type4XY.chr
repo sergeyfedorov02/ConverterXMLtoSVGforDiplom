@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<DesignerModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Items>
+<DesignerItem Id="fbcdba73-bcfb-46d4-b9fb-aaf085ecec0d" ToolId="StandardLibrary.RailJunctionEx" ClientId="0">
+      <Label>Симметрия X Y</Label>
+      <ShouldDrawLabel>true</ShouldDrawLabel>
+      <Properties>
+        <DesignerItemProperty>
+          <Name>LabelDefaultText</Name>
+          <Value>Стрелочная секция1</Value>
+          <Type>System.String</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LabelFontSize</Name>
+          <Value>22</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LineWidth</Name>
+          <Value>4</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>ObjectColor</Name>
+          <Value>#FF000000</Value>
+          <Type>System.Windows.Media.Color</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LabelPosition</Name>
+          <Value>321.225397333929,1936.09163666775</Value>
+          <Type>System.Windows.Point</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>IsInverse</Name>
+          <Value>False</Value>
+          <Type>System.Boolean</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>Type</Name>
+          <Value>Type4</Value>
+          <Type>Imsat.APKDK.Presentation.StandardLibrary.RailJunction.RailJunctionType</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>CenterPoint</Name>
+          <Value>386.155397333929,1992.895546904</Value>
+          <Type>System.Windows.Point</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>OffsetA2Center</Name>
+          <Value>-50</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>OffsetC2Center</Name>
+          <Value>103.333333333333</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>OffsetB2Center</Name>
+          <Value>-63.9774613345256</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>OffsetD2B</Name>
+          <Value>30</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>Angle</Name>
+          <Value>-60</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+      </Properties>
+      <Connections />
+    </DesignerItem>
+  </Items>
+</DesignerModel>

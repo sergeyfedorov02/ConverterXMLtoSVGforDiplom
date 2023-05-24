@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<DesignerModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Items>
+<DesignerItem Id="153fe48e-1b08-45fb-9b37-2603cf6f833f" ToolId="StandardLibrary.Measure" ClientId="0">
+      <Label>С точками</Label>
+      <ShouldDrawLabel>true</ShouldDrawLabel>
+      <Properties>
+        <DesignerItemProperty>
+          <Name>LabelDefaultText</Name>
+          <Value>Измерение1</Value>
+          <Type>System.String</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LabelFontSize</Name>
+          <Value>22</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LineWidth</Name>
+          <Value>4</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>ObjectColor</Name>
+          <Value>#FF000000</Value>
+          <Type>System.Windows.Media.Color</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LabelPosition</Name>
+          <Value>3529.10934043256,1269.90321759259</Value>
+          <Type>System.Windows.Point</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LabelBrush</Name>
+          <Value>#FFF08080</Value>
+          <Type>System.Windows.Media.SolidColorBrush</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>Left</Name>
+          <Value>3535.06211821034</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>Angle</Name>
+          <Value>-339.828175832467</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>TextColor</Name>
+          <Value>#FF3CB371</Value>
+          <Type>System.Windows.Media.Color</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>FontSize</Name>
+          <Value>14</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>FontStyle</Name>
+          <Value>Normal</Value>
+          <Type>System.Windows.FontStyle</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>MeasureId</Name>
+          <Value>[0, 0]</Value>
+          <Type>System.Collections.Generic.KeyValuePair`2[System.Int64,System.Int32]</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>ShowZerosAfterDecimalPoint</Name>
+          <Value>True</Value>
+          <Type>System.Boolean</Type>
+        </DesignerItemProperty>
+      </Properties>
+      <Connections />
+    </DesignerItem>
+  </Items>
+</DesignerModel>

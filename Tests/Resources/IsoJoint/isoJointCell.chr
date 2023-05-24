@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<DesignerModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Items>
+<DesignerItem Id="f1324713-f241-4ffb-92db-13b24eb92de8" ToolId="StandardLibrary.IsoJoint" ClientId="0">
+      <Label>Изостык ячейка без метки</Label>
+      <ShouldDrawLabel>false</ShouldDrawLabel>
+      <Properties>
+        <DesignerItemProperty>
+          <Name>LabelDefaultText</Name>
+          <Value>Изостык1</Value>
+          <Type>System.String</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LabelFontSize</Name>
+          <Value>22</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LineWidth</Name>
+          <Value>4</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>ObjectColor</Name>
+          <Value>#FF000000</Value>
+          <Type>System.Windows.Media.Color</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>LabelPosition</Name>
+          <Value>1579.28288888889,1197.62217881945</Value>
+          <Type>System.Windows.Point</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>Left</Name>
+          <Value>1576.21288888889</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>Top</Name>
+          <Value>1229.02217881945</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>Angle</Name>
+          <Value>0</Value>
+          <Type>System.Double</Type>
+        </DesignerItemProperty>
+        <DesignerItemProperty>
+          <Name>Type</Name>
+          <Value>Cell</Value>
+          <Type>Imsat.APKDK.Presentation.StandardLibrary.IsoJoint.IsoJointType</Type>
+        </DesignerItemProperty>
+      </Properties>
+      <Connections />
+    </DesignerItem>
+  </Items>
+</DesignerModel>

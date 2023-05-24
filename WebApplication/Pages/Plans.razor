@@ -1,0 +1,116 @@
+@page "/plans"
+@using System.Text
+@using System.Threading
+@using SvgConverter;
+@inject IJSRuntime Js;
+
+@implements IDisposable;
+
+<h1>Планы</h1>
+
+<p>
+    Выберите файлы для конвертации:
+    <InputFile OnChange="@LoadFiles" multiple accept=".chr"/>
+</p>
+
+
+@if (_errors.Count > 0)
+{
+    <h2>Список ошибок:</h2>
+    <ul>
+        @foreach (var error in _errors)
+        {
+            <li>@error</li>
+        }
+    </ul>
+}
+
+<p>
+    <button class="btn btn-primary" @onclick="StartConvert">Конвертировать</button>
+</p>
+
+<div id="svg-placeholder">
+</div>
+
+
+@code {
+        private const long MaxFileSize = long.MaxValue;
+        private const int MaxAllowedFiles = 1;
+    private readonly List<string> _errors = new();
+    private readonly List<string> _fileNames = new();
+    private readonly List<string> _fileContentsList = new();
+
+    private async Task LoadFiles(InputFileChangeEventArgs entry)
+    {
+        _errors.Clear();
+
+    // Количество одновременно загружаемых файлов должно быть не больше maxAllowedFiles
+        if (entry.FileCount > MaxAllowedFiles)
+        {
+            _errors.Add($"Error: Вы пытаетесь загрузить {entry.FileCount} файлов, " +
+                        $"когда максимум разрешено загружать {MaxAllowedFiles} файл !");
+            return;
+        }
+
+        if (_fileNames.Count == 1)
+        {
+            _errors.Add($"Error: Вы пытаетесь загрузить более {MaxAllowedFiles} файла для конвертации !");
+            return;
+        }
+
+        foreach (var file in entry.GetMultipleFiles(MaxAllowedFiles))
+        {
+            
+            if (!file.Name.Split(".")[1].Equals("chr"))
+            {
+                _errors.Add($"Error: Файл с именем \"{file.Name}\" имеет недопустимое расширение " +
+                            $", используйте только тип \".chr\" !");
+                continue;
+            }
+
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream(MaxFileSize).ReadAsync(buffer);
+            var fileContent = Encoding.UTF8.GetString(buffer);
+
+            _fileContentsList.Add(fileContent);
+            _fileNames.Add(file.Name);
+        }
+    }
+
+    private async void StartConvert()
+    {
+        if (_errors.Count == 0)
+        {
+            var file = _fileContentsList[0];
+
+            var convertResult = Converter.FromXml(file, null);
+
+            var newConvertResult = convertResult.Split("<svg");
+            var fullSvg = "<svg " + newConvertResult[1];
+
+            await Js.InvokeVoidAsync("SetSvg", fullSvg);
+
+            _fileNames.Clear();
+            _fileContentsList.Clear();
+        }
+    }
+    
+    private Timer _blinkTimer;
+    
+    protected override async Task OnInitializedAsync()
+    {
+
+        async void Callback(object _)
+        {
+            await Js.InvokeVoidAsync("ChangeBlinkState");
+        }
+
+        _blinkTimer = new Timer(Callback, new AutoResetEvent(false), 1000, 1000);
+    }
+
+    public void Dispose()
+    {
+        _blinkTimer?.Dispose();
+    }
+
+}

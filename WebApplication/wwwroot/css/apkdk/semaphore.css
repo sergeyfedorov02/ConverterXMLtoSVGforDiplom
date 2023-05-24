@@ -1,0 +1,1128 @@
+﻿/* Светофоры */
+g .mast-lamp0, g .mast-lamp1, g .mast-lamp2, g .mast-lamp3, g .mast-lamp4 {
+    fill-opacity: 1;
+    fill: #FF00FF;
+}
+
+g .short-lamp0, g .short-lamp1, g .short-lamp2, g .short-lamp3, g .short-lamp4 {
+    fill-opacity: 1;
+    fill: #FF00FF;
+}
+
+g[data-state='-1'] .mast-lamp0, g[data-state='-1'] .mast-lamp1, g[data-state='-1'] .mast-lamp2, g[data-state='-1'] .mast-lamp3, g[data-state='-1'] .mast-lamp4 {
+    fill-opacity: 0;
+}
+
+g[data-state='-2'] .mast-lamp0, g[data-state='-2'] .mast-lamp1, g[data-state='-2'] .mast-lamp2, g[data-state='-2'] .mast-lamp3, g[data-state='-2'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+g[data-state='-1'] .short-lamp0, g[data-state='-1'] .short-lamp1, g[data-state='-1'] .short-lamp2, g[data-state='-1'] .short-lamp3, g[data-state='-1'] .short-lamp4 {
+    fill-opacity: 0;
+}
+
+g[data-state='-2'] .short-lamp0, g[data-state='-2'] .short-lamp1, g[data-state='-2'] .short-lamp2, g[data-state='-2'] .short-lamp3, g[data-state='-2'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: #7F7F7F;
+}
+
+/* Маневровое показание */
+/*9*/
+
+/* запрет маневров */
+g[data-state='10'] g[data-lamp-count='1'] .short-lamp0,
+g[data-state='10'] g[data-lamp-count='1'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='10'] g[data-lamp-count='2'] .short-lamp0,
+g[data-state='10'] g[data-lamp-count='2'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: blue;
+}
+
+g[data-state='10'] g[data-lamp-count='2'] .short-lamp1,
+g[data-state='10'] g[data-lamp-count='2'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Открыт пригласительный */
+g[data-state='13'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='13'] g[data-lamp-count='2'] .short-lamp0,
+g[data-state='13'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='13'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='13'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='13'] g[data-lamp-count='2'] .short-lamp1,
+g[data-state='13'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='13'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='13'] g[data-lamp-count='3'] .short-lamp1,
+g[data-state='13'] g[data-lamp-count='3'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Один зеленый и один желтый огни */
+g[data-state='35'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='35'] g[data-lamp-count='2'] .short-lamp0,
+g[data-state='35'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='35'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='35'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='35'] g[data-lamp-count='2'] .short-lamp1,
+g[data-state='35'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='35'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g[data-state='35'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='35'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Ускоренные маневры */
+g.main-panel[data-first-color='1'] g[data-state='42'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='42'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='42'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='42'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='42'] g[data-lamp-count='2'] .mast-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='42'] g[data-lamp-count='3'] .mast-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='42'] g[data-lamp-count='4'] .mast-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='42'] g[data-lamp-count='5'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='42'] g[data-lamp-count='2'] .mast-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='42'] g[data-lamp-count='3'] .mast-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='42'] g[data-lamp-count='4'] .mast-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='42'] g[data-lamp-count='5'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='42'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='42'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='42'] g[data-lamp-count='4'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='42'] g[data-lamp-count='5'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='42'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='42'] g[data-lamp-count='4'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='42'] g[data-lamp-count='5'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='42'] g[data-lamp-count='3'] .mast-lamp3,
+g[data-state='42'] g[data-lamp-count='4'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='42'] g[data-lamp-count='5'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+
+/* Светофор зеленый */
+g[data-state='129'] g[data-lamp-count='1'] .mast-lamp0,
+g[data-state='129'] g[data-lamp-count='1'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g[data-state='129'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='129'] g[data-lamp-count='2'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='129'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='129'] g[data-lamp-count='2'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g[data-state='129'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='129'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='129'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='129'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='129'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='129'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g[data-state='129'] g[data-lamp-count='4'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='129'] g[data-lamp-count='4'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='129'] g[data-lamp-count='4'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g[data-state='129'] g[data-lamp-count='4'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='129'] g[data-lamp-count='5'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='129'] g[data-lamp-count='5'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='129'] g[data-lamp-count='5'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='129'] g[data-lamp-count='5'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g[data-state='129'] g[data-lamp-count='5'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор красный */
+g[data-state='131'] g[data-lamp-count='1'] .mast-lamp0,
+g[data-state='131'] g[data-lamp-count='1'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='131'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='131'] g[data-lamp-count='2'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='131'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='131'] g[data-lamp-count='2'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='131'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='131'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='131'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='131'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='131'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='131'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='131'] g[data-lamp-count='4'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='131'] g[data-lamp-count='4'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='131'] g[data-lamp-count='4'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='131'] g[data-lamp-count='4'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='131'] g[data-lamp-count='5'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='131'] g[data-lamp-count='5'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='131'] g[data-lamp-count='5'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='131'] g[data-lamp-count='5'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='131'] g[data-lamp-count='5'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор желтый */
+
+g[data-state='132'] g[data-lamp-count='1'] .mast-lamp0,
+g[data-state='132'] g[data-lamp-count='1'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='132'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='132'] g[data-lamp-count='2'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='132'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='132'] g[data-lamp-count='2'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='132'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='132'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='132'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='132'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='132'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='132'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='132'] g[data-lamp-count='4'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='132'] g[data-lamp-count='4'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='132'] g[data-lamp-count='4'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='132'] g[data-lamp-count='4'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='132'] g[data-lamp-count='5'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='132'] g[data-lamp-count='5'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='132'] g[data-lamp-count='5'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='132'] g[data-lamp-count='5'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='132'] g[data-lamp-count='5'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+
+/* Светофор два желтых */
+g[data-state='133'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='133'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='133'] g[data-lamp-count='2'] .short-lamp0,
+g[data-state='133'] g[data-lamp-count='2'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='133'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='133'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='133'] g[data-lamp-count='3'] .short-lamp1,
+g[data-state='133'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='133'] g[data-lamp-count='5'] .mast-lamp1,
+g[data-state='133'] g[data-lamp-count='5'] .mast-lamp4,
+g[data-state='133'] g[data-lamp-count='5'] .short-lamp1,
+g[data-state='133'] g[data-lamp-count='5'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='133'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='133'] g[data-lamp-count='3'] .short-lamp0,
+g[data-state='133'] g[data-lamp-count='5'] .mast-lamp0,
+g[data-state='133'] g[data-lamp-count='5'] .short-lamp0,
+g[data-state='133'] g[data-lamp-count='5'] .mast-lamp2,
+g[data-state='133'] g[data-lamp-count='5'] .short-lamp2,
+g[data-state='133'] g[data-lamp-count='5'] .mast-lamp3,
+g[data-state='133'] g[data-lamp-count='5'] .short-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор два желтых верхний мигающий */
+g[data-state='134'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='134'] g[data-lamp-count='2'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='134'] g[data-lamp-count='2'] .mast-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='134'] g[data-lamp-count='2'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='134'] g[data-lamp-count='2'] .mast-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='134'] g[data-lamp-count='2'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='134'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='134'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='134'] g[data-lamp-count='3'] .mast-lamp2,
+g.main-panel[data-first-color='1'] g[data-state='134'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='134'] g[data-lamp-count='3'] .mast-lamp2,
+g.main-panel[data-first-color='0'] g[data-state='134'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='134'] g[data-lamp-count='5'] .mast-lamp1,
+g[data-state='134'] g[data-lamp-count='5'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='134'] g[data-lamp-count='5'] .mast-lamp4,
+g.main-panel[data-first-color='1'] g[data-state='134'] g[data-lamp-count='5'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='134'] g[data-lamp-count='5'] .mast-lamp4,
+g.main-panel[data-first-color='0'] g[data-state='134'] g[data-lamp-count='5'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='134'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='134'] g[data-lamp-count='3'] .short-lamp0,
+g[data-state='134'] g[data-lamp-count='5'] .mast-lamp0,
+g[data-state='134'] g[data-lamp-count='5'] .short-lamp0,
+g[data-state='134'] g[data-lamp-count='5'] .mast-lamp2,
+g[data-state='134'] g[data-lamp-count='5'] .short-lamp2,
+g[data-state='134'] g[data-lamp-count='5'] .mast-lamp3,
+g[data-state='134'] g[data-lamp-count='5'] .short-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор белый */
+g[data-state='135'] g[data-lamp-count='1'] .mast-lamp0,
+g[data-state='135'] g[data-lamp-count='1'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='135'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='135'] g[data-lamp-count='2'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='135'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='135'] g[data-lamp-count='2'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='135'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='135'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='135'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='135'] g[data-lamp-count='3'] .short-lamp1,
+g[data-state='135'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='135'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='135'] g[data-lamp-count='4'] .mast-lamp0
+{
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='135'] g[data-lamp-count='4'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='135'] g[data-lamp-count='4'] .mast-lamp2,
+g[data-state='135'] g[data-lamp-count='4'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='135'] g[data-lamp-count='4'] .short-lamp0,
+g[data-state='135'] g[data-lamp-count='4'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='135'] g[data-lamp-count='4'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='135'] g[data-lamp-count='4'] .short-lamp3 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='135'] g[data-lamp-count='5'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='135'] g[data-lamp-count='5'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='135'] g[data-lamp-count='5'] .mast-lamp1,
+g[data-state='135'] g[data-lamp-count='5'] .mast-lamp3,
+g[data-state='135'] g[data-lamp-count='5'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='135'] g[data-lamp-count='5'] .short-lamp0,
+g[data-state='135'] g[data-lamp-count='5'] .short-lamp1,
+g[data-state='135'] g[data-lamp-count='5'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='135'] g[data-lamp-count='5'] .short-lamp3 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='135'] g[data-lamp-count='5'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+/* Светофор зеленый белый */
+g[data-state='141'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='141'] g[data-lamp-count='2'] .short-lamp0,
+g[data-state='141'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='141'] g[data-lamp-count='3'] .short-lamp0,
+g[data-state='141'] g[data-lamp-count='4'] .mast-lamp0,
+g[data-state='141'] g[data-lamp-count='5'] .mast-lamp0,
+g[data-state='141'] g[data-lamp-count='4'] .short-lamp3,
+g[data-state='141'] g[data-lamp-count='5'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='141'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='141'] g[data-lamp-count='2'] .short-lamp1,
+g[data-state='141'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='141'] g[data-lamp-count='3'] .short-lamp2,
+g[data-state='141'] g[data-lamp-count='4'] .mast-lamp2,
+g[data-state='141'] g[data-lamp-count='5'] .mast-lamp3,
+g[data-state='141'] g[data-lamp-count='4'] .short-lamp1,
+g[data-state='141'] g[data-lamp-count='5'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g[data-state='141'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='141'] g[data-lamp-count='3'] .short-lamp1,
+g[data-state='141'] g[data-lamp-count='4'] .short-lamp0,
+g[data-state='141'] g[data-lamp-count='5'] .short-lamp0,
+g[data-state='141'] g[data-lamp-count='4'] .mast-lamp1,
+g[data-state='141'] g[data-lamp-count='5'] .mast-lamp1,
+g[data-state='141'] g[data-lamp-count='4'] .mast-lamp3,
+g[data-state='141'] g[data-lamp-count='5'] .mast-lamp2,
+g[data-state='141'] g[data-lamp-count='5'] .mast-lamp4,
+g[data-state='141'] g[data-lamp-count='4'] .short-lamp2,
+g[data-state='141'] g[data-lamp-count='5'] .short-lamp2,
+g[data-state='141'] g[data-lamp-count='5'] .short-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Закрыт поездной */
+g[data-state='149'] g[data-lamp-count='1'] .mast-lamp0,
+g[data-state='149'] g[data-lamp-count='1'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='149'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='149'] g[data-lamp-count='2'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='149'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='149'] g[data-lamp-count='2'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='149'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='149'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='149'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='149'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g[data-state='149'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='149'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+
+/*  Нет достоверных данных, мигающий фиолетовый */
+g.main-panel[data-first-color='1'] g[data-state='107'] .mast-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='107'] .mast-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='107'] .mast-lamp2,
+g.main-panel[data-first-color='1'] g[data-state='107'] .mast-lamp3,
+g.main-panel[data-first-color='1'] g[data-state='107'] .mast-lamp4,
+g.main-panel[data-first-color='1'] g[data-state='107'] .short-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='107'] .short-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='107'] .short-lamp2,
+g.main-panel[data-first-color='1'] g[data-state='107'] .short-lamp3,
+g.main-panel[data-first-color='1'] g[data-state='107'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: #FF00FF;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='107'] .mast-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='107'] .mast-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='107'] .mast-lamp2,
+g.main-panel[data-first-color='0'] g[data-state='107'] .mast-lamp3,
+g.main-panel[data-first-color='0'] g[data-state='107'] .mast-lamp4,
+g.main-panel[data-first-color='0'] g[data-state='107'] .short-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='107'] .short-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='107'] .short-lamp2,
+g.main-panel[data-first-color='0'] g[data-state='107'] .short-lamp3,
+g.main-panel[data-first-color='0'] g[data-state='107'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор зеленый мигающий */
+g[data-state='125'] .mast-lamp0,
+g[data-state='125'] .mast-lamp1,
+g[data-state='125'] .mast-lamp2,
+g[data-state='125'] .mast-lamp3,
+g[data-state='125'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='125'] g[data-lamp-count='1'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='125'] g[data-lamp-count='1'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='125'] g[data-lamp-count='2'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='125'] g[data-lamp-count='2'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='125'] g[data-lamp-count='3'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='125'] g[data-lamp-count='3'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='125'] g[data-lamp-count='4'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='125'] g[data-lamp-count='4'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='125'] g[data-lamp-count='5'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: #00BF00;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='125'] g[data-lamp-count='5'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор желтый мигающий */
+g[data-state='126'] .mast-lamp0,
+g[data-state='126'] .mast-lamp1,
+g[data-state='126'] .mast-lamp2,
+g[data-state='126'] .mast-lamp3,
+g[data-state='126'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='126'] g[data-lamp-count='1'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='126'] g[data-lamp-count='1'] .mast-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='126'] g[data-lamp-count='2'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='126'] g[data-lamp-count='2'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='126'] g[data-lamp-count='3'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='126'] g[data-lamp-count='3'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='126'] g[data-lamp-count='4'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='126'] g[data-lamp-count='4'] .mast-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='126'] g[data-lamp-count='5'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='126'] g[data-lamp-count='5'] .mast-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор черный */
+g[data-state='130'] .mast-lamp0,
+g[data-state='130'] .mast-lamp1,
+g[data-state='130'] .mast-lamp2,
+g[data-state='130'] .mast-lamp3,
+g[data-state='130'] .mast-lamp4,
+g[data-state='130'] .short-lamp0,
+g[data-state='130'] .short-lamp1,
+g[data-state='130'] .short-lamp2,
+g[data-state='130'] .short-lamp3,
+g[data-state='130'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор красный мигающий */
+
+g.main-panel[data-first-color='1'] g[data-state='136'] g[data-lamp-count='1'] .mast-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='136'] g[data-lamp-count='2'] .mast-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='136'] g[data-lamp-count='3'] .mast-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='136'] g[data-lamp-count='4'] .mast-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='136'] g[data-lamp-count='5'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: red;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='136'] g[data-lamp-count='1'] .mast-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='136'] g[data-lamp-count='2'] .mast-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='136'] g[data-lamp-count='3'] .mast-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='136'] g[data-lamp-count='4'] .mast-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='136'] g[data-lamp-count='5'] .mast-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='136'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='136'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='136'] g[data-lamp-count='4'] .mast-lamp0,
+g[data-state='136'] g[data-lamp-count='5'] .mast-lamp0,
+g[data-state='136'] g[data-lamp-count='5'] .mast-lamp1,
+g[data-state='136'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='136'] g[data-lamp-count='4'] .mast-lamp2,
+g[data-state='136'] g[data-lamp-count='4'] .mast-lamp3,
+g[data-state='136'] g[data-lamp-count='5'] .mast-lamp3,
+g[data-state='136'] g[data-lamp-count='5'] .mast-lamp4 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор синий */
+g[data-state='137'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='137'] g[data-lamp-count='2'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='137'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='137'] g[data-lamp-count='2'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: blue;
+}
+
+/* Светофор два белых */
+g[data-state='138'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='138'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='138'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='138'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='138'] g[data-lamp-count='2'] .short-lamp0,
+g[data-state='138'] g[data-lamp-count='2'] .short-lamp1,
+g[data-state='138'] g[data-lamp-count='3'] .short-lamp0,
+g[data-state='138'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='138'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='138'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор белый и нижний желтый */
+
+g[data-state='150'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='150'] g[data-lamp-count='2'] .short-lamp0,
+g[data-state='150'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='150'] g[data-lamp-count='3'] .short-lamp0,
+g[data-state='150'] g[data-lamp-count='4'] .mast-lamp0,
+g[data-state='150'] g[data-lamp-count='5'] .mast-lamp0,
+g[data-state='150'] g[data-lamp-count='4'] .short-lamp3,
+g[data-state='150'] g[data-lamp-count='5'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='150'] g[data-lamp-count='2'] .mast-lamp1,
+g[data-state='150'] g[data-lamp-count='2'] .short-lamp1,
+g[data-state='150'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='150'] g[data-lamp-count='3'] .short-lamp1,
+g[data-state='150'] g[data-lamp-count='4'] .mast-lamp2,
+g[data-state='150'] g[data-lamp-count='5'] .mast-lamp1,
+g[data-state='150'] g[data-lamp-count='4'] .short-lamp0,
+g[data-state='150'] g[data-lamp-count='5'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g[data-state='150'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='150'] g[data-lamp-count='3'] .short-lamp2,
+g[data-state='150'] g[data-lamp-count='4'] .mast-lamp1,
+g[data-state='150'] g[data-lamp-count='4'] .mast-lamp3,
+g[data-state='150'] g[data-lamp-count='5'] .mast-lamp2,
+g[data-state='150'] g[data-lamp-count='5'] .mast-lamp3,
+g[data-state='150'] g[data-lamp-count='5'] .mast-lamp4,
+g[data-state='150'] g[data-lamp-count='4'] .short-lamp1,
+g[data-state='150'] g[data-lamp-count='4'] .short-lamp2,
+g[data-state='150'] g[data-lamp-count='5'] .short-lamp1,
+g[data-state='150'] g[data-lamp-count='5'] .short-lamp2,
+g[data-state='150'] g[data-lamp-count='5'] .short-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор белый и нижний желтый мигающий */
+
+g[data-state='151'] g[data-lamp-count='2'] .mast-lamp0,
+g[data-state='151'] g[data-lamp-count='2'] .short-lamp0,
+g[data-state='151'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='151'] g[data-lamp-count='3'] .short-lamp0,
+g[data-state='151'] g[data-lamp-count='4'] .mast-lamp0,
+g[data-state='151'] g[data-lamp-count='5'] .mast-lamp0,
+g[data-state='151'] g[data-lamp-count='4'] .short-lamp3,
+g[data-state='151'] g[data-lamp-count='5'] .short-lamp4 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='151'] g[data-lamp-count='2'] .mast-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='151'] g[data-lamp-count='2'] .short-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='151'] g[data-lamp-count='3'] .mast-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='151'] g[data-lamp-count='3'] .short-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='151'] g[data-lamp-count='4'] .mast-lamp2,
+g.main-panel[data-first-color='1'] g[data-state='151'] g[data-lamp-count='5'] .mast-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='151'] g[data-lamp-count='4'] .short-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='151'] g[data-lamp-count='5'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='151'] g[data-lamp-count='2'] .mast-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='151'] g[data-lamp-count='2'] .short-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='151'] g[data-lamp-count='3'] .mast-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='151'] g[data-lamp-count='3'] .short-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='151'] g[data-lamp-count='4'] .mast-lamp2,
+g.main-panel[data-first-color='0'] g[data-state='151'] g[data-lamp-count='5'] .mast-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='151'] g[data-lamp-count='4'] .short-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='151'] g[data-lamp-count='5'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='151'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='151'] g[data-lamp-count='3'] .short-lamp2,
+g[data-state='151'] g[data-lamp-count='4'] .mast-lamp1,
+g[data-state='151'] g[data-lamp-count='4'] .mast-lamp3,
+g[data-state='151'] g[data-lamp-count='5'] .mast-lamp2,
+g[data-state='151'] g[data-lamp-count='5'] .mast-lamp3,
+g[data-state='151'] g[data-lamp-count='5'] .mast-lamp4,
+g[data-state='151'] g[data-lamp-count='4'] .short-lamp1,
+g[data-state='151'] g[data-lamp-count='4'] .short-lamp2,
+g[data-state='151'] g[data-lamp-count='5'] .short-lamp1,
+g[data-state='151'] g[data-lamp-count='5'] .short-lamp2,
+g[data-state='151'] g[data-lamp-count='5'] .short-lamp3 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор белый мигающий */
+g.main-panel[data-first-color='1'] g[data-state='155'] .mast-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='155'] g[data-lamp-count='1'] .short-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='155'] g[data-lamp-count='2'] .short-lamp0,
+g.main-panel[data-first-color='1'] g[data-state='155'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='155'] .mast-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='155'] g[data-lamp-count='1'] .short-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='155'] g[data-lamp-count='2'] .short-lamp0,
+g.main-panel[data-first-color='0'] g[data-state='155'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='155'] .mast-lamp1,
+g[data-state='155'] .mast-lamp2,
+g[data-state='155'] .mast-lamp3,
+g[data-state='155'] .mast-lamp4,
+g[data-state='155'] g[data-lamp-count='2'] .short-lamp1,
+g[data-state='155'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор белый и белый мигающий */
+
+g[data-state='156'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='156'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='156'] g[data-lamp-count='3'] .mast-lamp1,
+g.main-panel[data-first-color='1'] g[data-state='156'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='156'] g[data-lamp-count='3'] .mast-lamp1,
+g.main-panel[data-first-color='0'] g[data-state='156'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+g[data-state='156'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='156'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+/* Светофор желтый, желтый и белый */
+
+g[data-state='157'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='157'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='157'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='157'] g[data-lamp-count='3'] .mast-lamp2,
+g[data-state='157'] g[data-lamp-count='3'] .short-lamp1,
+g[data-state='157'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+
+
+/* Светофор желтый мигающий, желтый и белый */
+g[data-state='158'] g[data-lamp-count='3'] .mast-lamp0,
+g[data-state='158'] g[data-lamp-count='3'] .short-lamp0 {
+    fill-opacity: 1;
+    fill: white;
+}
+
+g[data-state='158'] g[data-lamp-count='3'] .mast-lamp1,
+g[data-state='158'] g[data-lamp-count='3'] .short-lamp1 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='158'] g[data-lamp-count='3'] .mast-lamp2,
+g.main-panel[data-first-color='1'] g[data-state='158'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='158'] g[data-lamp-count='3'] .mast-lamp2,
+g.main-panel[data-first-color='0'] g[data-state='158'] g[data-lamp-count='3'] .short-lamp2 {
+    fill-opacity: 1;
+    fill: black;
+}
+
+
+
+
+
+
+

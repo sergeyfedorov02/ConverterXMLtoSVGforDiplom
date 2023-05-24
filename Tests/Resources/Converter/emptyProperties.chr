@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<DesignerModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Items>
+  <DesignerItem Id="f4ab9aab-bbe4-42f2-8dbe-c3ac0ddcf812" ToolId="StandardLibrary.Lamp" ClientId="12">
+        <Label>треугольник</Label>
+        <ShouldDrawLabel>true</ShouldDrawLabel>
+        <Properties>
+        </Properties>
+        <Connections />
+      </DesignerItem>
+  </Items>
+</DesignerModel>

@@ -1,0 +1,278 @@
+﻿/* Стрелки */
+
+/* Все прочие состояния - неопределено */
+g .rail-junction-plus,
+g .rail-junction-minus {
+    visibility: hidden;
+}
+
+g .rail-junction-no-control {
+    visibility: visible;
+}
+
+g .rail-junction-no-control-outer,
+g .rail-junction-no-control-inner {
+    stroke: #FF00FF;
+}
+
+/* Нет привязки */
+g[data-state='-2'] .rail-junction-other-outer,
+g[data-state='-2'] .rail-junction-other-inner,
+g[data-state='-2'] .rail-junction-main-outer,
+g[data-state='-2'] .rail-junction-main-inner {
+    stroke: #7F7F7F;
+}
+
+g[data-state='-1'] .rail-junction-other-outer,
+g[data-state='-1'] .rail-junction-other-inner,
+g[data-state='18'] .rail-junction-other-outer,
+g[data-state='18'] .rail-junction-other-inner,
+g[data-state='19'] .rail-junction-other-outer,
+g[data-state='19'] .rail-junction-other-inner,
+g[data-state='20'] .rail-junction-other-outer,
+g[data-state='20'] .rail-junction-other-inner,
+g[data-state='21'] .rail-junction-other-outer,
+g[data-state='21'] .rail-junction-other-inner,
+g[data-state='22'] .rail-junction-other-outer,
+g[data-state='22'] .rail-junction-other-inner,
+g[data-state='23'] .rail-junction-other-outer,
+g[data-state='23'] .rail-junction-other-inner,
+g[data-state='26'] .rail-junction-other-outer,
+g[data-state='26'] .rail-junction-other-inner,
+g[data-state='27'] .rail-junction-other-outer,
+g[data-state='27'] .rail-junction-other-inner,
+g[data-state='28'] .rail-junction-other-outer,
+g[data-state='28'] .rail-junction-other-inner,
+g[data-state='29'] .rail-junction-other-outer,
+g[data-state='29'] .rail-junction-other-inner {
+    stroke: black;
+}
+
+g[data-state='-1'] .rail-junction-plus,
+g[data-state='-2'] .rail-junction-plus,
+g[data-state='18'] .rail-junction-plus,
+g[data-state='19'] .rail-junction-minus,
+g[data-state='20'] .rail-junction-plus,
+g[data-state='21'] .rail-junction-minus,
+g[data-state='22'] .rail-junction-plus,
+g[data-state='23'] .rail-junction-minus,
+g[data-state='24'] .rail-junction-plus,
+g[data-state='25'] .rail-junction-minus,
+g[data-state='26'] .rail-junction-plus,
+g[data-state='27'] .rail-junction-plus,
+g[data-state='28'] .rail-junction-minus,
+g[data-state='29'] .rail-junction-minus,
+g[data-state='6'] .rail-junction-no-control,
+g[data-state='8'] .rail-junction-no-control,
+g[data-state='17'] .rail-junction-no-control,
+g[data-state='37'] .rail-junction-no-control,
+g[data-state='38'] .rail-junction-no-control,
+g[data-state='41'] .rail-junction-no-control,
+g[data-state='107'] .rail-junction-no-control {
+    visibility: visible;
+}
+
+g[data-state='-1'] .rail-junction-minus,
+g[data-state='-2'] .rail-junction-minus,
+g[data-state='18'] .rail-junction-minus,
+g[data-state='19'] .rail-junction-plus,
+g[data-state='20'] .rail-junction-minus,
+g[data-state='21'] .rail-junction-plus,
+g[data-state='22'] .rail-junction-minus,
+g[data-state='23'] .rail-junction-plus,
+g[data-state='24'] .rail-junction-minus,
+g[data-state='25'] .rail-junction-plus,
+g[data-state='26'] .rail-junction-minus,
+g[data-state='27'] .rail-junction-minus,
+g[data-state='28'] .rail-junction-plus,
+g[data-state='29'] .rail-junction-plus,
+g[data-state='6'] .rail-junction-plus,
+g[data-state='8'] .rail-junction-plus,
+g[data-state='17'] .rail-junction-plus,
+g[data-state='37'] .rail-junction-plus,
+g[data-state='38'] .rail-junction-plus,
+g[data-state='41'] .rail-junction-plus,
+g[data-state='107'] .rail-junction-plus,
+g[data-state='6'] .rail-junction-minus,
+g[data-state='8'] .rail-junction-minus,
+g[data-state='17'] .rail-junction-minus,
+g[data-state='37'] .rail-junction-minus,
+g[data-state='38'] .rail-junction-minus,
+g[data-state='41'] .rail-junction-minus,
+g[data-state='107'] .rail-junction-minus,
+g[data-state='-1'] .rail-junction-no-control,
+g[data-state='-2'] .rail-junction-no-control,
+g[data-state='18'] .rail-junction-no-control,
+g[data-state='19'] .rail-junction-no-control,
+g[data-state='20'] .rail-junction-no-control,
+g[data-state='21'] .rail-junction-no-control,
+g[data-state='22'] .rail-junction-no-control,
+g[data-state='23'] .rail-junction-no-control,
+g[data-state='24'] .rail-junction-no-control,
+g[data-state='25'] .rail-junction-no-control,
+g[data-state='26'] .rail-junction-no-control,
+g[data-state='27'] .rail-junction-no-control,
+g[data-state='28'] .rail-junction-no-control,
+g[data-state='29'] .rail-junction-no-control {
+    visibility: hidden;
+}
+
+/* Занята + не замкнута */
+g[data-state='18'] .rail-junction-main-outer,
+g[data-state='18'] .rail-junction-main-inner {
+    stroke: red;
+}
+
+/* Занята - не замкнута */
+g[data-state='19'] .rail-junction-main-outer,
+g[data-state='19'] .rail-junction-main-inner {
+    stroke: red;
+}
+
+
+/* Свободна + не замкнута */
+g[data-state='20'] .rail-junction-main-outer,
+g[data-state='20'] .rail-junction-main-inner {
+    stroke: black;
+}
+
+/* Свободна - не замкнута */
+g[data-state='-1'] .rail-junction-main-outer,
+g[data-state='-1'] .rail-junction-main-inner,
+g[data-state='21'] .rail-junction-main-outer,
+g[data-state='21'] .rail-junction-main-inner {
+    stroke: black;
+}
+
+/* + в маршруте */
+g[data-state='22'] .rail-junction-main-outer,
+g[data-state='22'] .rail-junction-main-inner {
+    stroke: yellow;
+}
+
+/* - в маршруте */
+g[data-state='23'] .rail-junction-main-outer,
+g[data-state='23'] .rail-junction-main-inner {
+    stroke: yellow;
+}
+
+/* + ИР */
+g.main-panel[data-first-color='0'] g[data-state='24'] .rail-junction-main-outer,
+g.main-panel[data-first-color='0'] g[data-state='24'] .rail-junction-main-inner {
+    stroke: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='24'] .rail-junction-main-outer,
+g.main-panel[data-first-color='1'] g[data-state='24'] .rail-junction-main-inner {
+    stroke: yellow;
+}
+
+/* - ИР */
+g.main-panel[data-first-color='0'] g[data-state='25'] .rail-junction-main-outer,
+g.main-panel[data-first-color='0'] g[data-state='25'] .rail-junction-main-inner {
+    stroke: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='25'] .rail-junction-main-outer,
+g.main-panel[data-first-color='1'] g[data-state='25'] .rail-junction-main-inner {
+    stroke: yellow;
+}
+
+/* +/- Занята замкнута */
+g[data-state='26'] .rail-junction-main-outer,
+g[data-state='28'] .rail-junction-main-outer {
+    stroke: yellow;
+}
+
+g[data-state='26'] g .rail-junction-main-inner,
+g[data-state='28'] g .rail-junction-main-inner
+{
+    stroke: red;
+}
+
+/* +/- Занята замкнута ИР */
+g[data-state='27'] .rail-junction-main-outer,
+g[data-state='29'] .rail-junction-main-outer {
+    stroke: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='27'] .rail-junction-main-inner,
+g.main-panel[data-first-color='0'] g[data-state='29'] .rail-junction-main-inner {
+    stroke: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='27'] .rail-junction-main-inner,
+g.main-panel[data-first-color='1'] g[data-state='29'] .rail-junction-main-inner {
+    stroke: red;
+}
+
+/* Потеряла контроль,занята,замкнута */
+
+g[data-state='6'] .rail-junction-no-control-outer {
+    stroke: yellow;
+}
+
+g.main-panel[data-first-color='0'] g[data-state='6'] .rail-junction-no-control-inner {
+    stroke: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='6'] .rail-junction-no-control-inner {
+    stroke: red;
+}
+
+/* Потеряла контроль, свободна, замкнута, искусственно размыкается */
+
+g.main-panel[data-first-color='0'] g[data-state='8'] .rail-junction-no-control-inner,
+g.main-panel[data-first-color='0'] g[data-state='8'] .rail-junction-no-control-outer {
+    stroke: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='8'] .rail-junction-no-control-inner,
+g.main-panel[data-first-color='1'] g[data-state='8'] .rail-junction-no-control-outer {
+    stroke: yellow;
+}
+
+/* Потеряла контроль, свободна, не замкнута */
+
+g[data-state='17'] .rail-junction-no-control-inner,
+g[data-state='17'] .rail-junction-no-control-outer {
+    stroke: black;
+}
+
+/* Потеряла контроль, свободна, замкнута */
+
+g[data-state='37'] .rail-junction-no-control-inner,
+g[data-state='37'] .rail-junction-no-control-outer {
+    stroke: yellow;
+}
+
+/* Потеряла контроль, занята, не замкнута */
+
+g[data-state='38'] .rail-junction-no-control-inner,
+g[data-state='38'] .rail-junction-no-control-outer {
+    stroke: red;
+}
+
+/* Потеряла контроль, занята, замкнута, искусственно размыкается */
+
+g.main-panel[data-first-color='0'] g[data-state='41'] .rail-junction-no-control-inner,
+g.main-panel[data-first-color='0'] g[data-state='41'] .rail-junction-no-control-outer {
+    stroke: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='41'] .rail-junction-no-control-inner,
+g.main-panel[data-first-color='1'] g[data-state='41'] .rail-junction-no-control-outer {
+    stroke: red;
+}
+
+/* Нет достоверных данных */
+
+g.main-panel[data-first-color='0'] g[data-state='107'] .rail-junction-no-control-inner,
+g.main-panel[data-first-color='0'] g[data-state='107'] .rail-junction-no-control-outer {
+    stroke: black;
+}
+
+g.main-panel[data-first-color='1'] g[data-state='107'] .rail-junction-no-control-inner,
+g.main-panel[data-first-color='1'] g[data-state='107'] .rail-junction-no-control-outer {
+    stroke: #FF00FF;
+}

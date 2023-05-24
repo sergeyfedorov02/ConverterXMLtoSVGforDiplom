@@ -1,0 +1,17 @@
+﻿/* Тупик */
+g .rc-terminator {
+    stroke-opacity: 1;
+    stroke: #FF00FF;
+}
+
+/* состояние по умолчанию */
+g[data-state='-1'] .rc-terminator {
+    stroke-opacity: 1;
+    stroke: black;
+}
+
+/* Нет привязки */
+g[data-state='-2'] .rc-terminator {
+    stroke-opacity: 1;
+    stroke: #7F7F7F;
+}
