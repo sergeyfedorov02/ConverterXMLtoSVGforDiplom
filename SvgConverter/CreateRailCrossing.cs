@@ -7,7 +7,8 @@ namespace SvgConverter
     internal static class CreateRailCrossing
     {
         // Функция для формирования SVG картинки для "StandardLibrary.RailCrossing"
-        public static SvgGroupElement CreateSvgImageRailCrossing(IReadOnlyDictionary<string, string> xmlNode)
+        public static SvgGroupElement CreateSvgImageRailCrossing(IReadOnlyDictionary<string, string> xmlNode,
+            ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetBounds(out var bounds))
@@ -17,6 +18,9 @@ namespace SvgConverter
 
             // Проверка типа элемента переезд
             if (!xmlNode.TryGetValue("RailCrossingType", out var typeRailCrossing)) return null;
+            
+            // Если был получен неизвестный тип Переезда
+            if (typeRailCrossing != "0" && typeRailCrossing != "1" && typeRailCrossing != "2") return null;
 
             // Вычислим все координаты
             var curLeft = bounds.Left;
@@ -25,22 +29,20 @@ namespace SvgConverter
             var curBottom = bounds.Bottom;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailCrossing" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, typeRailCrossing, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, typeRailCrossing, null, options);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
-
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
 
             // Получим элемент "Переезд"
             var railCrossingGroup =
                 CreateRailCrossingSvg(xmlNode, curLeft, curRight, curTop, curBottom, typeRailCrossing, objColor);
 
             // Добавим стандартные атрибуты
-            DictionaryExtension.AddStandardEndResultAttributes(railCrossingGroup, result, xmlNode, curLeft, curRight, curTop,
+            DictionaryExtension.AddStandardEndResultAttributes(railCrossingGroup, result, xmlNode, curLeft, curRight,
+                curTop,
                 curBottom, true);
-            
+
             // Задаем цвет линий
             result.Children[0].Stroke = new SvgPaint(objColor);
 

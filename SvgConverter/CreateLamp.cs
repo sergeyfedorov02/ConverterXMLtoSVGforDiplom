@@ -32,7 +32,8 @@ namespace SvgConverter
         };
 
         // Функция для формирования SVG картинки для "StandardLibrary.Lamp"
-        public static SvgGroupElement CreateSvgImageLamp(IReadOnlyDictionary<string, string> xmlNode)
+        public static SvgGroupElement CreateSvgImageLamp(IReadOnlyDictionary<string, string> xmlNode,
+            ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetBounds(out var bounds))
@@ -53,13 +54,10 @@ namespace SvgConverter
             var aDrawBorder = xmlNode.GetValueOrDefault("DrawBorder", "True");
 
             // Создадим группу для отрисовки текущей "StandardLibrary.Lamp" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(aShape, aDrawBorder, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(aShape, aDrawBorder, null, null, options);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
-
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
 
             // Если текущая лампа относится к классу "fill-indicator"
             if (FillIndicators.Contains(aShape))
@@ -120,7 +118,7 @@ namespace SvgConverter
 
                         // Получим ключ жезл
                         var keyBarrel = CreateKeyBarrelSvg(keyBarrelListPoints, xmlNode.GetLineWidth(), objColor);
-                        
+
                         // Добавим угол поворота, если он есть
                         keyBarrel.AddAngle(xmlNode, curLeft, curRight, curTop, curBottom);
 

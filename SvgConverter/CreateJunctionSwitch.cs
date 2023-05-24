@@ -7,7 +7,8 @@ namespace SvgConverter
     internal static class CreateJunctionSwitch
     {
         // Функция для формирования SVG картинки для "StandardLibrary.JunctionSwitch" или "JunctionSwitchWithoutNoControl"
-        public static SvgGroupElement CreateSvgImageJunctionSwitch(IReadOnlyDictionary<string, string> xmlNode)
+        public static SvgGroupElement CreateSvgImageJunctionSwitch(IReadOnlyDictionary<string, string> xmlNode,
+            ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetJunctionSwitchBounds(out var bounds))
@@ -24,13 +25,10 @@ namespace SvgConverter
             var curRowSpace = bounds["curRowSpace"];
 
             // Создадим группу для отрисовки текущей "StandardLibrary.JunctionSwitch" или "JunctionSwitchWithoutNoControl" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null, options);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
-
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
 
             // Получим элемент "Стрелочный коммутатор"
             var junctionSwitch = CreateJunctionSwitchSvg(xmlNode, curLeft, curTop, curLampWidth, curLampHeight,
@@ -60,7 +58,7 @@ namespace SvgConverter
                 StrokeWidth = new SvgLength(strokeWidth)
             };
 
-            // Если рассматриваем элемент "StandardLibrary.RailJunctionEx" -> три прямоугольника
+            // Если рассматриваем элемент "StandardLibrary.JunctionSwitch" -> три прямоугольника
             if (curRowSpace >= 0)
             {
                 result.Children.Add

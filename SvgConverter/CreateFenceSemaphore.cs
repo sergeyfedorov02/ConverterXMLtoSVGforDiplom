@@ -8,7 +8,8 @@ namespace SvgConverter
     internal static class CreateFenceSemaphore
     {
         // Функция для формирования SVG картинки для "StandardLibrary.FenceSemaphore"
-        public static SvgGroupElement CreateSvgImageFenceSemaphore(IReadOnlyDictionary<string, string> xmlNode)
+        public static SvgGroupElement CreateSvgImageFenceSemaphore(IReadOnlyDictionary<string, string> xmlNode,
+            ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetSemaphoreBounds(out var bounds))
@@ -24,13 +25,10 @@ namespace SvgConverter
             var curBottom = curTop + curRadius * 2;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.FenceSemaphore" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null, options);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
-
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
 
             // Получим элемент "Заградительный светофор"
             var fenceSemaphoreGroup =
@@ -54,7 +52,7 @@ namespace SvgConverter
             var halfWidth = (float)Math.Sqrt(curRadius * curRadius / 2);
 
             // Вычислим координаты центра квадрата
-            var centerX = curLeft +  curLineWidth + curRadius;
+            var centerX = curLeft + curLineWidth + curRadius;
             var centerY = curBottom - curRadius;
 
             return new SvgGroupElement

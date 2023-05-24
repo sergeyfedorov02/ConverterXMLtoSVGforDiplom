@@ -7,7 +7,8 @@ namespace SvgConverter
     internal static class CreateIsoJoint
     {
         // Функция для формирования SVG картинки для "StandardLibrary.IsoJoint"
-        public static SvgGroupElement CreateSvgImageIsoJoint(IReadOnlyDictionary<string, string> xmlNode)
+        public static SvgGroupElement CreateSvgImageIsoJoint(IReadOnlyDictionary<string, string> xmlNode,
+            ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetIsoJointBounds(out var bounds))
@@ -28,18 +29,18 @@ namespace SvgConverter
             var curBottom = bounds.Bottom;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.IsoJoint" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
-
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null, options);
 
             // Получим элемент "Изостык"
             var isoJoint = CreateIsoJointSvg(xmlNode, curLeft, curRight, curTop, curBottom, typeIsoJoint);
 
+            // Если был указан неверный тип
+            if (isoJoint == null) return null;
+
             // Добавим стандартные атрибуты
             DictionaryExtension.AddStandardEndResultAttributes(isoJoint, result, xmlNode, curLeft, curRight, curTop,
                 curBottom, true);
-            
+
             return result;
         }
 
@@ -51,10 +52,10 @@ namespace SvgConverter
             {
                 // Не габаритный изостык
                 "NoOverall" => CreateNoOverallIsoJointSvg(xmlNode, curLeft, curRight, curTop, curBottom),
-                
+
                 // Ячейка изостык
                 "Cell" => CreateCellIsoJointSvg(xmlNode, curLeft, curRight, curTop, curBottom),
-                
+
                 _ => null
             };
         }

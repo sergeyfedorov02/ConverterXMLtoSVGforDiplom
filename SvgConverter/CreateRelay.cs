@@ -7,7 +7,8 @@ namespace SvgConverter
     internal static class CreateRelay
     {
         // Функция для формирования SVG картинки для "StandardLibrary.Relay"
-        public static SvgGroupElement CreateSvgImageRelay(IReadOnlyDictionary<string, string> xmlNode)
+        public static SvgGroupElement CreateSvgImageRelay(IReadOnlyDictionary<string, string> xmlNode,
+            ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetBounds(out var bounds))
@@ -28,7 +29,7 @@ namespace SvgConverter
             var curBottom = bounds.Bottom;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.Relay" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null, options);
 
             // Добавим указатель типа
             result.CustomAttributes.Add
@@ -40,11 +41,10 @@ namespace SvgConverter
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
 
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
-
             // Получим элемент "Контакт/Реле"
             var relay = CreateRelaySvg(xmlNode, curLeft, curRight, curTop, curBottom, aShape, objColor);
+
+            if (relay == null) return null;
 
             // Добавим стандартные атрибуты
             DictionaryExtension.AddStandardEndResultAttributes(relay, result, xmlNode, curLeft, curRight, curTop,

@@ -177,7 +177,7 @@ namespace SvgConverter
             return true;
         }
 
-        // Функция для получения координат для элемента "StandardLibrary.RailJunctionEx" и "JunctionSwitchWithoutNoControl", если чего-то нет -> false
+        // Функция для получения координат для элемента "StandardLibrary.JunctionSwitch" и "JunctionSwitchWithoutNoControl", если чего-то нет -> false
         public static bool TryGetJunctionSwitchBounds(this IReadOnlyDictionary<string, string> properties,
             out Dictionary<string, float> curProperties)
         {
@@ -199,6 +199,8 @@ namespace SvgConverter
 
             // Проверка атрибута "RowSpace" из переданного Dictionary
             var curRowSpaceText = properties.TryGetValue("RowSpace", out var rowSpace) ? rowSpace : "-1.0";
+            if (properties["ToolId"] != "StandardLibrary.JunctionSwitchWithoutNoControl" &&
+                curRowSpaceText.Equals("-1.0")) return false;
             var curRowSpace = float.Parse(curRowSpaceText, CultureInfo.InvariantCulture);
 
             curProperties["curLeft"] = curLeft;
@@ -230,9 +232,71 @@ namespace SvgConverter
             return true;
         }
 
+        // Функция для получения координат для элемента "StandardLibrary.RailJunction", если чего-то нет -> false
+        public static bool TryGetRailJunctionBounds(this IReadOnlyDictionary<string, string> properties,
+            out Dictionary<string, float> curProperties)
+        {
+            curProperties = new Dictionary<string, float>();
+
+            // Проверка атрибута "CenterPoint" из переданного Dictionary
+            if (!properties.TryGetValue("CenterPoint", out var curCenterPointTopText)) return false;
+            var curCenterX = float.Parse(curCenterPointTopText.Split(",")[0], CultureInfo.InvariantCulture);
+            var curCenterY = float.Parse(curCenterPointTopText.Split(",")[1], CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "OffsetA2Center" из переданного Dictionary
+            if (!properties.TryGetValue("OffsetA2Center", out var curOffsetA2Text)) return false;
+            var curOffsetA2 = float.Parse(curOffsetA2Text, CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "OffsetC2Center" из переданного Dictionary
+            if (!properties.TryGetValue("OffsetC2Center", out var curOffsetC2Text)) return false;
+            var curOffsetC2 = float.Parse(curOffsetC2Text, CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "OffsetB2Center" из переданного Dictionary
+            if (!properties.TryGetValue("OffsetB2Center", out var curOffsetB2Text)) return false;
+            var curOffsetB2 = float.Parse(curOffsetB2Text, CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "OffsetB2Center" из переданного Dictionary
+            if (!properties.TryGetValue("OffsetD2B", out var curOffsetD2BText)) return false;
+            var curOffsetD2B = float.Parse(curOffsetD2BText, CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "Angle" из переданного Dictionary
+            if (!properties.TryGetValue("Angle", out var curAngleText)) return false;
+            var curAngle = float.Parse(curAngleText, CultureInfo.InvariantCulture);
+
+            curProperties["curCenterX"] = curCenterX;
+            curProperties["curCenterY"] = curCenterY;
+            curProperties["curOffsetA2"] = curOffsetA2;
+            curProperties["curOffsetC2"] = curOffsetC2;
+            curProperties["curOffsetB2"] = curOffsetB2;
+            curProperties["curOffsetD2B"] = curOffsetD2B;
+            curProperties["curAngle"] = curAngle;
+
+            return true;
+        }
+
+        // Функция для получения координат для элемента "StandardLibrary.Measure", если чего-то нет -> false
+        public static bool TryGetMeasureBounds(this IReadOnlyDictionary<string, string> properties,
+            out RectangleF rect)
+        {
+            rect = RectangleF.Empty;
+
+            // Проверка атрибута "Left" из переданного Dictionary
+            if (!properties.TryGetValue("Left", out var curLeftText)) return false;
+            var curLeft = float.Parse(curLeftText, CultureInfo.InvariantCulture);
+
+            // Проверка атрибута "Top" из переданного Dictionary
+            if (!properties.TryGetValue("Top", out var curTopText)) return false;
+            var curTop = float.Parse(curTopText, CultureInfo.InvariantCulture);
+
+            rect = new RectangleF(curLeft, curTop, 0, 0);
+
+            return true;
+        }
+
         // Функция для добавления стандартных кастомных атрибутов к группе в начале работы
         public static SvgGroupElement AddStandardStartResultAttributes(this IReadOnlyDictionary<string, string> xmlNode,
-            string aShape, string aDrawBorder, string railCrossingType, string semaphoreHint)
+            string aShape, string aDrawBorder, string railCrossingType, string semaphoreHint,
+            ISvgConvertOptions options)
         {
             var curResult = new SvgGroupElement
             {
@@ -271,6 +335,39 @@ namespace SvgConverter
                 );
             }
 
+            // Если рассматриваем стрелочную секцию -> stroke-width="4" + fill-opacity="0" + data-isInverse="true/false"+
+            // data-object-hint="Type=Type1/2/3/4, IsInverse=True/False"
+            if (xmlNode["ToolId"] == "StandardLibrary.RailJunctionEx")
+            {
+                // stroke-width="4"
+                curResult.CustomAttributes.Add
+                (
+                    new SvgCustomAttribute("stroke-width",
+                        "4")
+                );
+
+                // fill-opacity="0"
+                curResult.CustomAttributes.Add
+                (
+                    new SvgCustomAttribute("fill-opacity",
+                        "0")
+                );
+
+                // data-isInverse="true/false"
+                curResult.CustomAttributes.Add
+                (
+                    new SvgCustomAttribute("data-isInverse",
+                        xmlNode["IsInverse"].ToLower())
+                );
+
+                // data-object-hint="Type=Type1/2/3/4, IsInverse=True/False"
+                curResult.CustomAttributes.Add
+                (
+                    new SvgCustomAttribute("data-object-hint",
+                        "Type=" + xmlNode["Type"] + ",IsInverse=" + xmlNode["IsInverse"])
+                );
+            }
+
             // Добавление кастомного атрибута data-object-type = "StandardLibrary.RailUnitEx" (имя этого атрибута - Рельсовая единица)
             curResult.CustomAttributes.Add
             (
@@ -292,6 +389,17 @@ namespace SvgConverter
                 dataStateAttribute.Value = "-1";
                 // Добавление data-object-id
                 curResult.CustomAttributes.Add(new SvgCustomAttribute("data-object-id", objectId));
+
+                // Добавление Опций, если они есть
+                if (options.AddTitles)
+                {
+                    var title = options.GetTitleForObject(long.Parse(objectId));
+                    if (!string.IsNullOrEmpty(title))
+                    {
+                        curResult.Children.Add(new SvgTitleElement
+                            { Children = { new SvgContentElement { Content = title } } });
+                    }
+                }
             }
 
             return curResult;

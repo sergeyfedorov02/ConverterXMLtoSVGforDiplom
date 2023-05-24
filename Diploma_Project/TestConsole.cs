@@ -46,7 +46,7 @@ namespace Diploma_Project
                     
                     // Сохраним получившийся SVG файл
                     var curName = entry.FullName.Split(".")[0];
-                    var path = "D:\\RiderProjects\\Diploma_Project\\SvgConverter\\src\\" +
+                    var path = "D:\\RiderProjects\\Diploma_Project\\Diploma_Project\\src\\" +
                                curName + ".svg";
                             
                     using var fs = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);

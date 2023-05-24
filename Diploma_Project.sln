@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvgConverter", "SvgConverte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{ABEF5B6D-8D3A-4639-A668-E0AD79F5D297}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{27EDEB3A-705A-4F09-B4ED-3F2F8AB5898D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebAssembly", "TestWebAssembly\TestWebAssembly.csproj", "{33638EF5-7FDF-4769-A438-D007136A5578}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{ABEF5B6D-8D3A-4639-A668-E0AD79F5D297}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABEF5B6D-8D3A-4639-A668-E0AD79F5D297}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABEF5B6D-8D3A-4639-A668-E0AD79F5D297}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27EDEB3A-705A-4F09-B4ED-3F2F8AB5898D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27EDEB3A-705A-4F09-B4ED-3F2F8AB5898D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27EDEB3A-705A-4F09-B4ED-3F2F8AB5898D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27EDEB3A-705A-4F09-B4ED-3F2F8AB5898D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33638EF5-7FDF-4769-A438-D007136A5578}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33638EF5-7FDF-4769-A438-D007136A5578}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33638EF5-7FDF-4769-A438-D007136A5578}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33638EF5-7FDF-4769-A438-D007136A5578}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

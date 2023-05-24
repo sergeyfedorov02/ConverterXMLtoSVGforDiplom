@@ -8,7 +8,8 @@ namespace SvgConverter
     internal static class CreateSemaphore
     {
         // Функция для формирования SVG картинки для "StandardLibrary.Semaphore"
-        public static SvgGroupElement CreateSvgImageSemaphore(IReadOnlyDictionary<string, string> xmlNode)
+        public static SvgGroupElement CreateSvgImageSemaphore(IReadOnlyDictionary<string, string> xmlNode,
+            ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetSemaphoreBounds(out var bounds))
@@ -74,13 +75,10 @@ namespace SvgConverter
             }
 
             // Создадим группу для отрисовки текущей "StandardLibrary.Semaphore" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, curSemaphoreHint);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, curSemaphoreHint, options);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
-
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
 
             // Получим элемент "Светофор"
             var semaphoreGroup =
@@ -110,6 +108,9 @@ namespace SvgConverter
 
                 // Цвет внутри индикаторов
                 Fill = new SvgPaint(Color.Transparent),
+
+                // Делаем его видимым
+                FillOpacity = 1,
 
                 // Кастомный атрибут -> количество индикаторов в светофоре
                 CustomAttributes = new List<SvgCustomAttribute>
@@ -146,7 +147,7 @@ namespace SvgConverter
             }
 
             // Создадим начальное значение класса для индикатора в зависимости от его типа (круг или ромб)
-            var curClass = curLampShape == 0 ? "circle-mast-lamp0" : "rhombus-mast-lamp0";
+            var curClass = "mast-lamp0";
 
             // Пройдемся по всем индикаторам и добавим их в зависимости от типа (круг или ромб)
             for (var i = 0; i < curSemaphoreType; i++)

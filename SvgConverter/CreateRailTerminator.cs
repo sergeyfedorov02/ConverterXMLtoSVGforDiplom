@@ -7,7 +7,8 @@ namespace SvgConverter
     internal static class CreateRailTerminator
     {
         // Функция для формирования SVG картинки для "StandardLibrary.RailTerminator"
-        public static SvgGroupElement CreateSvgImageRailTerminator(IReadOnlyDictionary<string, string> xmlNode)
+        public static SvgGroupElement CreateSvgImageRailTerminator(IReadOnlyDictionary<string, string> xmlNode,
+            ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetRailTerminatorBounds(out var bounds))
@@ -22,13 +23,10 @@ namespace SvgConverter
             var curHeight = bounds.Height;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailTerminator" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null, options);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
-
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
 
             // Получим элемент "Тупик"
             var railTerminator = CreateRailTerminatorSvg(xmlNode, curLeft, curTop, curWidth, curHeight, objColor);

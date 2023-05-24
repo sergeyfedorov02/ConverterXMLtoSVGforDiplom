@@ -251,7 +251,7 @@
     "C:\\Users\\1\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "1.0.0",
+    "version": "1.0.7",
     "restore": {
       "projectUniqueName": "D:\\RiderProjects\\Diploma_Project\\SvgConverter\\SvgConverter.csproj",
       "projectName": "SvgConverter",
@@ -266,6 +266,7 @@
         "netstandard2.1"
       ],
       "sources": {
+        "D:\\RiderProjects\\Diploma_Project\\SvgConverter\\bin\\Debug": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

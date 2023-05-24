@@ -8,7 +8,8 @@ namespace SvgConverter
     internal static class CreateRailUnit
     {
         // Функция для формирования SVG картинки для "StandardLibrary.RailUnitEx"
-        public static SvgGroupElement CreateSvgImageRailUnit(IReadOnlyDictionary<string, string> xmlNode)
+        public static SvgGroupElement CreateSvgImageRailUnit(IReadOnlyDictionary<string, string> xmlNode,
+            ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetRailUnitBounds(out var bounds))
@@ -31,13 +32,10 @@ namespace SvgConverter
             }
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailUnitEx" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null, options);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
-
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
 
             // Получим элемент "Путь"
             var railUnitEx = CreateRailUnitExSvg(xmlNode, curLeft, curTop, curWidth, objColor);
@@ -83,7 +81,7 @@ namespace SvgConverter
                         X2 = new SvgLength(curLeft + curWidth - (float)internalWidth / 2),
                         Y2 = new SvgLength(curTop),
                         StrokeWidth = new SvgLength(internalWidth),
-                        Stroke = new SvgPaint(Color.Red), // TODO - потом заменить на "objColor", сейчас для наглядности
+                        Stroke = new SvgPaint(objColor),
                         Class = "rc-line-inner"
                     }
                 },

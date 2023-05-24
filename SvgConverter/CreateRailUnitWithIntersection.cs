@@ -8,7 +8,7 @@ namespace SvgConverter
     {
         // Функция для формирования SVG картинки для "StandardLibrary.RailUnitWithIntersection"
         public static SvgGroupElement CreateSvgImageRailUnitWithIntersection(
-            IReadOnlyDictionary<string, string> xmlNode)
+            IReadOnlyDictionary<string, string> xmlNode, ISvgConvertOptions options)
         {
             // Проверка координат 
             if (!xmlNode.TryGetRailUnitWithIntersectionBounds(out var bounds))
@@ -24,13 +24,10 @@ namespace SvgConverter
             var curTop = bounds[0].Top;
 
             // Создадим группу для отрисовки текущей "StandardLibrary.RailUnitWithIntersection" со стандартными атрибутами
-            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null);
+            var result = xmlNode.AddStandardStartResultAttributes(null, null, null, null, options);
 
             // Вычислим цвет обводки
             var objColor = xmlNode.GetObjectColor();
-
-            // Добавление Стиля
-            // TODO() - добавить параметр указания стиля (Stroke и Fill тогда мб следует убрать)
 
             // Получим элемент "Путь с разрывом"
             var railUnitWithIntersection = CreateRailUnitWithIntersectionSvg(xmlNode, firstLineLeft, firstLineWidth,
@@ -41,8 +38,9 @@ namespace SvgConverter
             railUnitWithIntersection.AddAngle(xmlNode, firstLineLeft, firstLineLeft + firstLineWidth, curTop, curTop);
             railUnitWithIntersection.AddAngle(xmlNode, secondLineLeft, secondLineLeft + secondLineWidth, curTop,
                 curTop);
-            
-            DictionaryExtension.AddStandardEndResultAttributes(railUnitWithIntersection, result, xmlNode, firstLineLeft, firstLineLeft + firstLineWidth,
+
+            DictionaryExtension.AddStandardEndResultAttributes(railUnitWithIntersection, result, xmlNode, firstLineLeft,
+                firstLineLeft + firstLineWidth,
                 curTop, curTop, false);
 
             return result;
@@ -83,7 +81,7 @@ namespace SvgConverter
                         X2 = new SvgLength(firstLineLeft + firstLineWidth - (float)internalWidth / 2),
                         Y2 = new SvgLength(curTop),
                         StrokeWidth = new SvgLength(internalWidth),
-                        Stroke = new SvgPaint(Color.Red), // TODO - потом заменить на "objColor", сейчас для наглядности
+                        Stroke = new SvgPaint(objColor),
                         Class = "rc-line-inner"
                     },
 
@@ -107,7 +105,7 @@ namespace SvgConverter
                         X2 = new SvgLength(secondLineLeft + secondLineWidth - (float)internalWidth / 2),
                         Y2 = new SvgLength(curTop),
                         StrokeWidth = new SvgLength(internalWidth),
-                        Stroke = new SvgPaint(Color.Red), // TODO - потом заменить на "objColor", сейчас для наглядности
+                        Stroke = new SvgPaint(objColor),
                         Class = "rc-line-inner"
                     }
                 },

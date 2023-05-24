@@ -2,6 +2,9 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <PackageVersion>1.0.7</PackageVersion>
+        <PackageId>SvgConverter</PackageId>
+        <Authors>SvgConverter</Authors>
     </PropertyGroup>
 
     <ItemGroup>
@@ -9,7 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="src" />
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+        </AssemblyAttribute>
     </ItemGroup>
 
 </Project>
